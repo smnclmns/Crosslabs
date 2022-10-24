@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <base target="_top">
+    <title>Crosslabs</title>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <script src="blockly_compressed.js"></script>
+    <script src="blocks_compressed.js"></script>
+    <script src="javascript_compressed.js"></script>
+    <script src="en.js"></script>
+    <script src="spritzpumpe.js"></script>
+    
+
+
+
+
+
+      <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+      margin: 10px;
+    }
+
+    #blocklyDiv {
+      float: bottom;
+      height: 90%;
+      width: 100%;
+    }
+  </style>
+
+  </head>
+  <body >
+    <h1>Crosslabs</h1>
+
+    <div id= "blocklydiv" style="height: 700px; width: 1200px;"></div>
+
+    <!----Toolbox Definition ---->
+  <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+  <category name="Crosslabs">
+    <block type="spritzpumpe"></block>
+    <block type="controls_if"></block>
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+    <block type="text">
+      <field name="TEXT"></field>
+    </block>
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  </xml> 
+    </div>
+
+    <script>
+    var toolbox = document.getElementById("toolbox");
+
+    var options = { 
+      toolbox : toolbox, 
+      collapse : true, 
+      comments : true, 
+      disable : true, 
+      maxBlocks : Infinity, 
+      trashcan : true, 
+      horizontalLayout : false, 
+      toolboxPosition : 'start', 
+      css : true, 
+      media : 'https://blockly-demo.appspot.com/static/media/', 
+      rtl : false, 
+      scrollbars : true, 
+      sounds : true, 
+      oneBasedIndex : true
+      };
+
+    /* Inject your workspace */ 
+    var workspace = Blockly.inject(blocklydiv, options);
+
+    /* Load Workspace Blocks from XML to workspace. Remove all code below if no blocks to load */
+
+    /* TODO: Change workspace blocks XML ID if necessary. Can export workspace blocks XML from Workspace Factory. */
+    var workspaceBlocks = document.getElementById("workspaceBlocks"); 
+
+    /* Load blocks to workspace. */
+    Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
+      
+
+    </script>
+
+
+  </body>
+  
+</html>
