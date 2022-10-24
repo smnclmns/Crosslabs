@@ -46,6 +46,13 @@
   <body >
     <h1>Crosslabs</h1>
 
+    <p>      Blöcke in Code umwandeln </p>
+
+    <p>
+      <button onclick="showCode()">Show JavaScript</button>
+      <button onclick="runCode()">Run JavaScript</button>
+    </p>
+
     <div id= "blocklydiv" style="height: 700px; width: 1200px;"></div>
 
     <!----Toolbox Definition ---->
@@ -53,12 +60,15 @@
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Crosslabs">
     <block type="spritzpumpe"></block>
+    <block type="lichtsensor"></block>
+    <block type="geschwindigkeit">
+      <field name="NAME">Langsam</field>
+    </block>
+  </category>
+  <category name="Blockly">
     <block type="controls_if"></block>
     <block type="logic_boolean">
       <field name="BOOL">TRUE</field>
-    </block>
-    <block type="text">
-      <field name="TEXT"></field>
     </block>
     <block type="controls_repeat_ext">
       <value name="TIMES">
@@ -68,28 +78,35 @@
       </value>
     </block>
   </category>
-  </xml> 
+  <category name="Variables" custom="VARIABLE"></category>
+</xml> 
     </div>
 
     <script>
     var toolbox = document.getElementById("toolbox");
 
-    var options = { 
-      toolbox : toolbox, 
-      collapse : true, 
-      comments : true, 
-      disable : true, 
-      maxBlocks : Infinity, 
-      trashcan : true, 
-      horizontalLayout : false, 
-      toolboxPosition : 'start', 
-      css : true, 
-      media : 'https://blockly-demo.appspot.com/static/media/', 
-      rtl : false, 
-      scrollbars : true, 
-      sounds : true, 
-      oneBasedIndex : true
-      };
+var options = { 
+  toolbox : toolbox, 
+  collapse : true, 
+  comments : true, 
+  disable : true, 
+  maxBlocks : Infinity, 
+  trashcan : true, 
+  horizontalLayout : false, 
+  toolboxPosition : 'start', 
+  css : true, 
+  media : 'https://blockly-demo.appspot.com/static/media/', 
+  rtl : false, 
+  scrollbars : true, 
+  sounds : true, 
+  oneBasedIndex : true, 
+  grid : {
+    spacing : 20, 
+    length : 1, 
+    colour : '#888', 
+    snap : true
+  }
+};
 
     /* Inject your workspace */ 
     var workspace = Blockly.inject(blocklydiv, options);
@@ -102,7 +119,28 @@
     /* Load blocks to workspace. */
     Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
       
+   /* Run Code */
 
+    function showCode() {
+      // Generate JavaScript code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      var code = Blockly.JavaScript.workspaceToCode(workspace);
+      alert(code);
+    }
+
+    function runCode() {
+      // Generate JavaScript code and run it.
+      window.LoopTrap = 1000;
+      Blockly.JavaScript.INFINITE_LOOP_TRAP =
+          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+      var code = Blockly.JavaScript.workspaceToCode(workspace);
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
+    }
     </script>
 
 
