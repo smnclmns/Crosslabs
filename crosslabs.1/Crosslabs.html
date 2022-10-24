@@ -57,7 +57,7 @@
 
     <!----Toolbox Definition ---->
   <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
-  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Crosslabs">
     <block type="spritzpumpe"></block>
     <block type="lichtsensor"></block>
@@ -67,6 +67,31 @@
   </category>
   <category name="Blockly">
     <block type="controls_if"></block>
+    <block type="text">
+      <field name="TEXT"></field>
+    </block>
+    <block type="math_arithmetic">
+      <field name="OP">ADD</field>
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="lists_create_with">
+      <mutation items="6"></mutation>
+    </block>
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+    <block type="logic_compare">
+      <field name="OP">EQ</field>
+    </block>
     <block type="logic_boolean">
       <field name="BOOL">TRUE</field>
     </block>
@@ -78,8 +103,7 @@
       </value>
     </block>
   </category>
-  <category name="Variables" custom="VARIABLE"></category>
-</xml> 
+</xml>
     </div>
 
     <script>
