@@ -252,7 +252,7 @@ void farbmessung(){
   //read the values!
   ams.readRawValues(sensorValues);
 
-  values[0] = int(sensorValues[AS726x_VIOLET]);
+  values[0] = sensorValues[AS726x_VIOLET];
   values[1] = sensorValues[AS726x_BLUE];
   values[2] = sensorValues[AS726x_GREEN];
   values[3] = sensorValues[AS726x_YELLOW];
