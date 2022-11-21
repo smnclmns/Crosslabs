@@ -30,26 +30,30 @@
     }
 
 
+/* 3 Verschiedene Div's um zwischen abteile zu switchen*/
 
     #blocklydiv {
       float: bottom;
       height: 90%;
       width: 100%;
-    }
+}
+    /* Platz fur das Bild*/
+
     #images {
 
       position:fixed;
       
       right:0;
     }
-
-  .button {
+/* CSS Code für die Buttons*/
+  .button1 {
     color: white;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 20px;
+    padding: 10px 20px;
     margin: 4px 2px;
     cursor: pointer;
     outline: none;
@@ -59,13 +63,34 @@
     border-radius: 15px;
     box-shadow: 0 9px #999;
   }
+  .button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
+
+
+
   .button1 {background-color: #4CAF50;} /* Green */
+  .button2 {background-color:   #00008B } /* Blue */
+  .button3 {background-color:   #1E90FF }
+  .button4 {background-color:   #1E90FF }
+
+  .button:hover{
+    background-color:#00008B  ;
+  }
 
   .button1:hover {
     background-color: #006400;
     color: white;}
 
-  .button:active {
+  .button1:active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
@@ -77,12 +102,16 @@
   <body >
     <h1>Crosslabs</h1>
 
+    <button id="Setup" class="button button2" onclick="myFunction2(blocklydiv)">Void Setup()</button>
+    <button id="Loop" class="button button3" onclick="myFunction3(blocklydiv2)">Void Loop()</button>
+    <button id="Functions" class="button button4" onclick="myFunction4()">Void Function()</button>
+
 
 
     <img id="images" src="images/crosslabs.png" width="900" height="500" /> 
-    <div id= "blocklydiv" style="height: 600px; width: 1000px;"></div>
 
-    <!----Toolbox Definition ---->
+         <!----Toolbox1 Definition ---->
+<div id= "blocklydiv" style="height: 600px; width: 1000px;"></div>
 <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Arduino Bibliothek">
@@ -106,7 +135,14 @@
     <block type="logic_boolean">
       <field name="BOOL">TRUE</field>
     </block>
-  </category>
+</xml>
+    </div>
+
+
+<!----Toolbox1 Definition ---->
+    <div id= "blocklydiv2" style="height: 600px; width: 1000px;"></div>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Motor und Sensor">
     <block type="spritzpumpe"></block>
     <block type="geschwindigkeit">
@@ -132,7 +168,7 @@
     </block>
   </category>
 </xml>
-    </div>
+
 
     <script>
     var toolbox = document.getElementById("toolbox");
@@ -177,10 +213,21 @@ var options = {
     function myFunction() {
     document.getElementById("check").style.color = "white";
     }
+    
+    function myFunction2(id){
+      document.getElementById('blocklydiv').innerHTML = document.getElementById(id).innerHTML;
+    }
+    function myFunction3(id){
+      document.getElementById('blocklydiv').id = 'blocklydiv3'
+    }
+    function myFunction4(id){
+      document.getElementById('blocklydiv').id = 'blocklydiv4'
+    }  
 
-    </script>
+  </script>
 
     <button id="check" class="button button1" onclick="myFunction()">Check Code</button>
+
 
     
 
