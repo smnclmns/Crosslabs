@@ -116,6 +116,8 @@ Blockly.Blocks['arduino_outputs'] = {
         .setCheck("Number")
         .appendField("Motor Direction Pin");
     this.setColour(300);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
  this.setTooltip("");
  this.setHelpUrl("");
   }
