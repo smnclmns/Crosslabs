@@ -130,6 +130,8 @@ Blockly.Blocks['titrationsphasen'] = {
         .appendField("Titrationsphasen")
         .appendField(new Blockly.FieldDropdown([["Phase1","1"], ["Phase2","2"], ["endphase","end"], ["Fertig","fertig"]]), "Titrationsphasen");
     this.setColour(230);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
  this.setTooltip("");
  this.setHelpUrl("");
   }
