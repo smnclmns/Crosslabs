@@ -42,6 +42,35 @@
       
       right:0;
     }
+
+  .button {
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+  }
+  .button1 {background-color: #4CAF50;} /* Green */
+
+  .button1:hover {
+    background-color: #006400;
+    color: white;}
+
+  .button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+
+
   </style>
 
   </head>
@@ -50,15 +79,11 @@
 
 
 
- <img id="images" src="images/crosslabs.png" 
-                                            width="900" 
-                                            height="500" /> 
-
-
+    <img id="images" src="images/crosslabs.png" width="900" height="500" /> 
     <div id= "blocklydiv" style="height: 600px; width: 1000px;"></div>
 
     <!----Toolbox Definition ---->
-  <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
+<xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Arduino Bibliothek">
     <block type="library"></block>
@@ -148,7 +173,17 @@ var options = {
       
    /* Run Code */
 
+
+    function myFunction() {
+    document.getElementById("check").style.color = "white";
+    }
+
     </script>
+
+    <button id="check" class="button button1" onclick="myFunction()">Check Code</button>
+
+    
+
 
 
   </body>
