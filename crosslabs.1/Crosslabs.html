@@ -64,49 +64,50 @@
     <!----Toolbox Definition ---->
   <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
-  <category name="Crosslabs">
-    <block type="spritzpumpe"></block>
-    <block type="lichtsensor"></block>
-    <block type="geschwindigkeit">
-      <field name="NAME">Langsam</field>
-    </block>
+  <category name="Arduino Bibliothek">
+    <block type="library"></block>
+    <block type="adafruit"></block>
+    <block type="stepper"></block>
+    <block type="wire"></block>
+    <block type="fake_lib_1"></block>
+    <block type="fake_lib_2"></block>
   </category>
-  <category name="Blockly">
-    <block type="controls_if"></block>
-    <block type="text">
-      <field name="TEXT"></field>
-    </block>
-    <block type="math_arithmetic">
-      <field name="OP">ADD</field>
-      <value name="A">
-        <shadow type="math_number">
-          <field name="NUM">1</field>
-        </shadow>
-      </value>
-      <value name="B">
-        <shadow type="math_number">
-          <field name="NUM">1</field>
-        </shadow>
-      </value>
-    </block>
-    <block type="lists_create_with">
-      <mutation items="6"></mutation>
-    </block>
+  <category name="PIN Zuweisung">
+    <block type="arduino_outputs"></block>
     <block type="math_number">
       <field name="NUM">0</field>
     </block>
-    <block type="logic_compare">
-      <field name="OP">EQ</field>
+  </category>
+  <category name="Titrationsphasen">
+    <block type="titrationsphasen">
+      <field name="Titrationsphasen">1</field>
     </block>
     <block type="logic_boolean">
       <field name="BOOL">TRUE</field>
     </block>
-    <block type="controls_repeat_ext">
-      <value name="TIMES">
-        <shadow type="math_number">
-          <field name="NUM">10</field>
-        </shadow>
-      </value>
+  </category>
+  <category name="Motor und Sensor">
+    <block type="spritzpumpe"></block>
+    <block type="geschwindigkeit">
+      <field name="NAME">Langsam</field>
+    </block>
+    <block type="lichtsensor"></block>
+  </category>
+  <category name="Allgemein">
+    <block type="controls_if"></block>
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+    <block type="controls_whileUntil">
+      <field name="MODE">WHILE</field>
+      <statement name="DO">
+        <block type="controls_flow_statements">
+          <field name="FLOW">BREAK</field>
+        </block>
+      </statement>
+    </block>
+    <block type="lists_create_with">
+      <mutation items="3"></mutation>
     </block>
   </category>
 </xml>
