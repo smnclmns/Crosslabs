@@ -38,8 +38,6 @@ Blockly.Blocks['library'] = {
     this.appendValueInput("Library1")
         .setCheck("String")
         .appendField("Library include");
-    this.appendValueInput("Library2")
-        .setCheck("String");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
