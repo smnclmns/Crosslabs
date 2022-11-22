@@ -4,13 +4,16 @@
   <head>
     <meta charset="utf-8">
     <base target="_top">
-    <title>Crosslabs</title>
-    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-    <script src="blockly_compressed.js"></script>
-    <script src="blocks_compressed.js"></script>
-    <script src="javascript_compressed.js"></script>
-    <script src="en.js"></script>
-    <script src="Blöcke_Definition_Code.js"></script>
+    <title>Crosslabs Titration</title>
+    <!--<script src="https://unpkg.com/blockly/blockly.min.js"></script>-->
+
+    <!-- Hier wird der source-code für Blockly geladen-->
+    <script src="js/blockly_sourcecode/blockly_compressed.js"></script>
+    <script src="js/blockly_sourcecode/blocks_compressed.js"></script>
+    <script src="js/blockly_sourcecode/javascript_compressed.js"></script>
+    <script src="js/blockly_sourcecode/en.js"></script>
+
+    <script src="js/blocks_definition/Blöcke_Definition_Code.js"></script>
     
 
 
@@ -38,9 +41,7 @@
     }
     #images {
 
-      position:fixed;
-      
-      right:0;
+      float: right;
     }
 
   .button {
@@ -69,17 +70,19 @@
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
-
+  }
 
   </style>
 
   </head>
+
   <body >
     <h1>Crosslabs</h1>
 
 
 
-    <img id="images" src="images/crosslabs.png" width="900" height="500" /> 
+    <img id="images" alt="Versuchsaufbau" src="assets/images/crosslabs.png" width="900" height="500" /> 
+    
     <div id= "blocklydiv" style="height: 600px; width: 1000px;"></div>
 
     <!----Toolbox Definition ---->
