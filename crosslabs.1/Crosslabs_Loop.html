@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <base target="_top">
+    <title>Crosslabs</title>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <script src="blockly_compressed.js"></script>
+    <script src="blocks_compressed.js"></script>
+    <script src="javascript_compressed.js"></script>
+    <script src="en.js"></script>
+    <script src="Blöcke_Definition_Code.js"></script>
+    
+
+
+
+
+
+      <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+   #blocklydiv { 
+      float: bottom;
+      height: 90%;
+      width: 100%;
+}
+/* CSS Code für die Buttons*/
+  .button1 {
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    padding: 10px 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+  }
+  .button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
+
+
+
+  .button1 {background-color: #4CAF50;} /* Green */
+  .button2 {background-color:   #1E90FF } /* Blue */
+  .button3 {background-color:   #1E90FF }
+  .button4 {background-color:   #1E90FF }
+
+  .button:hover{
+    background-color:#00008B  ;
+  }
+
+  .button1:hover {
+    background-color: #006400;
+    color: white;}
+
+  .button1:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);}
+
+
+  </style>
+
+  </head>
+  <body >
+    <h1>Crosslabs</h1>
+
+
+    <button id="Setup" class="button button2" onclick="myFunction1()">Void Setup</button>
+    <button id="Loop" class="button button3" onclick="myFunction2()">Void Loop</button>
+    <button id="Functions" class="button button4" onclick="myFunction3()" >Void Function</button>
+
+    <a id="Setup1" href="Crosslabs_Setup.html"></a>
+
+    <a id="Loop1" href="Crosslabs_Loop.html"></a>
+
+    <a id="Function1" href="Crosslabs_Function.html"></a>
+
+<div id='blocklydiv' style="height:500px;width:900px">
+<xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+  <category name="Arduino Bibliothek">
+    <block type="library"></block>
+    <block type="adafruit"></block>
+    <block type="stepper"></block>
+    <block type="wire"></block>
+    <block type="fake_lib_1"></block>
+    <block type="fake_lib_2"></block>
+  </category>
+  <category name="PIN Zuweisung">
+    <block type="arduino_outputs"></block>
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </category>
+  <category name="Titrationsphasen">
+    <block type="titrationsphasen">
+      <field name="Titrationsphasen">1</field>
+    </block>
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+  </category>
+    <category name="Motor und Sensor">
+    <block type="spritzpumpe"></block>
+    <block type="geschwindigkeit">
+      <field name="NAME">Langsam</field>
+    </block>
+    <block type="lichtsensor"></block>
+  </category>
+  <category name="Allgemein">
+    <block type="controls_if"></block>
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+    <block type="controls_whileUntil">
+      <field name="MODE">WHILE</field>
+      <statement name="DO">
+        <block type="controls_flow_statements">
+          <field name="FLOW">BREAK</field>
+        </block>
+      </statement>
+    </block>
+    <block type="lists_create_with">
+      <mutation items="3"></mutation>
+    </block>
+  </category>
+</xml>
+</div>
+
+    
+
+
+<button id="check" class="button button1" onclick="myFunction()">Check Code</button>
+    
+<script>
+
+
+var toolbox = document.getElementById("toolbox");
+
+var options = { 
+  toolbox : toolbox, 
+  collapse : true, 
+  comments : true, 
+  disable : true, 
+  maxBlocks : Infinity, 
+  trashcan : true, 
+  horizontalLayout : false, 
+  toolboxPosition : 'start', 
+  css : true, 
+  media : 'https://blockly-demo.appspot.com/static/media/', 
+  rtl : false, 
+  scrollbars : false, 
+  sounds : true, 
+  oneBasedIndex : true, 
+  grid : {
+    spacing : 20, 
+    length : 1, 
+    colour : '#888', 
+    snap : true
+  }
+};
+  var workspace = Blockly.inject(blocklydiv, options);
+  var workspaceBlocks = document.getElementById("workspaceBlocks");
+  Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
+
+
+      
+   /* Run Code */
+
+
+    function myFunction() {
+    document.getElementById("check").style.color = "white";
+    } 
+
+    function myFunction1() {
+      document.getElementById('Setup1').click(); 
+    }   
+    function myFunction2(){
+      document.getElementById('Loop1').click();
+
+      
+    }    
+    function myFunction3(){
+      document.getElementById('Function1').click();
+
+      
+    } 
+  </script>
+
+  </body>
+  
+</html>
