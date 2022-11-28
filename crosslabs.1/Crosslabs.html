@@ -30,21 +30,27 @@
     }
 
 
-/* 3 Verschiedene Div's um zwischen abteile zu switchen*/
+
 
     #blocklydiv {
       float: bottom;
       height: 90%;
       width: 100%;
 }
+    #blocklydiv2 {
+      float: bottom;
+      height: 90%;
+      width: 100%;
+}
+    #blocklydiv3 {
+      float: bottom;
+      height: 90%;
+      width: 100%;
+}
+
     /* Platz fur das Bild*/
 
-    #images {
 
-      position:fixed;
-      
-      right:0;
-    }
 /* CSS Code für die Buttons*/
   .button1 {
     color: white;
@@ -102,13 +108,13 @@
   <body >
     <h1>Crosslabs</h1>
 
-    <button id="Setup" class="button button2" onclick="myFunction2(blocklydiv)">Void Setup()</button>
-    <button id="Loop" class="button button3" onclick="myFunction3(blocklydiv2)">Void Loop()</button>
-    <button id="Functions" class="button button4" onclick="myFunction4()">Void Function()</button>
+    <button type="submit" id="Setup" class="button button2" onclick="myFunction2('blocklydiv')">Void Setup()</button>
+    <button type="submit" id="Loop" class="button button3" onclick="myFunction3('blocklydiv2')">Void Loop()</button>
+    <button type="submit" id="Functions" class="button button4" onclick="myFunction4()">Void Function()</button>
+    <button id="check" class="button button1" onclick="myFunction()">Check Code</button>
 
 
-
-    <img id="images" src="images/crosslabs.png" width="900" height="500" /> 
+    
 
          <!----Toolbox1 Definition ---->
 <div id= "blocklydiv" style="height: 600px; width: 1000px;"></div>
@@ -137,12 +143,13 @@
     </block>
 </xml>
     </div>
+    
 
 
 <!----Toolbox1 Definition ---->
-    <div id= "blocklydiv2" style="height: 600px; width: 1000px;"></div>
-    <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
-<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+<div id= "blocklydiv2" style="height: 600px; width: 1000px;"></div>
+<xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks2" style="display: none"></xml>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox2" style="display: none">
   <category name="Motor und Sensor">
     <block type="spritzpumpe"></block>
     <block type="geschwindigkeit">
@@ -168,12 +175,93 @@
     </block>
   </category>
 </xml>
+  </div>
+
+
+      <!----Toolbox1 Definition ---->
+<div id= "blocklydiv3" style="height: 600px; width: 1000px;"></div>
+<xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks3" style="display: none"></xml>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox3" style="display: none">
+  <category name="Motor und Sensor">
+    <block type="spritzpumpe"></block>
+    <block type="geschwindigkeit">
+      <field name="NAME">Langsam</field>
+    </block>
+    <block type="lichtsensor"></block>
+  </category>
+  <category name="Allgemein">
+    <block type="controls_if"></block>
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+    <block type="controls_whileUntil">
+      <field name="MODE">WHILE</field>
+      <statement name="DO">
+        <block type="controls_flow_statements">
+          <field name="FLOW">BREAK</field>
+        </block>
+      </statement>
+    </block>
+    <block type="lists_create_with">
+      <mutation items="3"></mutation>
+    </block>
+  </category>
+</xml>
+    </div>
+
+
 
 
     <script>
     var toolbox = document.getElementById("toolbox");
+    var toolbox2 = document.getElementById("toolbox2");
+    var toolbox3 = document.getElementById("toolbox3");
 
 var options = { 
+  toolbox : toolbox, 
+  collapse : true, 
+  comments : true, 
+  disable : true, 
+  maxBlocks : Infinity, 
+  trashcan : true, 
+  horizontalLayout : false, 
+  toolboxPosition : 'start', 
+  css : true, 
+  media : 'https://blockly-demo.appspot.com/static/media/', 
+  rtl : false, 
+  scrollbars : false, 
+  sounds : true, 
+  oneBasedIndex : true, 
+  grid : {
+    spacing : 20, 
+    length : 1, 
+    colour : '#888', 
+    snap : true
+  }
+};
+var options2 = { 
+  toolbox : toolbox, 
+  collapse : true, 
+  comments : true, 
+  disable : true, 
+  maxBlocks : Infinity, 
+  trashcan : true, 
+  horizontalLayout : false, 
+  toolboxPosition : 'start', 
+  css : true, 
+  media : 'https://blockly-demo.appspot.com/static/media/', 
+  rtl : false, 
+  scrollbars : false, 
+  sounds : true, 
+  oneBasedIndex : true, 
+  grid : {
+    spacing : 20, 
+    length : 1, 
+    colour : '#888', 
+    snap : true
+  }
+};
+var options3 = { 
   toolbox : toolbox, 
   collapse : true, 
   comments : true, 
@@ -198,14 +286,21 @@ var options = {
 
     /* Inject your workspace */ 
     var workspace = Blockly.inject(blocklydiv, options);
+    var workspace2 = Blockly.inject(blocklydiv2, options2);
+    var workspace3 = Blockly.inject(blocklydiv3, options3);
 
     /* Load Workspace Blocks from XML to workspace. Remove all code below if no blocks to load */
 
     /* TODO: Change workspace blocks XML ID if necessary. Can export workspace blocks XML from Workspace Factory. */
     var workspaceBlocks = document.getElementById("workspaceBlocks"); 
+    var workspaceBlocks2 = document.getElementById("workspaceBlocks2");
+    var workspaceBlocks3 = document.getElementById("workspaceBlocks3");
 
     /* Load blocks to workspace. */
     Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
+    Blockly.Xml.domToWorkspace(workspaceBlocks2, workspace2);
+    Blockly.Xml.domToWorkspace(workspaceBlocks3, workspace3);
+
       
    /* Run Code */
 
@@ -213,25 +308,25 @@ var options = {
     function myFunction() {
     document.getElementById("check").style.color = "white";
     }
-    
-    function myFunction2(id){
-      document.getElementById('blocklydiv').innerHTML = document.getElementById(id).innerHTML;
+
+    function myFunction2(){
+      document.getElementById("blocklydiv").style.display="block"
+      document.getElementById("blocklydiv2").style.display="none"
+      document.getElementById("blocklydiv3").style.display="none"
+
+   }
+    function myFunction3(){
+      document.getElementById("blocklydiv").style.display="none"
+      document.getElementById("blocklydiv2").style.display="block"
+      document.getElementById("blocklydiv3").style.display="none"
     }
-    function myFunction3(id){
-      document.getElementById('blocklydiv').id = 'blocklydiv3'
-    }
-    function myFunction4(id){
-      document.getElementById('blocklydiv').id = 'blocklydiv4'
+    function myFunction4(){
+      document.getElementById("blocklydiv").style.display="none"
+      document.getElementById("blocklydiv2").style.display="none"
+      document.getElementById("blocklydiv3").style.display="block"
     }  
 
   </script>
-
-    <button id="check" class="button button1" onclick="myFunction()">Check Code</button>
-
-
-    
-
-
 
   </body>
   
