@@ -4,18 +4,20 @@
   <head>
     <meta charset="utf-8">
     <base target="_top">
-    <title>Crosslabs Titration</title>
-    <!--<script src="https://unpkg.com/blockly/blockly.min.js"></script>-->
+    <title>Arduino Funktionen</title>
 
-    <!-- Hier wird der source-code für Blockly geladen-->
+    <!--Hier wird der source code von Blockly geladen-->
     <script src="js/blockly_sourcecode/blockly_compressed.js"></script>
     <script src="js/blockly_sourcecode/blocks_compressed.js"></script>
     <script src="js/blockly_sourcecode/javascript_compressed.js"></script>
     <script src="js/blockly_sourcecode/en.js"></script>
 
+    <!--Hier werden die benötigten Blöcke zum Erstellen aller Funktionen geladen-->
     <script src="js/blocks_definition/Blöcke_Definition_Code.js"></script>
     
 
+    <!--Hier wird das stylesheet geladen-->
+    <link rel="stylesheet" href="assets/stylesheets/main.css">
 
 
 
@@ -32,9 +34,7 @@
       overflow: hidden;
     }
 
-
-
-    #blocklydiv {
+   #blocklydiv { 
       float: bottom;
       height: 90%;
       width: 100%;
@@ -50,7 +50,8 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 20px;
+    padding: 10px 20px;
     margin: 4px 2px;
     cursor: pointer;
     outline: none;
@@ -60,13 +61,34 @@
     border-radius: 15px;
     box-shadow: 0 9px #999;
   }
+  .button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
+
+
+
   .button1 {background-color: #4CAF50;} /* Green */
+  .button2 {background-color:   #1E90FF } /* Blue */
+  .button3 {background-color:   #1E90FF }
+  .button4 {background-color:   #1E90FF }
+
+  .button:hover{
+    background-color:#00008B  ;
+  }
 
   .button1:hover {
     background-color: #006400;
     color: white;}
 
-  .button:active {
+  .button1:active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
@@ -80,14 +102,17 @@
     <h1>Crosslabs</h1>
 
 
+    <button id="Setup1" class="button button2" onclick="myFunction1()">Void Setup</button>
+    <button id="Loop1" class="button button3" onclick="myFunction2()">Void Loop</button>
+    <button id="Functions1" class="button button4" onclick="myFunction3()" >Void Function</button>
 
-    <img id="images" alt="Versuchsaufbau" src="assets/images/crosslabs.png"
-                                                                            width="900"
-                                                                            height="500" /> 
-    
-    <div id= "blocklydiv" style="height: 600px; width: 1000px;"></div>
+    <a id="Setup1" href="Crosslabs_Setup.html"></a>
 
-    <!----Toolbox Definition ---->
+    <a id="Loop1" href="Crosslabs_Loop.html"></a>
+
+    <a id="Function1" href="Crosslabs_Function.html"></a>
+
+<div id='blocklydiv' style="height:500px;width:900px">
 <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Arduino Bibliothek">
@@ -112,7 +137,7 @@
       <field name="BOOL">TRUE</field>
     </block>
   </category>
-  <category name="Motor und Sensor">
+    <category name="Motor und Sensor">
     <block type="spritzpumpe"></block>
     <block type="geschwindigkeit">
       <field name="NAME">Langsam</field>
@@ -137,10 +162,17 @@
     </block>
   </category>
 </xml>
-    </div>
+</div>
 
-    <script>
-    var toolbox = document.getElementById("toolbox");
+    
+
+
+<button id="check" class="button button1" onclick="myFunction()">Check Code</button>
+    
+<script>
+
+
+var toolbox = document.getElementById("toolbox");
 
 var options = { 
   toolbox : toolbox, 
@@ -164,32 +196,33 @@ var options = {
     snap : true
   }
 };
+  var workspace = Blockly.inject(blocklydiv, options);
+  var workspaceBlocks = document.getElementById("workspaceBlocks");
+  Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
 
-    /* Inject your workspace */ 
-    var workspace = Blockly.inject(blocklydiv, options);
 
-    /* Load Workspace Blocks from XML to workspace. Remove all code below if no blocks to load */
-
-    /* TODO: Change workspace blocks XML ID if necessary. Can export workspace blocks XML from Workspace Factory. */
-    var workspaceBlocks = document.getElementById("workspaceBlocks"); 
-
-    /* Load blocks to workspace. */
-    Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
       
    /* Run Code */
 
 
     function myFunction() {
     document.getElementById("check").style.color = "white";
-    }
+    } 
 
-    </script>
+    function myFunction1() {
+      document.getElementById('Setup1').click(); 
+    }   
+    function myFunction2(){
+      document.getElementById('Loop1').click();
 
-    <button id="check" class="button button1" onclick="myFunction()">Check Code</button>
+      
+    }    
+    function myFunction3(){
+      document.getElementById('Function1').click();
 
-    
-
-
+      
+    } 
+  </script>
 
   </body>
   
