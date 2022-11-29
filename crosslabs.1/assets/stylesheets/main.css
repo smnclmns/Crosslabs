@@ -1,20 +1,49 @@
-html {
+html, body {
     height:100%;
+    margin: 0 auto;
+    background-color: #999;
 }
 body {
-    height: 100%;
     background-color: #fff;
     font-family: sans-serif;
+    overflow: hidden;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+h1 {
+    margin: 0 auto;
+    font-weight: normal;
+    font-size: 140%;
+}
+table {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+#blocklyArea {
+    height: 99%;
+}
+#Terminal {
+    width: 40%;
+
+}
+.container {
+    height: 100%;
+    width: 90%;
+    margin: 0 auto;
+    padding-left: 5%;
+    padding-right: 5%;
+    display: inline-flex;
+    flex-direction: column;
 }
 
-#blocklydiv { 
-    float: bottom;
-    height: 90%;
-    width: 100%;
+.terminal_item {
+    margin: 5px;
+
 }
-#images {
-    position: fixed;
-    right: 0;
+.terminal_item img {
+    width: 100%;
+    height: auto;
 }
 
 .button1 {

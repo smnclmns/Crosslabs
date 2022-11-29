@@ -19,136 +19,132 @@
     <!--Hier wird das stylesheet geladen-->
     <link rel="stylesheet" href="assets/stylesheets/main.css">
 
-
-
   </head>
 
   <body >
+
     <h1>Crosslabs</h1>
 
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Workspace</th>
+          <th scope="col">Terminal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <button id="Setup" class="button button2" onclick="myFunction1()">Void Setup</button>
+            <button id="Loop" class="button button3" onclick="myFunction2()">Void Loop</button>
+            <button id="Functions" class="button button4" onclick="myFunction3()" >Void Function</button>
 
-    <button id="Setup" class="button button2" onclick="myFunction1()">Void Setup</button>
-    <button id="Loop" class="button button3" onclick="myFunction2()">Void Loop</button>
-    <button id="Functions" class="button button4" onclick="myFunction3()" >Void Function</button>
+            <a id="Setup1" href="Crosslabs_Setup.html"></a>
 
-    <a id="Setup1" href="Crosslabs_Setup.html"></a>
+            <a id="Loop1" href="Crosslabs_Loop.html"></a>
 
-    <a id="Loop1" href="Crosslabs_Loop.html"></a>
+            <a id="Function1" href="Crosslabs_Function.html"></a>
+          </td>
+          <td>
+            
+          </td>
+        </tr>
+        <tr>
+          <td id="blocklyArea"></td>
+          <td id="Terminal">
+            <div class="container">
+              <p class="terminal_item">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                Numquam perspiciatis eaque, pariatur doloribus eos, quos 
+                laboriosam ipsum nemo itaque quis veniam voluptatum est ea
+                nisi. Unde explicabo harum excepturi deserunt.
+              </p>
+              <div class="terminal_item">
+                <img src="assets/images/Crosslabs.jpg" alt="Versuchsaufbau">
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-    <a id="Function1" href="Crosslabs_Function.html"></a>
+<div id='blocklyDiv' style="position: absolute;"></div>
 
-<div id='blocklydiv' style="height:500px;width:900px">
-<xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
-<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
-  <category name="Arduino Bibliothek">
-    <block type="library"></block>
-    <block type="adafruit"></block>
-    <block type="stepper"></block>
-    <block type="wire"></block>
-    <block type="fake_lib_1"></block>
-    <block type="fake_lib_2"></block>
-  </category>
-  <category name="PIN Zuweisung">
-    <block type="arduino_outputs"></block>
-    <block type="math_number">
-      <field name="NUM">0</field>
-    </block>
-  </category>
-  <category name="Titrationsphasen">
-    <block type="titrationsphasen">
-      <field name="Titrationsphasen">1</field>
-    </block>
-    <block type="logic_boolean">
-      <field name="BOOL">TRUE</field>
-    </block>
-  </category>
-    <category name="Motor und Sensor">
-    <block type="spritzpumpe"></block>
-    <block type="geschwindigkeit">
-      <field name="NAME">Langsam</field>
-    </block>
-    <block type="lichtsensor"></block>
-  </category>
-  <category name="Allgemein">
-    <block type="controls_if"></block>
-    <block type="logic_boolean">
-      <field name="BOOL">TRUE</field>
-    </block>
-    <block type="controls_whileUntil">
-      <field name="MODE">WHILE</field>
-      <statement name="DO">
-        <block type="controls_flow_statements">
-          <field name="FLOW">BREAK</field>
-        </block>
-      </statement>
-    </block>
-    <block type="lists_create_with">
-      <mutation items="3"></mutation>
-    </block>
-  </category>
-</xml>
-</div>
+<script>
+  var toolbox = {
+      "kind":"flyoutToolbox",
+      "contents":[
+        {
+          "kind":"block",
+          "type":"controls_if"
+        },
+        {
+          "kind":"block",
+          "type":"logic_compare"
+        },
+        {
+          "kind":"block",
+          "type":"controls_repeat_ext"
+        },
+        {
+          "kind":"block",
+          "type":"math_number",
+          "fields":{
+            "NUM":123
+          }
+        },
+        {
+          "kind":"block",
+          "type":"math_arithmetic"
+        },
+        {
+          "kind":"block",
+          "type":"text"
+        },
+        {
+          "kind":"block",
+          "type":"text_print"
+        }
+      ]
+    }
 
-    
+  var blocklyArea = document.getElementById('blocklyArea');
+  var blocklyDiv = document.getElementById('blocklyDiv');
+  var demoWorkspace = Blockly.inject(blocklyDiv,
+      {media: 'https://unpkg.com/blockly/media/',
+       toolbox: toolbox});
+  var onresize = function(e) {
+    // Compute the absolute coordinates and dimensions of blocklyArea.
+    var element = blocklyArea;
+    var x = 0;
+    var y = 0;
+    do {
+      x += element.offsetLeft;
+      y += element.offsetTop;
+      element = element.offsetParent;
+    } while (element);
+    // Position blocklyDiv over blocklyArea.
+    blocklyDiv.style.left = x + 'px';
+    blocklyDiv.style.top = y + 'px';
+    blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+    blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+    Blockly.svgResize(demoWorkspace);
 
+    console.log('resize');
+  };
+  window.addEventListener('resize', onresize, false);
+  onresize();
+</script>
 
-<button id="check" class="button button1" onclick="myFunction()">Check Code</button>
-    
 <script>
 
-
-var toolbox = document.getElementById("toolbox");
-
-var options = { 
-  toolbox : toolbox, 
-  collapse : true, 
-  comments : true, 
-  disable : true, 
-  maxBlocks : Infinity, 
-  trashcan : true, 
-  horizontalLayout : false, 
-  toolboxPosition : 'start', 
-  css : true, 
-  media : 'https://blockly-demo.appspot.com/static/media/', 
-  rtl : false, 
-  scrollbars : false, 
-  sounds : true, 
-  oneBasedIndex : true, 
-  grid : {
-    spacing : 20, 
-    length : 1, 
-    colour : '#888', 
-    snap : true
+  function myFunction1() {
+    document.getElementById('Setup1').click(); 
+  }   
+  function myFunction2(){
+    document.getElementById('Loop1').click();
+  }    
+  function myFunction3(){
+    document.getElementById('Function1').click();
   }
-};
-  var workspace = Blockly.inject(blocklydiv, options);
-  var workspaceBlocks = document.getElementById("workspaceBlocks");
-  Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
-
-
-      
-   /* Run Code */
-
-
-    function myFunction() {
-    document.getElementById("check").style.color = "white";
-    } 
-
-    function myFunction1() {
-      document.getElementById('Setup1').click(); 
-    }   
-    function myFunction2(){
-      document.getElementById('Loop1').click();
-
-      
-    }    
-    function myFunction3(){
-      document.getElementById('Function1').click();
-
-      
-    } 
-  </script>
-
-  </body>
-  
-</html>
+</script>

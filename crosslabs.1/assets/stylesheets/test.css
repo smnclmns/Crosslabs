@@ -1,0 +1,16 @@
+html {
+    height: 100%;
+    display: flex;
+}
+
+body {
+    height: 50%;
+    border: 5px;
+    border-color: black;
+    background-color: aqua;
+}
+
+.container {
+    display: flex;
+    justify-items: center;
+}
