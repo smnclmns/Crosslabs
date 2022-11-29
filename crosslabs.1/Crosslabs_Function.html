@@ -4,15 +4,20 @@
   <head>
     <meta charset="utf-8">
     <base target="_top">
-    <title>Crosslabs</title>
-    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-    <script src="blockly_compressed.js"></script>
-    <script src="blocks_compressed.js"></script>
-    <script src="javascript_compressed.js"></script>
-    <script src="en.js"></script>
-    <script src="Blöcke_Definition_Code.js"></script>
+    <title>Arduino Funktionen</title>
+
+    <!--Hier wird der source code von Blockly geladen-->
+    <script src="js/blockly_sourcecode/blockly_compressed.js"></script>
+    <script src="js/blockly_sourcecode/blocks_compressed.js"></script>
+    <script src="js/blockly_sourcecode/javascript_compressed.js"></script>
+    <script src="js/blockly_sourcecode/en.js"></script>
+
+    <!--Hier werden die benötigten Blöcke zum Erstellen aller Funktionen geladen-->
+    <script src="js/blocks_definition/Blöcke_Definition_Code.js"></script>
     
 
+    <!--Hier wird das stylesheet geladen-->
+    <link rel="stylesheet" href="assets/stylesheets/main.css">
 
 
 
@@ -33,9 +38,13 @@
       float: bottom;
       height: 90%;
       width: 100%;
-}
-/* CSS Code für die Buttons*/
-  .button1 {
+    }
+    #images {
+      position: fixed;
+      right: 0;
+    }
+
+  .button {
     color: white;
     padding: 15px 32px;
     text-align: center;
@@ -82,19 +91,20 @@
   .button1:active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
-    transform: translateY(4px);}
-
+    transform: translateY(4px);
+  }
 
   </style>
 
   </head>
+
   <body >
     <h1>Crosslabs</h1>
 
 
-    <button id="Setup" class="button button2" onclick="myFunction1()">Void Setup</button>
-    <button id="Loop" class="button button3" onclick="myFunction2()">Void Loop</button>
-    <button id="Functions" class="button button4" onclick="myFunction3()" >Void Function</button>
+    <button id="Setup1" class="button button2" onclick="myFunction1()">Void Setup</button>
+    <button id="Loop1" class="button button3" onclick="myFunction2()">Void Loop</button>
+    <button id="Functions1" class="button button4" onclick="myFunction3()" >Void Function</button>
 
     <a id="Setup1" href="Crosslabs_Setup.html"></a>
 
