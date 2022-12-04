@@ -65,6 +65,11 @@
             </div>
           </td>
         </tr>
+        <tr>
+          <td>
+            <button id="check" class="button button1" onclick="myFunction()">Check Code</button>
+          </td>
+        </tr>
       </tbody>
     </table>
 
@@ -137,7 +142,9 @@
 </script>
 
 <script>
-
+  function myFunction() {
+    document.getElementById("check").style.color = "white";
+  } 
   function myFunction1() {
     document.getElementById('Setup1').click(); 
   }   
