@@ -134,6 +134,18 @@ Blockly.Blocks['titrationsphasen'] = {
  this.setHelpUrl("");
   }
 };
+Blockly.Blocks['arduinobib'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldLabelSerializable("Bibliotheken"), "Text")
+        .appendField(new Blockly.FieldDropdown([["Adafruit","op1"], ["Stepper","op2"], ["Wire","op3"], ["FakeLib","op4"], ["FakeLib2","op5"]]), "DD1")
+        .appendField(new Blockly.FieldDropdown([["Adafruit","op1"], ["Stepper","op2"], ["Wire","op3"], ["FakeLib","op4"], ["FakeLib2","op5"]]), "DD2")
+        .appendField(new Blockly.FieldDropdown([["Adafruit","op1"], ["Stepper","op2"], ["Wire","op3"], ["FakeLib","op4"], ["FakeLib2","op5"]]), "DD3");
+    this.setColour(225);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+}
 //Generated stub
 
 Blockly.JavaScript['spritzpumpe'] = function(block) {
@@ -156,48 +168,28 @@ Blockly.JavaScript['geschwindigkeit'] = function(block) {
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-Blockly.JavaScript['library'] = function(block) {
-  var value_library1 = Blockly.JavaScript.valueToCode(block, 'Library1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_library2 = Blockly.JavaScript.valueToCode(block, 'Library2', Blockly.JavaScript.ORDER_ATOMIC);
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...;\n';
+
+Blockly.JavaScript['arduinobib'] = function(block) {
+  var dropdown_dd1 = block.getFieldValue('DD1');
+  var dropdown_dd2 = block.getFieldValue('DD2');
+  var dropdown_dd3 = block.getFieldValue('DD3');
+
+  if (dropdown_dd1 == "op4" || dropdown_dd3 == "op4" || dropdown_dd2 == "op4" || dropdown_dd1 == "op5" || dropdown_dd2 == "op5" || dropdown_dd3 =="op5") {
+    var code = "alert('wrong')";
+  }
+  else if (dropdown_dd1 == dropdown_dd2 && dropdown_dd2== dropdown_dd3){
+    var code ="alert('wrong')";
+  }
+  else if (dropdown_dd1 == dropdown_dd3 || dropdown_dd2== dropdown_dd3 || dropdown_dd2==dropdown_dd1){
+    var code ="alert('wrong')";
+  }
+  else {
+  var code = "alert('right')";
+}
+
   return code;
 };
 
-Blockly.JavaScript['adafruit'] = function(block) {
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...';
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['stepper'] = function(block) {
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...';
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['wire'] = function(block) {
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...';
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['fake_lib_1'] = function(block) {
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...';
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['fake_lib_2'] = function(block) {
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...';
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
 
 Blockly.JavaScript['arduino_outputs'] = function(block) {
   var value_led = Blockly.JavaScript.valueToCode(block, 'LED', Blockly.JavaScript.ORDER_ATOMIC);
