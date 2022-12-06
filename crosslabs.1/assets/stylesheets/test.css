@@ -1,16 +1,72 @@
-html {
+html, body {
     height: 100%;
-    display: flex;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #fff;
 }
-
 body {
-    height: 50%;
-    border: 5px;
-    border-color: black;
-    background-color: aqua;
-}
-
-.container {
     display: flex;
-    justify-items: center;
+    flex-direction: row;
+    overflow: hidden;
+}
+.leftcontainer {
+    width: 66vw;
+    height: 99.5vh;
+    float: left;
+    border: 2px solid blue;
+    display: flex;
+    flex-direction: column;
+}
+.leftcontainer header {
+    height: 12vh;
+    width: 100%;
+    align-items: center;
+    border: 2px solid green;
+}
+.leftcontainer nav {
+    height: 6.5vh;
+    width: 100%;
+    border: 2px solid violet;
+}
+.leftcontainer .blocklyArea {
+    height: 68.5vh;
+    width: 100%;
+    border: 2px solid black;
+}
+.leftcontainer footer {
+    height: 12vh;
+    width: 100%;
+    border: 2px solid orange;
+}
+.rightcontainer {
+    width: 34vw;
+    height: 99.5vh;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid red;
+}
+.rightcontainer .terminal {
+    margin: auto;
+    height: 95%;
+    width: 95%;
+    border: 2px solid darkblue;
+}
+.rightcontainer .terminal .terminal_item {
+    font-size: small;
+    text-align: justify;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+.rightcontainer .terminal .terminal_item figure {
+    margin: 0;
+    text-align: center;
+}
+.rightcontainer .terminal .terminal_item figure figcaption {
+    display: inline-block;
+    text-align: left;
+}
+.rightcontainer .terminal .terminal_item figure .terminal_item img {
+    width: 100%;
+    height: auto;
 }
