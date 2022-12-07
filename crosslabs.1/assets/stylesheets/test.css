@@ -19,7 +19,8 @@ body {
 }
 .leftcontainer header {
     height: 12vh;
-    width: 100%;
+    width: 66vw;
+    display: grid;
     align-items: center;
     border: 2px solid green;
 }
@@ -27,6 +28,21 @@ body {
     height: 6.5vh;
     width: 100%;
     border: 2px solid violet;
+}
+.leftcontainer nav menu button {
+    border: none;
+    color: white;
+    background-color: #1E90FF;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.leftcontainer nav menu button:hover {
+    background-color: darkblue;
 }
 .leftcontainer .blocklyArea {
     height: 68.5vh;
