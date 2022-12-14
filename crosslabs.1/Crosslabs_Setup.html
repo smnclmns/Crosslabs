@@ -39,12 +39,12 @@
 <xml xmlns="https://developers.google.com/blockly/xml" id="workspaceBlocks" style="display: none"></xml>
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Arduino Bibliothek">
-    <block type="library"></block>
-    <block type="adafruit"></block>
-    <block type="stepper"></block>
-    <block type="wire"></block>
-    <block type="fake_lib_1"></block>
-    <block type="fake_lib_2"></block>
+    <block type="arduinobib">
+      <field name="Text">Bibliotheken</field>
+      <field name="DD1">op1</field>
+      <field name="DD2">op1</field>
+      <field name="DD3">op1</field>
+    </block>
   </category>
   <category name="PIN Zuweisung">
     <block type="arduino_outputs"></block>
@@ -66,6 +66,7 @@
 
 
 <button id="check" class="button button1" onclick="myFunction()">Check Code</button>
+<button id="check1" class="button button1" onclick="runCode()">Run Code</button>
     
 <script>
 
@@ -102,10 +103,27 @@ var options = {
       
    /* Run Code */
 
+      function myFunction() {   
+      // Generate JavaScript code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      var code = Blockly.JavaScript.workspaceToCode(workspace);
+      alert(code);
+    }
 
-    function myFunction() {
-    document.getElementById("check").style.color = "white";
-    } 
+    function runCode() {
+      // Generate JavaScript code and run it.
+      window.LoopTrap = 1000;
+      Blockly.JavaScript.INFINITE_LOOP_TRAP =
+          'if (--window.LoopTrap === 0) throw "Infinite loop.";\n';
+      var code = Blockly.JavaScript.workspaceToCode(workspace);
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
+    }
+
 
     function myFunction1() {
       document.getElementById('Setup1').click(); 
