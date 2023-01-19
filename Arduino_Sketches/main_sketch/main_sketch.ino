@@ -1,5 +1,3 @@
-
-
 #include <Wire.h>
 #include "Adafruit_AS726x.h"
 #include <SpeedyStepper.h>
