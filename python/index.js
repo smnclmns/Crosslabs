@@ -1,6 +1,5 @@
 
 
-const { spawn } = require('child_process');
 
 const buttons = document.querySelectorAll(".run-script");
 
