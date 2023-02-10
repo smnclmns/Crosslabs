@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash
-from uml_handling import UML_Handler, get_ids
+from UMLs.uml_handling import UML_Handler, get_ids
 
 app = Flask(__name__)
 
