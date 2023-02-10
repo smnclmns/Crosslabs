@@ -1,8 +1,0 @@
-{
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "editor.defaultFormatter": "mgmcdermott.vscode-language-babel",
-    "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    }
-}

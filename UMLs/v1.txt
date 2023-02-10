@@ -1,0 +1,5 @@
+@startuml
+:Hello World;
+:Initilaise_anything();
+:Ready_with_initializing();
+@enduml
