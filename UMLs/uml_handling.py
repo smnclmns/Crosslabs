@@ -2,14 +2,17 @@ import os
 from dataclasses import dataclass, field
 from functools import partial
 
-from plantuml import PlantUML
+from plantuml import PlantUML, PlantUMLConnectionError, PlantUMLHTTPError
 
 def get_rootdir(basename = "Crosslabs") -> str:
     while not os.path.basename(os.getcwd()) == basename: os.chdir("..")
     return os.getcwd()
 
+def get_txt_files_dir(root_dir: str = get_rootdir()) -> str:
+    return os.path.join(root_dir, "UMLs", "txt_files")
+
 def get_uml_dirlist(root_dir: str = get_rootdir()) -> list:
-    return [os.path.join(root_dir, "UMLs", file) for file in os.listdir("UMLs") if ".txt" in file]
+    return [os.path.join(root_dir, "UMLs", "txt_files", file) for file in os.listdir(get_txt_files_dir()) if ".txt" in file]
 
 def get_uml_dict(uml_dirlist: list = get_uml_dirlist()) -> dict:
     return {os.path.basename(path)[:-4]:path for path in uml_dirlist}
@@ -40,17 +43,49 @@ class UML_Handler():
 
         else: raise FileNotFoundError(f"there is no file with the id '{uml_id}")
 
-        with open(uml_file, 'r') as f: plantuml_text: str = "".join(f.readlines())
+        with open(uml_file, 'r') as f: plantuml_text: str = f.read()
 
         return plantuml_text
 
-    def get_plantuml_url(self, uml_id: str) -> str:
+    def get_plantuml_url(self, uml_id: str, figtype: str = "any") -> str:
 
-        return self.__PlantUML__.get_url(self.get_plantuml_text(uml_id))
+        default_url = self.__PlantUML__.get_url(self.get_plantuml_text(uml_id))
+        sections = default_url.split("/")
 
-    def get_img_data(self, uml_id: str):
+        if figtype == "any": return default_url
 
-        return self.__PlantUML__.processes(self.get_plantuml_text(uml_id))
+        sections[4] = figtype
+
+        return "/".join(sections)
+        
+
+    def get_img_data(self, url: str):
+
+        try:
+            response, content = self.__PlantUML__.http.request(url, **self.__PlantUML__.request_opts)
+        except self.__PlantUML__.HttpLib2Error as e:
+            raise PlantUMLConnectionError(e)
+        if response.status != 200:
+            raise PlantUMLHTTPError(response, content)
+        return content
+
+    def save_png_file(self, uml_id: str) -> bool:
+
+        infile = self.__uml_dict__.get(uml_id)
+        outfile = os.path.join(self.__root_dir__, "UMLs", "PNGs", uml_id + ".png")
+        errorfile = os.path.join(self.__root_dir__, "UMLs","error_files", uml_id + "_error.html")
+
+        return self.__PlantUML__.processes_file(infile, outfile=outfile, errorfile=errorfile)
+
+    def save_svg_file(self, uml_id: str) -> None:
+
+        url = self.get_plantuml_url(uml_id, "svg")
+        content = self.get_img_data(url)
+
+        with open(os.path.join(self.__root_dir__, "UMLs", "SVGs", uml_id + ".svg"), 'wb') as out:
+            out.write(content)
+
+
 
     def add_Block(self, uml_id: str) -> None:
         pass
@@ -61,5 +96,5 @@ if __name__ == "__main__":
 
     testhandler = UML_Handler()
 
-    print(testhandler)
+    testhandler.save_svg_file("v1")
 

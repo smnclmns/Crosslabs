@@ -1,0 +1,10 @@
+@startuml
+title activity diagram of automated titration
+start
+fork
+  :initialise StepperMotor;
+fork again
+  :initialise Lightsensor;
+end fork
+end
+@enduml
