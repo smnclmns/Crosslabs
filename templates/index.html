@@ -8,11 +8,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
 </head>
 <body>
-    <h1>Hello There</h1>
-    <div>
-        <img src="{{ src }}">
-    </div>    
-    <br>
-    <input type="text">
+    <div class="dashboard">
+        <section class="navigation">
+            <img class="logo" src="{{ url_for('static', filename='assets/ICONs/science.svg')}}" alt="Logo">Logo</img>
+            <div>
+                <img class="nav-icons" src="{{ url_for('static', filename='assets/ICONs/home.svg')}}" alt="Home">
+                <img class="nav-icons" src="{{ url_for('static', filename='assets/ICONs/flowchart.svg')}}" alt="flowchart">
+                <img class="nav-icons" src="{{ url_for('static', filename='assets/ICONs/bookmarks.svg')}}" alt="">
+            </div>            
+        </section>
+        <section class="main">
+            <div class="block-container">
+            </div>
+            <img class="output" src="{{ uml_src }}" alt="uml_src">
+        </section>
+        <section class="prompt">
+        </section>
+    </div>
 </body>
 </html>
