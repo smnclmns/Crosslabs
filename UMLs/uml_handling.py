@@ -96,5 +96,5 @@ if __name__ == "__main__":
 
     testhandler = UML_Handler()
 
-    testhandler.save_svg_file("arduino_uml")
+    testhandler.save_svg_file("v1")
 
