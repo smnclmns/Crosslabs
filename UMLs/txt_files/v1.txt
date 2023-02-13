@@ -1,3 +1,4 @@
-@startuml
-(*) -> "Hello WOlrd"
-@enduml
+start
+:Schritt1;
+:Schritt2;
+end

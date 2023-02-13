@@ -21,7 +21,7 @@ def get_ids(uml_dict: dict = get_uml_dict()) -> set:
     return {name for name in uml_dict}
 
 
-@dataclass(slots=True, frozen=True)
+@dataclass(slots=True)
 class UML_Handler():
 
     root_dirname: str = "Crosslabs"
@@ -31,7 +31,7 @@ class UML_Handler():
 
     uml_ids: set = field(init=False, default_factory=get_ids)
 
-    __PlantUML__: PlantUML = field(init=False, default_factory=PlantUML) # initialises the connection to the open plantuml server
+    __PlantUML__: PlantUML = field(init=False, default_factory=partial(PlantUML, url="http://www.plantuml.com/plantuml/img/")) # initialises the connection to the open plantuml server
 
     def __repr__(self) -> str:
         return f"UML_Handler: {self.uml_ids}"
@@ -87,8 +87,15 @@ class UML_Handler():
 
 
 
-    def add_Block(self, uml_id: str) -> None:
-        pass
+    def add_uml_file(self, plant_uml_text: str) -> None:
+
+        with open("UMLs/txt_files/v1.txt", "w") as f: f.write(plant_uml_text)
+
+        self.__uml_list__ = get_uml_dirlist()
+        self.__uml_dict__ = get_uml_dict()
+        self.uml_ids = get_ids()
+
+
 
 
 

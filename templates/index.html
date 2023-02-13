@@ -10,7 +10,7 @@
 <body>
     <div class="dashboard">
         <section class="navigation">
-            <img class="logo" src="{{ url_for('static', filename='assets/ICONs/science.svg')}}" alt="Logo">Logo</img>
+            <img class="logo" src="{{ url_for('static', filename='assets/TU.jpeg')}}" alt="Logo"></img>
             <div>
                 <img class="nav-icons" src="{{ url_for('static', filename='assets/ICONs/home.svg')}}" alt="Home">
                 <img class="nav-icons" src="{{ url_for('static', filename='assets/ICONs/flowchart.svg')}}" alt="flowchart">
@@ -23,6 +23,11 @@
             <img class="output" src="{{ uml_src }}" alt="uml_src">
         </section>
         <section class="prompt">
+            <form action="/" method="post">
+                <textarea name="user-input" id="user-input" cols="30" rows="10" placeholder="Gib hier den Pseudo-Code ein"></textarea>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
         </section>
     </div>
 </body>
