@@ -1,29 +1,49 @@
-@startuml
-title Representation of Arduino-Skript
-start
-fork
-  :initialise StepperMotor;
-fork again
-  :initialise Lightsensor;
-end fork
-repeat
-  :read incomming command;
-  switch (command)
-  case (Start\n)
-    :set Start = true;
-  case (Stopp\n)
-    :set Start = false;
-    :set phase = 0;
-  case (Kalibirere\n)
-    :run Calibration();
-  case (Reset\n)
-    :run Reset();
-  case (Forward\n)
-    :run Move(int steps > 0);
-  case (Backward\n)
-    :run Move(int steps < 0);
-  case (Nullposition\n)
-    :set Nullposition = 0;
-  endswitch
-  :Finished executing the command;
+@startuml
+
+
+
+skinparam classFontSize 20
+
+title __Calibration Protocol__
+
+|Automated|
+
+start
+
+fork
+
+:Define n;
+
+-> **n = 150**;
+
+fork again
+
+:Initializing the motor;
+
+-> **i = 0**;
+
+fork end
+
+
+
+while (number of steps (i)) 
+
+-> **i < n**;
+
+:Pump drives one step;
+
+->**i + 1**;
+
+endwhile ( **i = n**)
+
+|Manually|
+
+:Insert the weigh into the Calibration protocol;
+
+|Automated|
+
+:End of Calibration;
+
+end
+
 @enduml
