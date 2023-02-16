@@ -1,4 +1,25 @@
+@startuml
+
+skinparam classFontSize 20
+title __Calibration Protocol__
+|Automated|
 start
-:Schritt1;
-:Schritt2;
-end
+fork
+:Define n;
+-> **n = 150**;
+fork again
+:Initializing the motor;
+-> **i = 0**;
+fork end
+
+while (number of steps (i)) 
+-> **i < n**;
+:Pump drives one step;
+->**i + 1**;
+endwhile ( **i = n**)
+|Manually|
+:Insert the weigh into the Calibration protocol;
+|Automated|
+:End of Calibration;
+end
+@enduml
