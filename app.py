@@ -14,8 +14,10 @@ def home():
     handler.add_uml_file(text_input)
     
     return render_template("index.html", uml_src=handler.get_plantuml_url("v1", "svg"))
-
+        
 if __name__ == "__main__":
 
     app.run(debug=True, port=8000)
+
+
 
