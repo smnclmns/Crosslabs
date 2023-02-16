@@ -12,8 +12,14 @@ def home():
         text_input = handler.get_plantuml_text("v1")
 
     handler.add_uml_file(text_input)
+    import test 
+    from test import statement
+   
     
-    return render_template("index.html", uml_src=handler.get_plantuml_url("v1", "svg"))
+    return render_template("index.html", uml_src=handler.get_plantuml_url("v1", "svg"), state = statement)
+
+
+
         
 if __name__ == "__main__":
 
