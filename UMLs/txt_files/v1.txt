@@ -5,9 +5,8 @@ title __Calibration Protocol__
 
 |Automated|
 
+:calibration;
 start
-
-:start of calibration;
 
 fork
 
