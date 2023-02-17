@@ -5,6 +5,7 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
 
     ouput_dict = {
         "score": 0,
+        "Oscore": 0,
         "tips": [""]
     }
 
@@ -21,24 +22,22 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
     for i, line in enumerate(entwurf):
 
         words = line.split(" ")
-        kwords=[""]
-
+        kwords=[]
+        keywords1 = keywords.copy()
         for word in words:
 
-            if word in keywords: 
+            if word in keywords1: 
                 ouput_dict["score"] += 1
+                keywords1.remove(word)
                 kwords.append(word)
                 
-                
 
-        for i in range(len([kwords])):
-            if kwords[i] == keywords[i]: 
-                ouput_dict["score"] += 1
-            
+        for m in range(len(kwords)):
+            if kwords[m] == keywords[m]: 
+                ouput_dict["Oscore"] += 1
 
-
-    
     return ouput_dict
+    
 
 
 app = Flask(__name__)
@@ -54,16 +53,18 @@ def home():
     handler.add_uml_file(text_input)
 
     vorlage = r"UMLs\txt_files\Calibration.txt"
-    keywords = ["calibration", "pump","initializing", "motor"]
+    keywords = ["calibration" ,"initializing","motor" ,"pump",]
     entwurf = r"UMLs\txt_files\v1.txt"
 
     output_dict = check(vorlage, keywords, entwurf)
 
-    score = output_dict["score"]   
+    score = output_dict["score"]
+    Oscore = output_dict["Oscore"]   
     
     return render_template("index.html",
      uml_src=handler.get_plantuml_url("v1", "svg"),
-     score=score)
+     score=score,
+     Oscore=Oscore)
 
 
 

@@ -1,4 +1,4 @@
-  @startuml
+@startuml
 
 
 title __Calibration Protocol__
@@ -6,6 +6,8 @@ title __Calibration Protocol__
 |Automated|
 
 start
+
+:start of calibration;
 
 fork
 
