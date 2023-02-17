@@ -1,27 +1,32 @@
 from flask import Flask, render_template, request, flash
 from UMLs.uml_handling import UML_Handler, get_ids
 
-def check():
+def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
 
-    with open("UMLs/txt_files/Calibration.txt","r") as cal:
-        vorlage = cal.read().split("/n")
+    ouput_dict = {
+        "score": 0,
+        "tips": [""]
+    }
 
-    with open("UMLs/txt_files/v1.txt", "r") as v1:
+    with open(vorlage_level,"r") as f:
+        vorlage = f.read().split("/n")
+        vorlage = [line.replace(" ", "") for line in vorlage]
+
+    with open(entwurf_input, "r") as v1:
         entwurf = v1.read().split("/n")
+        # entwurf = [line.replace(" ", "") for line in entwurf]
 
-    score = 0
 
-    for i,line in enumerate(entwurf):
+    for i, line in enumerate(entwurf):
 
-        entwurf_line = line.replace(" ", "")
+        words = line.split(" ")
 
-        # if line is right: score += 1
-        
-        pass
+        for word in words:
 
+            if word in keywords: ouput_dict["score"] += 1
 
     
-    return score
+    return ouput_dict
 
 
 app = Flask(__name__)
@@ -36,11 +41,17 @@ def home():
 
     handler.add_uml_file(text_input)
 
+    vorlage = r"UMLs\txt_files\Calibration.txt"
+    keywords = ["calbibration", "pump", "stepper motor", "Initializing"]
+    entwurf = r"UMLs\txt_files\v1.txt"
+
+    output_dict = check(vorlage, keywords, entwurf)
+
+    score = output_dict["score"]   
     
-    
-   
-    
-    return render_template("index.html", uml_src=handler.get_plantuml_url("v1", "svg"), state = check())
+    return render_template("index.html",
+     uml_src=handler.get_plantuml_url("v1", "svg"),
+     score=score)
 
 
 
