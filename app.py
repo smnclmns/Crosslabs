@@ -9,11 +9,12 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
     }
 
     with open(vorlage_level,"r") as f:
-        vorlage = f.read().split("/n")
+        vorlage = f.read().lower().split("/n")
         vorlage = [line.replace(" ", "") for line in vorlage]
 
     with open(entwurf_input, "r") as v1:
-        entwurf = v1.read().split("/n")
+        entwurf = v1.read().lower().replace(":"," ").replace(";"," ").split("/n")
+        
         # entwurf = [line.replace(" ", "") for line in entwurf]
 
 
@@ -42,7 +43,7 @@ def home():
     handler.add_uml_file(text_input)
 
     vorlage = r"UMLs\txt_files\Calibration.txt"
-    keywords = ["calbibration", "pump", "stepper motor", "Initializing"]
+    keywords = ["calibration", "pump", "motor", "initializing"]
     entwurf = r"UMLs\txt_files\v1.txt"
 
     output_dict = check(vorlage, keywords, entwurf)
