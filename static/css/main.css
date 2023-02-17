@@ -1,0 +1,83 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0px;
+    background-color: #ffffff;
+}
+.dashboard {
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    margin: 0 auto;
+    display: flex;
+}
+
+/* ==================================
+            Navigation
+====================================*/
+
+.dashboard .navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 5vw;
+    height: 100%;
+    background-color: slategrey;
+}
+.dashboard .navigation .logo {
+    width: 90%;
+    margin-top: 5vh;
+}
+.dashboard .navigation div {
+    height: 50%;
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.dashboard .navigation div .nav-icons{
+    height: 14%;
+    width: 60%;
+    border: solid 5px slategray;
+    border-radius: 20px;
+}
+.dashboard .navigation div .nav-icons:hover {
+    border: solid 5px #00FFCE;
+}
+/* ==================================
+            Main Content
+====================================*/
+.dashboard .main {
+    height: 100%;
+    width: 70vw;
+    background-color: darkslategray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.dashboard .main .block-container {
+    height: 25vh;
+    width: 90%;
+    background-color: beige;
+    
+}
+/* ==================================
+            Prompt Window
+====================================*/
+.dashboard .prompt {
+    width: 25vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.dashboard .prompt form {
+    height: 95%;
+    width: 95%;
+}
+#user-input {
+    height: 80%;
+    width: 80%;
+}
