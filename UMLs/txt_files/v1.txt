@@ -1,4 +1,4 @@
-@startuml
+  @startuml
 
 
 title __Calibration Protocol__
@@ -21,19 +21,19 @@ fork again
 
 fork end
 
-while (number of steps (i)) 
+while (number of steps(i)) 
 
 ->i < n;
 
-:pump drives one step;
+:Pump drives one step;
 
 ->i + 1;
 
-endwhile(i = n)
+endwhile(i=n)
 
 |Manually|
 
-:Insert the weigh into the protocol;
+:Insert the weigh into the Calibration protocol;
 
 |Automated|
 

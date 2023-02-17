@@ -13,7 +13,7 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
         vorlage = [line.replace(" ", "") for line in vorlage]
 
     with open(entwurf_input, "r") as v1:
-        entwurf = v1.read().lower().replace(":"," ").replace(";"," ").split("/n")
+        entwurf = v1.read().lower().replace(":"," ").replace(";"," ").replace("->"," ").split("/n")
         
         # entwurf = [line.replace(" ", "") for line in entwurf]
 
@@ -21,10 +21,21 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
     for i, line in enumerate(entwurf):
 
         words = line.split(" ")
+        kwords=[""]
 
         for word in words:
 
-            if word in keywords: ouput_dict["score"] += 1
+            if word in keywords: 
+                ouput_dict["score"] += 1
+                kwords.append(word)
+                
+                
+
+        for i in range(len([kwords])):
+            if kwords[i] == keywords[i]: 
+                ouput_dict["score"] += 1
+            
+
 
     
     return ouput_dict
@@ -43,7 +54,7 @@ def home():
     handler.add_uml_file(text_input)
 
     vorlage = r"UMLs\txt_files\Calibration.txt"
-    keywords = ["calibration", "pump", "motor", "initializing"]
+    keywords = ["calibration", "pump","initializing", "motor"]
     entwurf = r"UMLs\txt_files\v1.txt"
 
     output_dict = check(vorlage, keywords, entwurf)
