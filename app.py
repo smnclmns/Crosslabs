@@ -53,7 +53,7 @@ def home():
     handler.add_uml_file(text_input)
 
     vorlage = r"UMLs\txt_files\Calibration.txt"
-    keywords = ["calibration" ,"initializing","motor" ,"pump",]
+    keywords = ["initializing","motor" ,"pump","input"]
     entwurf = r"UMLs\txt_files\v1.txt"
 
     output_dict = check(vorlage, keywords, entwurf)
