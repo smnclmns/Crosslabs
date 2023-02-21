@@ -48,26 +48,7 @@ class UML_Handler():
             # #farbe:blocK,
 
         with open(uml_file, 'r') as f:
-            plantuml_text = f.read().replace(":motor;", "#green:motor;").replace(":input","#green:input")
-
-        keywords = ["initializing","motor" ,"pump","input"]
-
-        for i,line in enumerate(plantuml_text):
-            words = line.split(" ")
-            kwords=[]
-            keywords1 = keywords.copy()
-
-            for word in words:
-
-                if word in keywords1: 
-                    plantuml_text: str = plantumltext.replace(":{};".format(word),"yellow:{};".format(word))
-                    kwords.append(word)
-                
-
-           # for m in range(len(kwords)):
-               # if kwords[m] == keywords[m]: 
-                  #  plantuml_text: str = plantumltext.replace(":{};".format(kwords[m]),"#green:{};".format(kwords[m]))
-                
+            plantuml_text = f.read().replace(":motor;", "#green:motor;").replace(":input","#green:input")                
 
         return plantuml_text
 
