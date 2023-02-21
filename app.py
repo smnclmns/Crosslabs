@@ -23,7 +23,7 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
     kwords=[]
     keywords1 = keywords.copy()
 
-    for i, line in enumerate(entwurf):
+    for line in entwurf:
 
         words = line.split()
 
@@ -37,14 +37,15 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
           
                 
 
-                for m in range(len(kwords)):
-                    if kwords[m] == keywords[m]: 
-                        ouput_dict["Oscore"] += +1
+                for m,kword in enumerate(kwords):
+                    if kword == keywords[m]:
+                        ouput_dict["Oscore"] += 1
+                    
                     
 
 
 
-    baba = kwords[100]
+    
     return ouput_dict
 
 app = Flask(__name__)
@@ -60,7 +61,7 @@ def home():
     handler.add_uml_file(text_input)
 
     vorlage = r"UMLs\txt_files\Calibration.txt"
-    keywords = ["initializing","motor" ,"pump","input"]
+    keywords = ["initializing", "motor", "pump", "input"]
     entwurf = r"UMLs\txt_files\v1.txt"
 
     output_dict = check(vorlage, keywords, entwurf)

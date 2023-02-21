@@ -1,7 +1,4 @@
 Initializing
-motor
 pump
-blulb
-bla
-input
-input
+motor
+input
