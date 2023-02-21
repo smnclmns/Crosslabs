@@ -9,36 +9,43 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
         "tips": [""]
     }
 
+
+
+
     with open(vorlage_level,"r") as f:
-        vorlage = f.read().lower().split("/n")
+        vorlage = f.read().lower().split()
         vorlage = [line.replace(" ", "") for line in vorlage]
 
     with open(entwurf_input, "r") as v1:
-        entwurf = v1.read().lower().replace(":"," ").replace(";"," ").replace("->"," ").split("/n")
-        
-        # entwurf = [line.replace(" ", "") for line in entwurf]
+        #entwurf = v1.read().lower().replace(":"," ").replace(";"," ").replace("->"," ").split()
+        entwurf = v1.read().lower().split()
 
+    kwords=[]
+    keywords1 = keywords.copy()
 
     for i, line in enumerate(entwurf):
 
-        words = line.split(" ")
-        kwords=[]
-        keywords1 = keywords.copy()
+        words = line.split()
+
         for word in words:
 
-            if word in keywords1: 
-                ouput_dict["score"] += 1
-                keywords1.remove(word)
-                kwords.append(word)
+
+                if word in keywords1: 
+                    ouput_dict["score"] += 1
+                    keywords1.remove(word)
+                    kwords.append(word)
+          
                 
 
-        for m in range(len(kwords)):
-            if kwords[m] == keywords[m]: 
-                ouput_dict["Oscore"] += 1
+                for m in range(len(kwords)):
+                    if kwords[m] == keywords[m]: 
+                        ouput_dict["Oscore"] += +1
+                    
 
+
+
+    baba = kwords[100]
     return ouput_dict
-    
-
 
 app = Flask(__name__)
 

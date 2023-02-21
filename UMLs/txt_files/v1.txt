@@ -1,5 +1,7 @@
-:Initializing;
-:pump;
-:motor;
-:input the weigh;
-
+Initializing
+motor
+pump
+blulb
+bla
+input
+input

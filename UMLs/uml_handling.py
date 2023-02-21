@@ -46,9 +46,21 @@ class UML_Handler():
 
             #farbiges markieren der textblöcke
             # #farbe:blocK,
+        plantuml_text=""
 
-        with open(uml_file, 'r') as f:
-            plantuml_text = f.read().replace(":motor;", "#green:motor;").replace(":input","#green:input")                
+        with open(uml_file, "r") as f: 
+            text = f.read().split()
+
+        s = ":"
+        s1 = ";"
+        text1 = [s + x + s1 for x in text]
+        
+        for y in text1: 
+                    plantuml_text +=  y+"\n"
+
+
+
+            #plantuml_text = f.read().replace(":motor;", "#green:motor;").replace(":input","#green:input")                
 
         return plantuml_text
 
