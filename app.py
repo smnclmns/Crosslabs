@@ -37,9 +37,9 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
           
                 
 
-                for m,kword in enumerate(kwords):
-                    if kword == keywords[m]:
-                        ouput_dict["Oscore"] += 1
+    for m,kword in enumerate(kwords):
+        if kword == keywords[m]:
+            ouput_dict["Oscore"] += 1
                     
                     
 

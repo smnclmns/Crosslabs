@@ -1,4 +1,1 @@
-Initializing
-pump
-motor
-input
+Initializing motor input pump

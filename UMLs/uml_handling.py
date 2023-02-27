@@ -60,7 +60,7 @@ class UML_Handler():
 
 
 
-            #plantuml_text = f.read().replace(":motor;", "#green:motor;").replace(":input","#green:input")                
+        plantuml_text = plantuml_text.replace(":motor;", "#green:motor;").replace(":input","#green:input")                
 
         return plantuml_text
 
