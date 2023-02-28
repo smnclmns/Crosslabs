@@ -39,11 +39,28 @@ class UML_Handler():
 
     def get_plantuml_text(self, uml_id: str) -> str:
 
+
         if uml_id in self.uml_ids: uml_file = self.__uml_dict__.get(uml_id)
 
         else: raise FileNotFoundError(f"there is no file with the id '{uml_id}")
 
-        with open(uml_file, 'r') as f: plantuml_text = f.read()
+            #farbiges markieren der textblöcke
+            # #farbe:blocK,
+        plantuml_text=""
+
+        with open(uml_file, "r") as f: 
+            text = f.read().split()
+
+        s = ":"
+        s1 = ";"
+        text1 = [s + x + s1 for x in text]
+        
+        for y in text1: 
+                    plantuml_text +=  y+"\n"
+
+
+
+        plantuml_text = plantuml_text.replace(":motor;", "#green:motor;").replace(":input","#green:input")                
 
         return plantuml_text
 

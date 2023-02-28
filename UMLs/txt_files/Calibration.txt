@@ -1,0 +1,44 @@
+@startuml
+
+
+title __Calibration Protocol__
+
+|Automated|
+
+start
+
+fork
+
+:Define n;
+
+->n = 150;
+
+fork again
+
+:Initializing the motor;
+
+->i = 0;
+
+fork end
+
+while (number of steps(i)) 
+
+->i < n;
+
+:Pump drives one step;
+
+->i + 1;
+
+endwhile(i=n)
+
+|Manually|
+
+:Insert the weigh into the Calibration protocol;
+
+|Automated|
+
+:End of Calibration;
+
+end
+
+@enduml
