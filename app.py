@@ -50,8 +50,23 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/dev", methods=["POST", "GET"])
+def dev():
+    return render_template("index.html")
+
+@app.route("/", methods=["POST", "GET"])
 def home():
+    return render_template("home.html")
+
+@app.route("/workspace", methods=["GET", "POST"])
+def workspace():
+
+    return render_template("workspace.html", lvl1="disabled", lvl2="disabled")
+
+
+
+@app.route("/workspace/tutorial", methods=["POST", "GET"])
+def tutorial():
     handler = UML_Handler()
     if request.method == "POST":
         text_input = request.form["user-input"]
@@ -69,10 +84,15 @@ def home():
     score = output_dict["score"]
     Oscore = output_dict["Oscore"]   
     
-    return render_template("index.html",
+    return render_template("Levels/tutorial.html",
      uml_src=handler.get_plantuml_url("v1", "svg"),
+     value=text_input,
      score=score,
      Oscore=Oscore)
+
+@app.route("/drafts", methods=["POST", "GET"])
+def Drafts():
+    return render_template("drafts.html")
 
 
 

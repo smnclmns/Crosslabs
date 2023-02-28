@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}
+Workspace
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+{% endblock %}
+
+
+{% block main %}
+
+<div class="dashboard">
+    <section class="main">
+        <div class="accordion col-12" id="LevelOverview">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Tutorial
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#LevelOverview">
+                    <div class="accordion-body d-flex flex-column align-items-center">
+                        <p><strong>After</strong> reading the <a href="{{ url_for('home')}}">Instructions</a> you can test the procedure in this Level:</p>
+                        <img src="{{ url_for('static', filename='assets/SVGs/Calibration.svg') }}" alt="Calibration UML">
+                        <p></p>
+                        <a class="btn btn-primary" href="{{ url_for('tutorial') }}" role="button">Start</a>
+                    </div>
+                </div>                
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button btn {{ lvl1 }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Level 1
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#LevelOverview">
+                    <div class="accordion-body d-flex flex-column align-items-center">
+                        <p>In this Level we take a closer look at ...:</p>
+                        <img src="{{ url_for('static', filename='assets/SVGs/Arduino_Skript.svg') }}" alt="Level 1 UML">
+                    </div>
+                </div>     
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button btn {{ lvl2 }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Level 2
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#LevelOverview">
+                    <div class="accordion-body d-flex flex-column align-items-center">
+                        <p>In this Level we take a closer look at ...:</p>
+                        <img src="{{ url_for('static', filename='assets/SVGs/Arduino_Skript.svg') }}" alt="Level 1 UML">
+                    </div>
+                </div>     
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

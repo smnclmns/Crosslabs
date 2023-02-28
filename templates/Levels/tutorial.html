@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}
+Tutorial
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+{% endblock %}
+
+{% block main %}
+
+<div class="dashboard">
+    <section class="main">
+        <img src="{{ uml_src }}" alt="Result Image">
+    </section>
+    <section class="prompt">
+        <form action="#" method="post">
+            <textarea name="user-input" id="user-input" placeholder="Gib hier den Pseudo-Code ein" required="true">
+                {{ value }}
+            </textarea>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <p>Your score is: {{ score }}<br>The order score is: {{Oscore}}</br>
+        </p>
+    </section>
+</div>
+
+{% endblock %}
+
+<!-- (HIER MÜSSTE JETZT block script eingefügt werden)
+    <script>
+        function saveValue(inputElement) {
+                if (!inputElement) throw new Error('inputElement param is required');
+
+                const { id, value } = inputElement;
+
+                if (!id) throw new Error('inputElemend should have an id attribute');
+
+                localStorage.setItem(id, value);
+            }
+
+        function getSavedValue(inputElement) {
+            if (!inputElement) throw new Error('inputElement param is required');
+
+            const { id } = inputElement;
+
+            if (!id) throw new Error('inputElemend should have an id attribute');
+
+            const value = localStorage.getItem(id);
+
+            return value;
+        }
+
+        const input = document.querySelector('#user-input');
+
+        input.addEventListener("keyup", function(event) {
+            saveValue(event.target)
+        });
+
+        window.addEventListener('load', function() {
+            const value = getSavedValue(input);
+            input.value = value;
+        })
+    </script>
+-->
