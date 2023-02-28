@@ -47,12 +47,14 @@ void setup(void) {
   Serial.begin(9600);
   while(!Serial);
 
-  if (!ams.begin()) {
+  Serial.println("Setup-Ready");
+
+  /*if (!ams.begin()) {
     Serial.println("could not connect to sensor! Please check your wiring.");
     while(1);
   }
 
-  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN); // implement the wiring of the motor  
+  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN); // implement the wiring of the motor  */
 }
 
 
@@ -93,7 +95,22 @@ void loop(void) {
 
     else if (inputString == "Nullposition\n") {
       nullposition = 0;
-    }  
+    }
+
+    else if (inputString.startsWith("double")) {
+
+      String digit_chars = "";
+      
+      for (uint8_t cha = 6; cha < inputString.length(); cha++) {
+
+        if (!isdigit(inputString[cha])) {
+          break;
+        }
+        digit_chars += inputString[cha];        
+      }
+      int response_int = digit_chars.toInt() * 2;
+      Serial.println(response_int);
+    }
   }
 
   
@@ -109,7 +126,6 @@ void serialEvent() {
     // do something about it:
     if (inChar == '\n') {
       stringComplete = true;
-      Serial.flush();
     }
   }
 }
