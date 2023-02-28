@@ -43,7 +43,7 @@ class UML_Handler():
 
         else: raise FileNotFoundError(f"there is no file with the id '{uml_id}")
 
-        with open(uml_file, 'r') as f: plantuml_text: str = f.read()
+        with open(uml_file, 'r') as f: plantuml_text = f.read()
 
         return plantuml_text
 
