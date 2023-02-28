@@ -19,16 +19,53 @@
         </section>
         <section class="main">
             <div class="block-container">
+                <img class="block-container" src="{{ url_for('static', filename='assets/Logiccalibration.svg')}}">
             </div>
             <img class="output" src="{{ uml_src }}" alt="uml_src">
         </section>
         <section class="prompt">
             <form action="/" method="post">
-                <textarea name="user-input" id="user-input" cols="30" rows="10" placeholder="Gib hier den Pseudo-Code ein"></textarea>
+                <textarea name="user-input" id="user-input" cols="30" rows="10" placeholder="Gib hier den Pseudo-Code ein" required="true"></textarea>
                 <br>
                 <input type="submit" value="Submit">
             </form>
+            <p>Your score is: {{ score }}<br>The order score is: {{Oscore}}</br>
+            </p>
         </section>
     </div>
+    <script>
+        function saveValue(inputElement) {
+                if (!inputElement) throw new Error('inputElement param is required');
+
+                const { id, value } = inputElement;
+
+                if (!id) throw new Error('inputElemend should have an id attribute');
+
+                localStorage.setItem(id, value);
+            }
+
+        function getSavedValue(inputElement) {
+            if (!inputElement) throw new Error('inputElement param is required');
+
+            const { id } = inputElement;
+
+            if (!id) throw new Error('inputElemend should have an id attribute');
+
+            const value = localStorage.getItem(id);
+
+            return value;
+        }
+
+        const input = document.querySelector('#user-input');
+
+        input.addEventListener("keyup", function(event) {
+            saveValue(event.target)
+        });
+
+        window.addEventListener('load', function() {
+            const value = getSavedValue(input);
+            input.value = value;
+        })
+    </script>
 </body>
 </html>
