@@ -1,27 +1,9 @@
-                                                                                                                                                                                                                                                                                                                                       
-            Pump
-            motor
-Motor
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+                                                                                                                                                                                                                                                                               initializing
+motor
+while()
+            pump
+endwhile()
+calibrate
             
             
             
