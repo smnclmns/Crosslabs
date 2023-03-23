@@ -64,7 +64,11 @@ class UML_Handler():
         .replace(":motor;", "#green:motor;")\
         .replace(":input;","#green:input;")\
         .replace(":initializing;","#green:initializing;")\
-        .replace(":pump;", "#green:pump;")
+        .replace(":pump;", "#green:pump;")\
+        .replace(":Motor;", "#green:Motor;")\
+        .replace(":Input;","#green:Input;")\
+        .replace(":Initializing;","#green:Initializing;")\
+        .replace(":Pump;", "#green:Pump;")
 
         return plantuml_text
 
