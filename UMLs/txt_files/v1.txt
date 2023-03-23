@@ -1,1 +1,6 @@
+<<<<<<< Updated upstream
 hallo
+=======
+Hallo
+if jaja
+>>>>>>> Stashed changes
