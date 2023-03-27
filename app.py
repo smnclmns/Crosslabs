@@ -24,28 +24,16 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
     keywords1 = keywords.copy()
 
     for line in entwurf:
-
         words = line.split()
-
         for word in words:
-
-
                 if word in keywords1: 
                     ouput_dict["score"] += 1
                     keywords1.remove(word)
                     kwords.append(word)
-          
-                
-
     for m,kword in enumerate(kwords):
         if kword == keywords[m]:
             ouput_dict["Oscore"] += 1
                     
-                    
-
-
-
-    
     return ouput_dict
 
 app = Flask(__name__)
