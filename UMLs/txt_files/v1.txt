@@ -1,11 +1,6 @@
-                                        
+                while()
 Step1
-while(x<y)
-Step2
-endwhile(x>y)
-Step3
-
-
+endwhile(pump)
             
             
             

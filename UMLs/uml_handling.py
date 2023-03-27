@@ -62,8 +62,6 @@ class UML_Handler():
                 
                 elif text[i][:9] == "endwhile(":
                     text1.append(text[i])
-                
-                
                 else:
                     s = ":"
                     s1 = ";"
