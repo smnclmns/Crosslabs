@@ -1,6 +1,3 @@
-                while()
-Step1
-endwhile(pump)
-            
-            
+Pump
+motor
             
