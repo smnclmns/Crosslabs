@@ -27,6 +27,23 @@ Tutorial
     </section>
 </div>
 
+
+<script>
+const textArea = document.getElementById('user-input');
+
+// Save input to local storage on every change
+textArea.addEventListener('input', () => {
+  localStorage.setItem('textAreaInput', textArea.value);
+});
+
+// Set text area value to saved input on page load
+window.addEventListener('load', () => {
+  const savedInput = localStorage.getItem('textAreaInput');
+  if (savedInput) {
+    textArea.value = savedInput;
+  }
+});
+</script>
 {% endblock %}
 
 <!-- (HIER MÜSSTE JETZT block script eingefügt werden)
