@@ -17,7 +17,6 @@ def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
         vorlage = [line.replace(" ", "") for line in vorlage]
 
     with open(entwurf_input, "r") as v1:
-        #entwurf = v1.read().lower().replace(":"," ").replace(";"," ").replace("->"," ").split()
         entwurf = v1.read().lower().split()
 
     kwords=[]
@@ -58,10 +57,12 @@ def tutorial():
     handler = UML_Handler()
     if request.method == "POST":
         text_input = request.form["user-input"]
+
+
+        handler.add_uml_file(text_input)
+
     else:
         text_input = handler.get_plantuml_text("v1")
-
-    handler.add_uml_file(text_input)
 
     vorlage = r"UMLs\txt_files\Calibration.txt"
     keywords = ["initializing", "motor", "pump", "input"]
@@ -72,9 +73,11 @@ def tutorial():
     score = output_dict["score"]
     Oscore = output_dict["Oscore"]   
     
+  
+    
+
     return render_template("Levels/tutorial.html",
      uml_src=handler.get_plantuml_url("v1", "svg"),
-     value=text_input,
      score=score,
      Oscore=Oscore)
 
