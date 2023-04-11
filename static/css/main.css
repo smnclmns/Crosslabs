@@ -53,3 +53,8 @@ html, body {
     height: 80%;
     width: 80%;
 }
+br {
+    display: block; /* makes it have a width */
+    content: ""; /* clears default height */
+    margin-top: 5px; /* change this to whatever height you want it */
+}
