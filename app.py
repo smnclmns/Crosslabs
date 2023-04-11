@@ -69,7 +69,6 @@ def tutorial():
     entwurf = r"UMLs\txt_files\v1.txt"
 
     output_dict = check(vorlage, keywords, entwurf)
-
     score = output_dict["score"]
     Oscore = output_dict["Oscore"]   
     
