@@ -14,7 +14,44 @@ Tutorial
         <img src="{{ uml_src }}" alt="Result Image">
     </section>
     <section class="prompt">
-        <form action="#" method="post">
+        <form action="#" methhod="post">
+            <p>
+            <label for="first">First step:</label>
+            <br><br>
+            <input type="text" id='first' placeholder="Gib hier den Pseudo-Code ein" name="first" >
+                {{ value }}
+            <br><br>
+            <label for="second">Second step:</label>
+            <br><br>
+            <input type="text" id="second" name="second">
+                {{value}}
+            <p>
+            <label for="While">While loop:</label>
+            <br></br>    
+            <label for="variable">Variable:</label>
+            <br><br>
+            <input type="text" id="second" name="second">
+                {{value}}
+            <br><br>
+            <label for="variable">Loop Condition:</label>
+            <br><br>
+            <input type="text" id="second" name="second" >
+                {{value}}
+            <br><br>
+            <label for="variable">End Condition:</label>
+            <br><br>
+            <input type="text" id="second" name="second">
+                {{value}}
+            <br><br>
+            </p>
+            </p>
+            <p>
+            <input type="submit" value="Submit">
+            </p>
+          </form>
+
+
+        <!-- <form action="#" method="post">
             <textarea name="user-input" id="user-input" placeholder="Gib hier den Pseudo-Code ein" required="true">
                 {{ value }}
             </textarea>
@@ -24,6 +61,7 @@ Tutorial
             <p>Your score is: {{ score }}<br>The order score is: {{Oscore}}</br>
             </p>
         </form>
+        -->
     </section>
 </div>
 
