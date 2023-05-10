@@ -9,6 +9,7 @@ Tutorial
 
 {% block main %}
 
+
 <div class="dashboard">
     <section class="main">
         <img src="{{ uml_src }}" alt="Result Image">
@@ -18,7 +19,7 @@ Tutorial
             <p>
             <label for="first">First step:</label>
             <br><br>
-            <input type="text" id='user-input' placeholder="Gib hier den Pseudo-Code ein" name="user-input" >
+            <input type="text" id='user-input' placeholder="Gib hier den Pseudo-Code ein" name="user-input" autofill="off" >
                 {{ value }}
             <br><br>
             <label for="second">Second step:</label>
@@ -83,6 +84,8 @@ window.addEventListener('load', () => {
     textArea.value = savedInput;
   }
 });
+
+
 </script>
 {% endblock %}
 
