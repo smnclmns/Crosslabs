@@ -18,15 +18,16 @@ html, body {
 ====================================*/
 .dashboard .main {
     height: 100%;
-    width: 70vw;
+    width: 50vw;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     overflow-y: auto;
 }
 .dashboard .main img {
-    height: 95%;
-    width: auto;
+    width: 100%;
+    height: auto;
 }
 .dashboard .main .block-container {
     height: 25vh;
@@ -38,7 +39,7 @@ html, body {
             Prompt Window
 ====================================*/
 .dashboard .prompt {
-    width: 25vw;
+    width: 45vw;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -49,7 +50,40 @@ html, body {
     height: 100%;
     width: 100%;
 }
-#user-input {
-    height: 80%;
-    width: 80%;
+pre {
+    background-color: #1e1e1e; /* Dunkelgrau */
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    overflow: auto;
+}
+code {
+    font-family: "Courier New", Courier, monospace;
+}
+
+code p {
+    color: white;
+}
+
+code .user-input {
+    min-width: 50px;
+}
+
+code .keyword {
+    color: #569cd6; /* Dunkelblau */
+}
+code .string {
+    color: #ce9178; /* Hellbraun */
+}
+code .function {
+    color: #dcdcaa; /* Hellgelb */
+}
+code .comment {
+    color: #608b4e; /* Dunkelgrün */
+}
+
+br {
+    display: block; /* makes it have a width */
+    content: ""; /* clears default height */
+    margin-top: 5px; /* change this to whatever height you want it */
 }

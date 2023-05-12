@@ -1,0 +1,34 @@
+@startuml
+
+
+title __Calibration Protocol__
+
+|Automated|
+
+start
+
+:<i>set_Motorspeed()</i>;
+
+while (number of iterations = <b>15</b>) 
+
+-> if i < n;
+
+:motor moves <b>500</b> number of steps;
+
+:Delay for <b>1000 ms</b>;
+
+->i + 1;
+
+endwhile(if i=n)
+
+|Manually|
+
+:Insert the weigh into the Calibration protocol;
+
+|Automated|
+
+:End of Calibration;
+
+end
+
+@enduml

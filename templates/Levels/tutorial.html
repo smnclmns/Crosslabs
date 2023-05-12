@@ -9,58 +9,76 @@ Tutorial
 
 {% block main %}
 
+
 <div class="dashboard">
     <section class="main">
+        <h1>UML</h1>
         <img src="{{ uml_src }}" alt="Result Image">
     </section>
+
     <section class="prompt">
+        <h1>Task</h1>
         <form action="#" method="post">
-            <textarea name="user-input" id="user-input" placeholder="Gib hier den Pseudo-Code ein" required="true">
-                {{ value }}
-            </textarea>
-            <br>
+<p>
+    In the following you will find a pseudo-code for the calibration of the stepper motor. <br>
+    The pseudo-code is incomplete, so you have to fill in the missing parts. <br>
+</p>
+<pre><code>
+<p>
+<span class="keyword">if</span> incoming command is <span class="string">"Start Calibration"</span>, run the following calbration routine:
+
+<span class="keyword">execute</span> the function <span class="function">set_Motorspeed()</span>
+
+<span class="keyword">for</span> <input class="user-input" type="text" id='Tut_iterations' placeholder="Number of iterations" name="Tut_iterations" tabindex="1" pattern="\d*"> times <span class="keyword">do</span>:
+  <span class="function">Move(<input class="user-input" type="text" id="Tut_steps" placeholder="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
+  <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="3" style="width: 50px" pattern="\d*"> ms
+
+Finally <span class="keyword">end</span> calibration
+
+
+</p>
+</code></pre>
             <input type="submit" value="Submit">
-        </form>
-        <p>Your score is: {{ score }}<br>The order score is: {{Oscore}}</br>
-        </p>
+            <p>
+            <br>You got {{ value }} out of 3 points.<br>
+            <ul>
+                {% for tip in tips.split("\n")[:-1] %}
+                    <li>{{ tip }}</li>
+                {% endfor %}
+            </ul>
+            </p>
+          </form>
+
     </section>
 </div>
 
+
+
+
+<script>
+
+const textAreas = document.getElementsByClassName('user-input');
+
+console.log(textAreas);
+
+// Loop over all input elements
+for (let i=0; i < textAreas.length; i++) {
+    let textArea = textAreas[i];
+
+    console.log(textArea.id);
+
+    // Save input to local storage on every change
+    textArea.addEventListener('input', () => {
+    localStorage.setItem(textArea.id, textArea.value);
+    });
+
+    // Set text area value to saved input on page load
+    window.addEventListener('load', () => {
+    const savedInput = localStorage.getItem(textArea.id);
+    if (savedInput) {
+        textArea.value = savedInput;
+    }
+    });
+}
+</script>
 {% endblock %}
-
-<!-- (HIER MÜSSTE JETZT block script eingefügt werden)
-    <script>
-        function saveValue(inputElement) {
-                if (!inputElement) throw new Error('inputElement param is required');
-
-                const { id, value } = inputElement;
-
-                if (!id) throw new Error('inputElemend should have an id attribute');
-
-                localStorage.setItem(id, value);
-            }
-
-        function getSavedValue(inputElement) {
-            if (!inputElement) throw new Error('inputElement param is required');
-
-            const { id } = inputElement;
-
-            if (!id) throw new Error('inputElemend should have an id attribute');
-
-            const value = localStorage.getItem(id);
-
-            return value;
-        }
-
-        const input = document.querySelector('#user-input');
-
-        input.addEventListener("keyup", function(event) {
-            saveValue(event.target)
-        });
-
-        window.addEventListener('load', function() {
-            const value = getSavedValue(input);
-            input.value = value;
-        })
-    </script>
--->

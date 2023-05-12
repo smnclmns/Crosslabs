@@ -4,6 +4,7 @@ from functools import partial
 
 from plantuml import PlantUML, PlantUMLConnectionError, PlantUMLHTTPError
 
+ 
 def get_rootdir(basename = "Crosslabs") -> str:
     while not os.path.basename(os.getcwd()) == basename: os.chdir("..")
     return os.getcwd()
@@ -50,13 +51,26 @@ class UML_Handler():
 
         with open(uml_file, "r") as f: 
             text = f.read().split()
+            text1=[]
 
-        s = ":"
-        s1 = ";"
-        text1 = [s + x + s1 for x in text]
+            for i,y in enumerate(text):
+                
+                if text[i][:6] == "while(":
+                    text1.append(text[i])
+
+                elif text[i][:10] == "endwhile()":
+                    text1.append("endwhile")
+                
+                elif text[i][:9] == "endwhile(":
+                    text1.append(text[i])
+                else:
+                    s = ":"
+                    s1 = ";"
+                    x = s + text[i] + s1
+                    text1.append(x)
         
         for y in text1: 
-                    plantuml_text +=  y+"\n"
+                plantuml_text +=  y+"\n"
 
 
 
@@ -64,7 +78,13 @@ class UML_Handler():
         .replace(":motor;", "#green:motor;")\
         .replace(":input;","#green:input;")\
         .replace(":initializing;","#green:initializing;")\
-        .replace(":pump;", "#green:pump;")
+        .replace(":pump;", "#green:pump;")\
+        .replace(":Motor;", "#green:Motor;")\
+        .replace(":Input;","#green:Input;")\
+        .replace(":Initializing;","#green:Initializing;")\
+        .replace(":Pump;", "#green:Pump;")
+
+        plantuml_text= "start" +"\n"+ plantuml_text + "\n" +  "end"
 
         return plantuml_text
 
