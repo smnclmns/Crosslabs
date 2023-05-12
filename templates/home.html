@@ -1,110 +1,46 @@
-{% extends "base.html" %}
+{% extends "base.html" %}  <!-- Extend the base layout -->
 
 {% block title %}
 Home
 {% endblock %}
 
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}"> <!-- Link to the main CSS file -->
+{% endblock %}
+
 {% block main %}
-<h1>Instructions to use this website for the laboratory stand</h1>
-<p>Control and automation of the titration stand using pseudocode</p>
-<p>Simple syntax and ready-made functions provide an easy introduction to programming, conditional steps inside a process and displaying the process with activity diagrams</p>
-
-<link rel="stylesheet" href=
-"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity=
-"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-
-
-       
-<button type="button"
-class="btn btn-primary"
-data-toggle="modal"
-data-target="#exampleModal">
-Start Instructions
-</button>
-
-<div class="modal fade"
-id="exampleModal"
-tabindex="-1"
-role="dialog"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true">
- 
-<div class="modal-dialog modal-dialog-centered modal-scrollable modal-lg" role="document">
-    <div class="modal-content">
-     
-        <!-- Add image inside the body of modal -->
-        <div class="modal-body modal-xl">
-            <img id="image-modal" src="{{ url_for('static', filename='assets/SVGs/INS1.svg') }}" alt="Instructions 1" style="width: 750px; max-height:750px">
+<div class="container py-5 dashboard"> <!-- Main dashboard container -->
+    <div class="main"> <!-- Main content section -->
+        <h1 class="mb-5">Welcome to the Interactive Titration Simulation Tutorial!</h1>
+        
+        <div class="block-container"> <!-- Project Overview block -->
+            <h2>Project Overview</h2>
+            <p>Our project aims to provide students with a deep understanding of automating a titration. Through an Arduino-based hardware solution, a user-friendly web application, and interactive pseudo-code tasks, students can learn the individual steps of titration and its automation.</p>
+            <img src="{{ url_for('static', filename='assets/ProjectOverview.png') }}" alt="Project Overview" class="img-fluid">
         </div>
 
-        <div class="modal-footer">
-            <button type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal">
-                Close
-            </button>
-            <button type="button" id="previous-btn"
-                class="btn btn-primary"
-                >
-                Previous
-            </button>
-            <button type="button" id="next-btn"
-                class="btn btn-primary"
-                >
-                Next
-            </button>
+        <div class="block-container"> <!-- Scientific Background block -->
+            <h2>Scientific Background</h2>
+            <p>Titration is a fundamental procedure in chemistry used to determine the concentration of a known reactant in a solution. By automating this process, we can improve accuracy, repeatability, and efficiency.</p>
+            <img src="{{ url_for('static', filename='assets/ScientificBackground.png') }}" alt="Scientific Background" class="img-fluid">
+        </div>
+
+        <div class="block-container"> <!-- Our Technology block -->
+            <h2>Our Technology</h2>
+            <p>We use an Arduino microcontroller to automate the titration step. In addition, we use Flask as a web framework to create a user-friendly interface through which users can understand and modify the Arduino code and its functions.</p>
+            <img src="{{ url_for('static', filename='assets/Technology.png') }}" alt="Our Technology" class="img-fluid">
+        </div>
+
+        <div class="block-container"> <!-- How It Works block -->
+            <h2>How It Works</h2>
+            <p>In this interactive tutorial, students learn how the automation of titration works by completing pseudo-code and matching it with the corresponding functions of the Arduino code. Students' progress is evaluated through a scoring system, and helpful tips support them in improving their skills.</p>
+            <img src="{{ url_for('static', filename='assets/HowItWorks.png') }}" alt="How It Works" class="img-fluid">
         </div>
     </div>
+
+    <div class="prompt"> <!-- Getting Started section -->
+        <h2>Get Started</h2>
+        <p>To get started, visit the <a href="{{ url_for('workspace')}}">Workspace</a> and start the tutorial. Enjoy learning!</p>
+    </div>
 </div>
-</div>
-<script>
-const images = [
-"{{ url_for('static', filename='assets/SVGs/INS1.svg') }}",
-"{{ url_for('static', filename='assets/SVGs/INS2.svg') }}", 
-"{{ url_for('static', filename='assets/SVGs/INS3.svg') }}",
-"{{ url_for('static', filename='assets/SVGs/INS4.svg') }}",
-"{{ url_for('static', filename='assets/SVGs/INS5.svg') }}",
-"{{ url_for('static', filename='assets/SVGs/INS7.svg') }}",
-"{{ url_for('static', filename='assets/SVGs/INS8.svg') }}",
-];
-
-let currentImageIndex = 0; // Start with the first image in the array
-
-document.getElementById('previous-btn').addEventListener('click', function() {
-  currentImageIndex--;
-  if (currentImageIndex < 0) {
-    currentImageIndex = images.length - 1; // Loop back to the last image
-  }
-  document.getElementById('image-modal').src = images[currentImageIndex];
-});
-
-document.getElementById('next-btn').addEventListener('click', function() {
-  currentImageIndex++;
-  if (currentImageIndex >= images.length) {
-    currentImageIndex = 0; // Loop back to the first image
-  }
-  document.getElementById('image-modal').src = images[currentImageIndex];
-});
-
-
-</script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-integrity=
-"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-crossorigin="anonymous">
-</script>
-<script src=
-"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-integrity=
-"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-crossorigin="anonymous">
-</script>
-<script src=
-"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-integrity=
-"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-crossorigin="anonymous">
-</script> 
 {% endblock %}
