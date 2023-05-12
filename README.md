@@ -12,7 +12,19 @@ For ease, there will be a lot of given functions that are explained and kann be 
 crosslabs
 CrissCross
 
-## Aufteilung
- 1. Reading sensordata
+## Level Structure
+
+1. Reading sensordata
 -> Task: Understanding of how to read and interprete the sensordata
-->  
+
+2. Recognizing the equivalence point
+-> Task: Learn how to interpret light sensor data to determine the equivalence point in titration.
+
+3. Pump control
+-> Task: Learn how to control the pump to start and stop the flow of titration solution as well as calibrate motor steps to a volume output
+
+4. Proper timing
+-> Task: Understand how to program the Arduino script to control the timing of the pump to ensure accurate and efficient titration.
+
+5. Titration automation
+-> Task: Learn how to combine the previous tasks to create a fully automated titration process.
