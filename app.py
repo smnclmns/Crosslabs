@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, url_for
 from UMLs.uml_handling import UML_Handler, get_ids
 
 def check(vorlage_level: str,keywords: list[str], entwurf_input: str) -> dict:
@@ -54,31 +54,53 @@ def workspace():
 
 @app.route("/workspace/tutorial", methods=["POST", "GET"])
 def tutorial():
-    handler = UML_Handler()
+
+    # All inputs from the user in the tutorial page
+
+    input_dict = {
+        "Tut_iterations": 0,
+        "Tut_steps": 0,
+        "Tut_delay": 0,
+    }
+
+    # initialising the score and tips
+
+    tips= ""
+    score = 0
+
+    # if the user has submitted the form, the input_dict will be updated
+
     if request.method == "POST":
-        text_input = request.form["user-input"]
+        
+        for key, val in input_dict.items():
 
+            inp = request.form.get(key)
+            if inp == None: continue
+            else: input_dict[key] = inp
 
-        handler.add_uml_file(text_input)
-
-    else:
-        text_input = handler.get_plantuml_text("v1")
-
-    vorlage = r"UMLs\txt_files\Calibration.txt"
-    keywords = ["initializing", "motor", "pump", "input"]
-    entwurf = r"UMLs\txt_files\v1.txt"
-
-    output_dict = check(vorlage, keywords, entwurf)
-    score = output_dict["score"]
-    Oscore = output_dict["Oscore"]   
+    # checking the input_dict for the right values and updating the score and tips
     
-  
-    
+    for key, val in input_dict.items():
 
+        if key == "Tut_iterations":
+            if val != "15": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            else: score += 1
+
+        if key == "Tut_steps":
+            if val != "500": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            else: score += 1
+
+        if key == "Tut_delay":
+            if val != "1000": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            else: score += 1
+
+    # rendering the template with the right values
+    
     return render_template("Levels/tutorial.html",
-     uml_src=handler.get_plantuml_url("v1", "svg"),
-     score=score,
-     Oscore=Oscore)
+     uml_src=url_for('static', filename='assets/SVGs/Calibration.svg'),
+     value=score,
+     tips=tips,
+    )
 
 @app.route("/drafts", methods=["POST", "GET"])
 def Drafts():

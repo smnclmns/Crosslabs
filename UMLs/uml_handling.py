@@ -4,6 +4,7 @@ from functools import partial
 
 from plantuml import PlantUML, PlantUMLConnectionError, PlantUMLHTTPError
 
+ 
 def get_rootdir(basename = "Crosslabs") -> str:
     while not os.path.basename(os.getcwd()) == basename: os.chdir("..")
     return os.getcwd()
