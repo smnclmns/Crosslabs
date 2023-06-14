@@ -29,9 +29,9 @@ Tutorial
 
 <span class="keyword">execute</span> the function <span class="function">set_Motorspeed()</span>
 
-<span class="keyword">for</span> <input class="user-input" type="text" id='Tut_iterations' value="Number of iterations" name="Tut_iterations" tabindex="1" pattern="\d*"> times <span class="keyword">do</span>:
-  <span class="function">Move(<input class="user-input" type="text" id="Tut_steps" value="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
-  <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' value="Delay" name="Tut_delay" tabindex="3" style="width: 50px" pattern="\d*"> ms
+<span class="keyword">for</span> <input class="user-input" type="text" id='Tut_iterations' placeholder="Number of iterations" name="Tut_iterations" tabindex="1" pattern="\d*"> times <span class="keyword">do</span>:
+  <span class="function">Move(<input class="user-input" type="text" id="Tut_steps" placeholder="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
+  <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="3" style="width: 50px" pattern="\d*"> ms
 
 Finally <span class="keyword">end</span> calibration
 
@@ -69,12 +69,12 @@ for (let i=0; i < textAreas.length; i++) {
 
     // Save input to local storage on every change
     textArea.addEventListener('input', () => {
-    localStorage.setItem(textArea.id, textArea.value);
+    sessionStorage.setItem(textArea.id, textArea.value);
     });
 
     // Set text area value to saved input on page load
     window.addEventListener('load', () => {
-    const savedInput = localStorage.getItem(textArea.id);
+    const savedInput = sessionStorage.getItem(textArea.id);
     if (savedInput) {
         textArea.value = savedInput;
     }

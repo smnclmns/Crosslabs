@@ -15,7 +15,6 @@ def home():
 
 @app.route("/workspace", methods=["GET", "POST"])
 def workspace():
-
     return render_template("workspace.html", lvl1="disabled", lvl2="disabled")
 
 
@@ -73,7 +72,7 @@ def tutorial():
 
 if __name__ == "__main__":
 
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, port=8000)
 
 
 
