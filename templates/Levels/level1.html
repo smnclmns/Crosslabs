@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-Tutorial - Control Pump
+Tutorial
 {% endblock %}
 
 {% block header %}
@@ -8,6 +8,7 @@ Tutorial - Control Pump
 {% endblock %}
 
 {% block main %}
+
 
 <div class="dashboard">
     <section class="main">
@@ -19,20 +20,22 @@ Tutorial - Control Pump
         <h1>Task</h1>
         <form action="#" method="post">
 <p>
-    The following pseudo-code controls the operation of the pump. <br>
-    The pseudo-code is incomplete, so you need to fill in the missing parts. <br>
+    In the following you will find a pseudo-code for the calibration of the stepper motor. <br>
+    The pseudo-code is incomplete, so you have to fill in the missing parts. <br>
 </p>
 <pre><code>
 <p>
-<span class="keyword">if</span> incoming command is <span class="string">"Start Pump"</span>, run the following routine:
+<span class="keyword">if</span> incoming command is <span class="string">"Start Calibration"</span>, run the following calbration routine:
 
-<span class="keyword">execute</span> the function <span class="function">set_PumpSpeed()</span>
+<span class="keyword">execute</span> the function <span class="function">set_Motorspeed()</span>
 
 <span class="keyword">for</span> <input class="user-input" type="text" id='Tut_iterations' placeholder="Number of iterations" name="Tut_iterations" tabindex="1" pattern="\d*"> times <span class="keyword">do</span>:
-  <span class="function">Pump(<input class="user-input" type="text" id="Tut_steps" placeholder="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
+  <span class="function">Move(<input class="user-input" type="text" id="Tut_steps" placeholder="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
   <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="3" style="width: 50px" pattern="\d*"> ms
 
-Finally <span class="keyword">end</span> pump operation
+Finally <span class="keyword">end</span> calibration
+
+
 </p>
 </code></pre>
             <input type="submit" value="Submit">
@@ -44,9 +47,13 @@ Finally <span class="keyword">end</span> pump operation
                 {% endfor %}
             </ul>
             </p>
-        </form>
+          </form>
+
     </section>
 </div>
+
+
+
 
 <script>
 
