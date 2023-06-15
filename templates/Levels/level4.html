@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}
+Tutorial - Performing Titration
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+{% endblock %}
+
+{% block main %}
+
+<div class="dashboard">
+    <section class="main">
+        <h1>UML</h1>
+        <img src="{{ uml_src }}" alt="Result Image">
+    </section>
+
+    <section class="prompt">
+        <h1>Task</h1>
+        <form action="#" method="post">
+<p>
+    The following pseudo-code represents the process of performing a titration. <br>
+    The pseudo-code is incomplete, so you need to fill in the missing parts. <br>
+</p>
+<pre><code>
+<p>
+<span class="keyword">execute</span> the function <span class="function">Start_Titration()</span>
+
+<span class="keyword">while</span> sensor data <span class="string">"does not significantly change"</span>:
+  <span class="keyword">execute</span> the function <span class="function">Dose_Substance()</span>
+  <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="1" style="width: 50px" pattern="\d*"> ms
+
+<span class="keyword">if</span> sensor data <span class="string">"significantly changes"</span>:
+  <span class="keyword">execute</span> the function <span class="function">Stop_Titration()</span>
+
+Finally <span class="keyword">end</span> titration process
+</p>
+</code></pre>
+            <input type="submit" value="Submit">
+            <p>
+            <br>You got {{ value }} out of 3 points.<br>
+            <ul>
+                {% for tip in tips.split("\n")[:-1] %}
+                    <li>{{ tip }}</li>
+                {% endfor %}
+            </ul>
+            </p>
+        </form>
+    </section>
+</div>
+
+<script>
+
+const textAreas = document.getElementsByClassName('user-input');
+
+console.log(textAreas);
+
+// Loop over all input elements
+for (let i=0; i < textAreas.length; i++) {
+    let textArea = textAreas[i];
+
+    console.log(textArea.id);
+
+    // Save input to local storage on every change
+    textArea.addEventListener('input', () => {
+    sessionStorage.setItem(textArea.id, textArea.value);
+    });
+
+    // Set text area value to saved input on page load
+    window.addEventListener('load', () => {
+    const savedInput = sessionStorage.getItem(textArea.id);
+    if (savedInput) {
+        textArea.value = savedInput;
+    }
+    });
+}
+</script>
+{% endblock %}
