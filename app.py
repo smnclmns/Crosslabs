@@ -1,5 +1,11 @@
 from flask import Flask, render_template, request, flash, url_for
 from static.py.Levels import get_level_names
+from static.py.Arduino_communication import Arduino
+
+try:
+    arduino = Arduino("COM3")
+except:
+    arduino = None
 
 
 
@@ -16,6 +22,12 @@ def home():
 
 @app.route("/playground", methods=["POST", "GET"])
 def playground():
+    if arduino == None:
+        return render_template("playground.html", response="The Arduino is disabled")
+    
+    if request.method == "POST":
+        pass
+
     return render_template("playground.html")
 
 

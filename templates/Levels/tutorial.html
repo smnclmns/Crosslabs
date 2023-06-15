@@ -10,46 +10,52 @@ Tutorial
 {% block main %}
 
 
-<div class="dashboard">
-    <section class="main">
-        <h1>UML</h1>
-        <img src="{{ uml_src }}" alt="Result Image">
-    </section>
+<div class="container">
+    <div class="row">
+        <div class='col-12 col-md-6'> <!-- Main Part with heading, explanations and pictures -->
+                <h1 class="d-flex justify-content-center">Calibration</h1>
+                <p class="justify-content-center">
+                    The calibration of the stepper motor is a very important step. <br>
+                    It is necessary to determine the correct relation between the number of steps the motor makes
+                    and the volume that is being dispensed through the sirenge pump. <br>
+                </p>
+                <img src="{{ uml_src }}" alt="Result Image" class="img-fluid">
+        </div> <!-- End of Main Part -->    
 
-    <section class="prompt">
-        <h1>Task</h1>
-        <form action="#" method="post">
-<p>
-    In the following you will find a pseudo-code for the calibration of the stepper motor. <br>
-    The pseudo-code is incomplete, so you have to fill in the missing parts. <br>
-</p>
-<pre><code>
-<p>
-<span class="keyword">if</span> incoming command is <span class="string">"Start Calibration"</span>, run the following calbration routine:
+        <div class="col-12 col-md-6 order-md-last"> <!-- Code Part -->
+            <h1 class="d-flex justify-content-center">Task</h1>
+            <form action="#" method="post">
+                <p>
+                    In the following you will find a pseudo-code for the calibration of the stepper motor. <br>
+                    The pseudo-code is incomplete, so you have to fill in the missing parts. <br>
+                </p>
 
-<span class="keyword">execute</span> the function <span class="function">set_Motorspeed()</span>
+                <pre ><code class="d-flex justify-content-center">
+    <p>
+    <span class="keyword">if</span> incoming command is <span class="string">"Start Calibration"</span>:
 
-<span class="keyword">for</span> <input class="user-input" type="text" id='Tut_iterations' placeholder="Number of iterations" name="Tut_iterations" tabindex="1" pattern="\d*"> times <span class="keyword">do</span>:
-  <span class="function">Move(<input class="user-input" type="text" id="Tut_steps" placeholder="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
-  <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="3" style="width: 50px" pattern="\d*"> ms
+    <span class="keyword">execute</span> the function <span class="function">set_Motorspeed()</span>
 
-Finally <span class="keyword">end</span> calibration
+    <span class="keyword">for</span> <input class="user-input" type="text" id='Tut_iterations' placeholder="Number of iterations" name="Tut_iterations" tabindex="1" pattern="\d*"> times <span class="keyword">do</span>:
+    <span class="function">Move(<input class="user-input" type="text" id="Tut_steps" placeholder="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
+    <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="3" style="width: 50px" pattern="\d*"> ms
+    Finally <span class="keyword">end</span> calibration
+                </p>
+                </code></pre>
 
+                <input type="submit" value="Submit">
+                <p>
+                <br>You got {{ value }} out of 3 points.<br>
+                <ul>
+                    {% for tip in tips.split("\n")[:-1] %}
+                        <li>{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+                </p>
+            </form>
 
-</p>
-</code></pre>
-            <input type="submit" value="Submit">
-            <p>
-            <br>You got {{ value }} out of 3 points.<br>
-            <ul>
-                {% for tip in tips.split("\n")[:-1] %}
-                    <li>{{ tip }}</li>
-                {% endfor %}
-            </ul>
-            </p>
-          </form>
-
-    </section>
+        </div> <!-- End of Code Part -->
+    </div>
 </div>
 
 
