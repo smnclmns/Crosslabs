@@ -13,6 +13,12 @@ def dev():
 def home():
     return render_template("home.html")
 
+
+@app.route("/playground", methods=["POST", "GET"])
+def playground():
+    return render_template("playground.html")
+
+
 @app.route("/workspace", methods=["GET", "POST"])
 def workspace():
     return render_template("workspace.html", lvl1="disabled", lvl2="disabled")
