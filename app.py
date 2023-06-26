@@ -1,34 +1,80 @@
 from flask import Flask, render_template, request, flash, url_for
+
+import time, sys, threading
 from static.py.Levels import get_level_names
-from static.py.Arduino_communication import Arduino
-
-try:
-    arduino = Arduino("COM3")
-except:
-    arduino = None
+from static.py.Arduino_communication import Arduino, attempt_connection, get_arduino_ports, connection_state
 
 
+# Initialing arduino variables
+
+connected = False
+arduino: Arduino = None
+
+# Initialising the Flask app
 
 app = Flask(__name__)
 
-@app.route("/dev", methods=["POST", "GET"])
-def dev():
-    return render_template("index.html")
+def check_arduino(connected: bool, arduino: Arduino):
+
+    if connected and isinstance(arduino, Arduino):
+        arduino.measurement()
+
+
+# Routes for the different pages
 
 @app.route("/", methods=["POST", "GET"])
 def home():
     return render_template("home.html")
 
+""" @app.route("/start", methods=["POST", "GET"])
+def start():
+    t = threading.Timer(1.0, check_arduino, args=[connected, arduino])
+    t.start() """
 
 @app.route("/playground", methods=["POST", "GET"])
 def playground():
-    if arduino == None:
-        return render_template("playground.html", response="The Arduino is disabled")
-    
-    if request.method == "POST":
-        pass
 
-    return render_template("playground.html")
+    global connected
+    global arduino
+
+    response = ">"
+
+    input_dict = {
+        "connect": "",
+        "query-input": "",        
+    }
+
+    if request.method == "POST":
+
+        for key in input_dict:
+
+            inp = request.form.get(key)
+
+            if inp == None: continue
+            else:
+                input_dict[key] = inp
+
+        if connected and input_dict["query-input"] != "":
+            arduino.send(input_dict["query-input"])
+            log = arduino.get_log()
+            if len(log) > 7: response = "\n> ".join(log[-7:])
+            else: response = "\n> ".join(log)
+
+        if input_dict["query-input"] == "mock":
+            t = threading.Timer(1.0, check_arduino, args=[connected, arduino])
+            t.start()
+
+        if input_dict["connect"] == "connect":
+            if get_arduino_ports() == []: response = "No Arduino found."
+            else:
+                connected, arduino = attempt_connection(get_arduino_ports()[0])
+                response = connection_state(connected, arduino)
+
+
+    return render_template("playground.html", response=response, connected=connected)
+
+
+
 
 
 @app.route("/workspace", methods=["GET", "POST"])
@@ -52,10 +98,13 @@ def tutorial():
 
     tips= ""
     score = 0
+    visible_tips = False
 
     # if the user has submitted the form, the input_dict will be updated
 
     if request.method == "POST":
+
+        visible_tips = True
         
         for key, val in input_dict.items():
 
@@ -68,16 +117,16 @@ def tutorial():
     for key, val in input_dict.items():
 
         if key == "Tut_iterations":
-            if val != "15": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            else: score += 1
+            if val != "15" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            elif val == "15": score += 1
 
         if key == "Tut_steps":
-            if val != "500": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            else: score += 1
+            if val != "500" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            elif val == "500": score += 1
 
         if key == "Tut_delay":
-            if val != "1000": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            else: score += 1
+            if val != "1000" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            elif val == "1000": score += 1
 
     # rendering the template with the right values
     
@@ -85,6 +134,7 @@ def tutorial():
      uml_src=url_for('static', filename='assets/SVGs/Calibration.svg'),
      value=score,
      tips=tips,
+     visible_tips=visible_tips,
     )
 
 @app.route("/workspace/level1", methods=["POST", "GET"])
@@ -245,7 +295,7 @@ def level4():
 
 if __name__ == "__main__":
 
-    app.run(debug=True, port=8000)
+    app.run(debug=True)
 
 
 

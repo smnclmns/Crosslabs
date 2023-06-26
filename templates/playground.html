@@ -10,7 +10,8 @@ Playground
 
 {% block main %}
 <div class="container">
-    <div class="row"> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
+  <form action="#" method="post">
+    <div class="row g-4"> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
         <div class="tabs">
             <h3 id="tablist-1" class="d-flex justify-content-center">Arduino Responses</h3>
             <div role="tablist" aria-labelledby="tablist-1" class="manual">
@@ -20,20 +21,57 @@ Playground
               <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2" tabindex="-1">
                 <span class="focus">Graphical Output</span>
               </button>
-            </div>          
+            </div> <!-- Tablist for the different outputs -->
             <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1">
               <pre id="terminal">
 > Arduino Output:
-> {{ response }}
+{{ response }}
+{% if not connected == True %}
+<input id="query-input" type="text" placeholder="> Arduino not connected" name="query-input" disabled>
+<input id="connect" value="connect" name="connect" type="hidden">
+<form action="#" method="post"><button type="submit" class="btn col-12 button-5">CONNECT</button></form>
+{% endif %}
+{% if connected == True %}
+<input id="query-input" type="text" placeholder="> Type in query..." name="query-input">
+{% endif %}
               </pre>
-            </div>
+            </div> <!-- Tabpanel for the Terminal Output -->
             <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" class="is-hidden">
                 <img src="{{ colour_graph }}" alt="Graphical Output" class="img-fluid">
-            </div>
-          </div>
+            </div> <!-- Tabpanel for the Graphical Output -->
+          </div> <!-- Tabs for the different outputs -->
                   
+      </div> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
+    </form>
+    </div> <!-- Container for the whole page -->
+
+    <div class="container text-center">
+
+      <div class="row g-0"> <!-- Row for the buttons and the revolutions input -->
+        <div class="col-12 p-2"> <input type="text" id="turns-count" placeholder="Number of revolutions" name="turns-count"></div>
+        <div class="col-6 p-2"><button type="button" class="btn btn-secondary col-12 button-30">Clockwise</button></div>
+        <div class="col-6 p-2"><button type="button" class="btn btn-secondary col-12 button-30">Counterclockwise</button></div>
+      </div>
+
+    <div class="row g-0"> <!-- Row for the slider -->
+        <div class="p-2 col-12">
+          <label for="customRange1" class="form-label">Syringe-Position</label>
+        <input type="range" class="form-range col-12" id="customRange1">
+      </div>
     </div>
-</div>
+
+    <div class="row g-0"> <!-- Row for the valve position -->
+
+    </div>
+      
+
+    </div> <!-- Container for the buttons and the slider -->
+
+    
+  
+    
+    
+
 {% endblock %}
 {% block script %}
 <script>

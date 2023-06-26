@@ -44,14 +44,17 @@ Tutorial
                 </code></pre>
 
                 <input type="submit" value="Submit">
+                {% if visible_tips %}
                 <p>
-                <br>You got {{ value }} out of 3 points.<br>
+                <br>
+                You got {{ value }} out of 3 points.<br>
                 <ul>
                     {% for tip in tips.split("\n")[:-1] %}
                         <li>{{ tip }}</li>
                     {% endfor %}
                 </ul>
                 </p>
+                {% endif %}
             </form>
 
         </div> <!-- End of Code Part -->
