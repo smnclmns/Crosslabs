@@ -224,7 +224,7 @@ class Arduino():
 
         return p
 
-def attempt_connection(port: str, baudrate: int = 9600, timeout: int = 1) -> tuple[bool, Arduino | None]:
+def attempt_connection(port: str, baudrate: int = 9600, timeout: int = 1) -> tuple[bool, Arduino]:
     """Attempts to connect to the Arduino.
 
     Args:
@@ -249,8 +249,13 @@ def get_arduino_ports() -> list[str]:
     Returns:
         list[str]: list of all available ports
     """
-
-    arduino_ports = [port for port, desc, hwid in sorted(comports()) if "Arduino" in desc]
+    arduino_ports = []
+    
+    for port, desc, hwid in sorted(comports()):
+        print(f"port: {port}, desc: {desc}, hwid: {hwid}"
+        
+        if "Arduino" in desc:
+            arduino_ports.append(port)
 
     print("Available ports:")
     for port in arduino_ports:
