@@ -252,7 +252,7 @@ def get_arduino_ports() -> list[str]:
     arduino_ports = []
     
     for port, desc, hwid in sorted(comports()):
-        print(f"port: {port}, desc: {desc}, hwid: {hwid}"
+        print(f"port: {port}, desc: {desc}, hwid: {hwid}")
         
         if "Arduino" in desc:
             arduino_ports.append(port)
