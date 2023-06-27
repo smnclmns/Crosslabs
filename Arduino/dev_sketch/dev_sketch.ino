@@ -6,8 +6,12 @@
 String inputString = "";
 bool stringComplete = false;
 bool Start = false;
+
+
 unsigned long Starttime;
-unsigned long currentTime;
+uint16_t currentTime;
+
+
 bool mocking_data = false;
 
 
@@ -80,8 +84,9 @@ void loop(void) {
       digitalWrite(13, LOW);
     }
 
-    else if (inputString == "mock\n") {
+    else if (inputString == "mock\n" && !mocking_data) {
       mocking_data = true;
+      Starttime = millis();
     }
 
     else if (inputString == "Stopp\n") {
@@ -164,7 +169,14 @@ void Move() {
 
 void Mocking_Data() {
 
- currentTime = millis();
+ 
+ unsigned long millis_now = millis();
+ unsigned long timediff = millis_now - Starttime;
+ if (timediff >= 30000) {
+  timediff -= 30000;
+  Starttime += 30000;
+ }
+ currentTime = (uint16_t)timediff;
   
 
  // Generiere simulierten Lichtsensorwerte für jede Farbe (Kanal)
@@ -221,7 +233,7 @@ void Mocking_Data() {
 
 void send_in_utf_8(){
   
-  Serial.print((currentTime/1000)); Serial.print(",");
+  Serial.print(currentTime); Serial.print(",");
   
   for (uint8_t i=0; i<AS726x_NUM_CHANNELS; i++) {
      Serial.print(values[i]); Serial.print(",");

@@ -5,7 +5,13 @@ Playground
 {% endblock %}
 
 {% block header %}
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}"> <!-- Link to the main CSS file -->
+<link rel="stylesheet" href="{{ url_for('static', filename='bokeh/bokeh.3.2.0.min.css')}}">
+
+<script scr="{{ url_for('static', filename='bokeh/bokeh.3.2.0.min.js')}}"></script>
+<script>{{ script|safe }}</script>
+
 {% endblock %}
 
 {% block main %}
@@ -37,7 +43,7 @@ Playground
               </pre>
             </div> <!-- Tabpanel for the Terminal Output -->
             <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" class="is-hidden">
-                <img src="{{ colour_graph }}" alt="Graphical Output" class="img-fluid">
+                <div> {{ div|safe }} </div>
             </div> <!-- Tabpanel for the Graphical Output -->
           </div> <!-- Tabs for the different outputs -->
                   

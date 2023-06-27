@@ -3,13 +3,14 @@ from serial.tools.list_ports import comports
 
 
 import time
-import sys
 import os
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
 import threading
-from flask import url_for
+import pandas as pd
+import matplotlib.pyplot as plt
+from bokeh.plotting import figure
+from bokeh.embed import components
 
 # Path: static\py\Arduino_communication.py
 
@@ -47,6 +48,8 @@ class Arduino():
         self.create_sensor_data()
 
         self.is_measuring = False
+        self.last_time = 0
+        self.thirty_secs_passed = 0
         self.user_commands = []
 
 
@@ -70,16 +73,10 @@ class Arduino():
         Returns:
             bytes: line from the Arduino
         """
-        print("before reading")
-
-        print(f"is currently locked: {self.lock.locked()}")
+        print(f"reading is locked: {self.lock.locked()}")
         with self.lock:
 
-            print("in reading")
-
             rawline = self.serial.readline()
-
-            print("after reading")
 
             return rawline
     
@@ -93,17 +90,15 @@ class Arduino():
 
         time.sleep(2)
 
-        with self.lock:
+        print(f"sending is locked: {self.lock.locked()}")
 
-            print("before sending")
+        with self.lock:
 
             self.serial.write(f"{msg}\n".encode())
 
-            print("after sending")
-
         for i in range(self.QUERY_ITERATIONS):
             rawline = self.read()
-            print(f"rawline after sending: , {rawline}")
+            # print(f"rawline after sending: , {rawline}")
             if rawline != b"":
                 self.last_rawline = rawline
             if rawline == f"{msg}\n".encode():
@@ -114,8 +109,6 @@ class Arduino():
     
     def create_log(self) -> None:
         """Creates a log file for the Arduino."""
-
-        if os.path.exists(self.log_adress): return
 
         with self.lock:
             with open(self.log_adress, "w") as f:
@@ -168,6 +161,11 @@ class Arduino():
 
     def measurement(self, recurrsion_depth=0) -> None:
 
+        if self.is_measuring and recurrsion_depth == 0:
+            return
+        else:
+            self.is_measuring = True
+
         columns = [
             "Time",
             "Violet",   # 405 nm
@@ -191,6 +189,16 @@ class Arduino():
         
             data = rawline.decode().rstrip(",\r\n") # bringt die Daten in die Form "time,violet,blue,green,yellow,orange,red"
             values = np.array(object=data.split(","), dtype=np.uint32).reshape((1,7))
+
+            this_t = values[0] + self.thirty_secs_passed * 30000
+
+            if self.last_time > this_t: 
+                self.thirty_secs_passed += 1
+                this_t += 30000
+
+            self.last_time = this_t
+            values[0] = this_t
+
             with open(self.sensor_adress, 'a') as f:
                 writer = csv.writer(f)
                 writer.writerow(values)
@@ -199,7 +207,22 @@ class Arduino():
             self.update_log(b"===================== Measurement failed =======================")
             print("Measurement failed")
 
+    def create_plot(self) -> figure:
 
+        df = pd.read_csv(self.sensor_adress, header=0)
+
+        p = figure(x_axis_type="datetime", title="Farben über Zeit", plot_height=350, plot_width=800)
+        p.xgrid.grid_line_color=None
+        p.ygrid.grid_line_alpha=0.5
+        p.xaxis.axis_label = 'Zeit'
+        p.yaxis.axis_label = 'Wert'
+
+        colors = ["Violet", "Blue", "Green", "Yellow", "Orange", "Red"]
+
+        for color in colors:
+            p.line(df['Time'], df[color], legend_label=color, line_width=2, line_color=color.lower())
+
+        return p
 
 def attempt_connection(port: str, baudrate: int = 9600, timeout: int = 1) -> tuple[bool, Arduino | None]:
     """Attempts to connect to the Arduino.

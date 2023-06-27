@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, flash, url_for
+import threading
+from bokeh.embed import components
 
-import time, sys, threading
+
 from static.py.Levels import get_level_names
 from static.py.Arduino_communication import Arduino, attempt_connection, get_arduino_ports, connection_state
 
@@ -39,6 +41,9 @@ def playground():
 
     response = ">"
 
+    script = None
+    div = None
+
     input_dict = {
         "connect": "",
         "query-input": "",        
@@ -70,8 +75,14 @@ def playground():
                 connected, arduino = attempt_connection(get_arduino_ports()[0])
                 response = connection_state(connected, arduino)
 
+        if connected and arduino.is_measuring:
 
-    return render_template("playground.html", response=response, connected=connected)
+            plot = arduino.create_plot()
+            script, div = components(plot)
+
+
+
+    return render_template("playground.html", response=response, connected=connected, script=script, div=div,)
 
 
 
