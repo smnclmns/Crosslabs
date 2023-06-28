@@ -134,6 +134,10 @@ def playground():
             arduino.is_measuring = True
             is_measuring = True
 
+        if connected and input_dict["query-input"] == "Start":
+            arduino.is_measuring = True
+            is_measuring = True
+
         if connected and input_dict["query-input"] == "Stop":
             arduino.is_measuring = False
             is_measuring = False
