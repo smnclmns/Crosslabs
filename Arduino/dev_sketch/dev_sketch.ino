@@ -5,49 +5,46 @@
 // Buffer to read the Serial port commands
 String inputString = "";
 bool stringComplete = false;
-bool Start = false;
 
-
-unsigned long Starttime = 0;
-uint16_t currentTime;
-
-
-bool mocking_data = false;
-
-
-// Motor Outputs
+// Motor object, outputs and buffer variables
+SpeedyStepper stepper;
 const int MOTOR_STEP_PIN = 3;
 const int MOTOR_DIRECTION_PIN = 4;
+long NULLPOSITION = 0;
+long ENDPOSITION = 11000; // number of steps from full to empty syringe
+long POSITION = 0;
 
-// Motor position buffer
-double nullposition = 0;
 
+// Lightsensor object and buffer
+Adafruit_AS726x ams;
+uint16_t startvalues[AS726x_NUM_CHANNELS];
+uint16_t values[AS726x_NUM_CHANNELS];
+
+// Titration adjustments and buffer
+bool Start = false;
+unsigned long Starttime = 0;
+uint16_t currentTime;
 
 // Phases of titration
 /*
  * 0 ~ break
- * 1 ~ first phase
- * 2 ~ second phase
- * 3 ~ last phase
+ * 1 ~ first phase (fastest)
+ * 2 ~ second phase (medium fast)
+ * 3 ~ last phase (slow)
  * 4 ~ finish
  */
-uint8_t ph = 0;
-
-// Light sensor buffer
-uint16_t startvalues[AS726x_NUM_CHANNELS];
-uint16_t values[AS726x_NUM_CHANNELS];
-
+uint8_t phase = 0;
 
 // Adjustments for the process
 double change = 0.9; // indicates at what percentage of the initial intensity of a light value phase 2 should be initiated
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
-uint16_t endtime = 10000; // waiting time in ms to check if titration is finished
-double steps1 = 50; // indicates the number of steps in phase 1 after which the light values are compared
-double steps2 = 10; // indicates the number of steps in phase 2 after which the light values are compared
+double endtime = 10.0; // waiting time in s to check if titration is finished
+double steps1 = 50.0; // indicates the number of steps in phase 1 after which the light values are compared
+double steps2 = 10.0; // indicates the number of steps in phase 2 after which the light values are compared
 
-// Object initialization to control the sensor and the motor
-SpeedyStepper stepper;
-Adafruit_AS726x ams;
+// Enables the generation of mocking data to test handling of sensor readings
+bool mocking_data = false;
+
 
 void setup(void) {
 
@@ -57,8 +54,7 @@ void setup(void) {
   pinMode(LED_BUILTIN, OUTPUT);
 
   if (!ams.begin()) {
-    Serial.println("could not connect to sensor! Please check your wiring.");
-    while(1);
+    Serial.println("Could not connect to sensor! Please check your wiring.");
   }
 
   stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN); // implement the wiring of the motor
@@ -77,64 +73,60 @@ void loop(void) {
      * From here, commands are executed depending on the content of the Serial port.
      */
 
-    if (inputString == "Start\n" && ph == 0) {
+    if (inputString == "Start\n" && phase == 0 && !Start && !mocking_data) {
       Start = true;
-      
+      Starttime = millis();
     }
 
-    else if (inputString == "mock\n" && !mocking_data) {
+    else if (inputString == "mock\n" && !mocking_data && !Start) {
       mocking_data = true;
       Starttime = millis();
     }
 
     else if (inputString == "Stop\n") {
       Start = false;
-      ph = 0;
+      phase = 0;
       mocking_data = false;
     }
 
-    else if (inputString == "Kalibriere\n") {
+    else if (inputString == "Calib\n" && !Start) {
       Calibration();
     }
 
-    else if (inputString == "Reset\n") {
+    else if (inputString == "Reset\n" && phase == 0) {
       Reset();
     }
 
-    else if (inputString == "Forward\n") {
-      Forward();
+    else if (inputString.startsWith("F")) {      
+      Forward(extract_motor_settings(inputString));
     }
 
-    else if (inputString == "Backward\n") {
-      Backward();
+    else if (inputString.startsWith("B")) {
+      Backward(extract_motor_settings(inputString));
     }
 
-    else if (inputString == "Nullposition\n") {
-      nullposition = 0;
+    else if (inputString == "Null\n") {
+      NULLPOSITION = 0;
     }
 
-    else if (inputString.startsWith("double")) {
+  /*
+   * End of command checking. 
+   */
 
-      String digit_chars = "";
-      
-      for (uint8_t cha = 6; cha < inputString.length(); cha++) {
-
-        if (!isdigit(inputString[cha])) {
-          break;
-        }
-        digit_chars += inputString[cha];        
-      }
-      int response_int = digit_chars.toInt() * 2;
-      Serial.println(response_int);
-    }
     inputString = "";
     stringComplete = false;
   }
+
+
+   /*
+    * Below the functions are executed in the loop depending on the current state.
+    */
 
   if (Start == true) {
     measurement();
     send_in_utf_8();
   }
+  
   if (mocking_data && Start != true) {
     Mocking_Data();
     send_in_utf_8();
@@ -159,23 +151,21 @@ void serialEvent() {
 }
 
 void Calibration() {
-  
+  stepper.setSpeedInStepsPerSecond(100);
+  stepper.setAccelerationInStepsPerSecondPerSecond(100);
+  stepper.moveToPositionInSteps(200);
 }
 
 void Reset() {
   
 }
 
-void Forward() {
-  stepper.setSpeedInRevolutionsPerSecond(3);
-  stepper.setAccelerationInRevolutionsPerSecondPerSecond(3.0);
-  stepper.moveRelativeInRevolutions(25);  
+void Forward(long fw_steps) {
+  stepper.moveRelativeInSteps(fw_steps);  
 }
 
-void Backward() {
-  stepper.setSpeedInRevolutionsPerSecond(3);
-  stepper.setAccelerationInRevolutionsPerSecondPerSecond(3.0);
-  stepper.moveRelativeInRevolutions(-25);  
+void Backward(long bw_steps) {
+  stepper.moveRelativeInSteps(-bw_steps);  
 }
 
 void measurement() {
@@ -198,6 +188,61 @@ void measurement() {
 
  ams.readRawValues(values);
 }
+
+void send_in_utf_8(){
+  
+  Serial.print(currentTime); Serial.print(",");
+  
+  for (uint8_t i=0; i<AS726x_NUM_CHANNELS; i++) {
+     Serial.print(values[i]); Serial.print(",");
+  }
+  
+  Serial.println();  
+}
+
+long extract_motor_settings(String inp) {
+
+  String s_p_s = "";
+
+  String a_p_qs = "";
+  
+  String n_steps = "";
+
+  uint8_t setting = 0;
+
+  for (int i = 1; i < inp.length(); i++) {
+
+    if (isdigit(inp[i]) || inp[i] == '.') {
+      if (setting == 0) {
+        s_p_s += inp[i];
+      }
+      else if (setting == 1) {
+        a_p_qs += inp[i];
+      }
+      else if (setting == 2) {
+        n_steps += inp[i];
+      }
+    }
+
+    else if (inp[i] == '+') {
+      setting += 1;
+    }
+    
+    else {
+      break;
+    }
+  }
+
+  stepper.setSpeedInStepsPerSecond(s_p_s.toDouble());
+  stepper.setAccelerationInStepsPerSecondPerSecond(a_p_qs.toDouble());
+
+  return n_steps.toInt();
+  
+}
+
+/*
+ *  Mocking Data function below
+ */
 
 void Mocking_Data() {
 
@@ -261,15 +306,4 @@ void Mocking_Data() {
       }
       values[i] = (uint16_t)value;
     }
-}
-
-void send_in_utf_8(){
-  
-  Serial.print(currentTime); Serial.print(",");
-  
-  for (uint8_t i=0; i<AS726x_NUM_CHANNELS; i++) {
-     Serial.print(values[i]); Serial.print(",");
-  }
-  
-  Serial.println();  
 }
