@@ -56,18 +56,18 @@ void setup(void) {
 
   pinMode(LED_BUILTIN, OUTPUT);
 
-  Serial.println("Setup ready...");
-
-  /*if (!ams.begin()) {
+  if (!ams.begin()) {
     Serial.println("could not connect to sensor! Please check your wiring.");
     while(1);
   }
 
-  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN); // implement the wiring of the motor  */
+  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN); // implement the wiring of the motor
+
+
+  Serial.println("Setup ready...");
 }
 
-
-
+  
 void loop(void) {
 
   if (stringComplete) {
@@ -79,9 +79,7 @@ void loop(void) {
 
     if (inputString == "Start\n" && ph == 0) {
       Start = true;
-      digitalWrite(13, HIGH);
-      delay(1000);
-      digitalWrite(13, LOW);
+      
     }
 
     else if (inputString == "mock\n" && !mocking_data) {
@@ -104,12 +102,11 @@ void loop(void) {
     }
 
     else if (inputString == "Forward\n") {
-      Serial.println("In Forward");
-      Move();
+      Forward();
     }
 
     else if (inputString == "Backward\n") {
-      Move();
+      Backward();
     }
 
     else if (inputString == "Nullposition\n") {
@@ -134,7 +131,11 @@ void loop(void) {
     stringComplete = false;
   }
 
-  if (mocking_data) {
+  if (Start == true) {
+    measurement();
+    send_in_utf_8();
+  }
+  if (mocking_data && Start != true) {
     Mocking_Data();
     send_in_utf_8();
   }
@@ -165,8 +166,37 @@ void Reset() {
   
 }
 
-void Move() {
-  
+void Forward() {
+  stepper.setSpeedInRevolutionsPerSecond(10);
+  stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+  stepper.moveRelativeInRevolutions(25);  
+}
+
+void Backward() {
+  stepper.setSpeedInRevolutionsPerSecond(10);
+  stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+  stepper.moveRelativeInRevolutions(-25);  
+}
+
+void measurement() {
+
+  ams.startMeasurement();
+
+  bool rdy = false;
+  while(!rdy) {
+    delay(5);
+    rdy = ams.dataReady();
+  }
+   
+ unsigned long millis_now = millis();
+ long timediff = millis_now - Starttime;
+ if (timediff >= 30000) {
+  timediff -= 30000;
+  Starttime += 30000;
+ }
+ currentTime = (uint16_t)timediff;
+
+ ams.readRawValues(values);
 }
 
 void Mocking_Data() {
