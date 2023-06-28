@@ -167,14 +167,14 @@ void Reset() {
 }
 
 void Forward() {
-  stepper.setSpeedInRevolutionsPerSecond(10);
-  stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+  stepper.setSpeedInRevolutionsPerSecond(3);
+  stepper.setAccelerationInRevolutionsPerSecondPerSecond(3.0);
   stepper.moveRelativeInRevolutions(25);  
 }
 
 void Backward() {
-  stepper.setSpeedInRevolutionsPerSecond(10);
-  stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+  stepper.setSpeedInRevolutionsPerSecond(3);
+  stepper.setAccelerationInRevolutionsPerSecondPerSecond(3.0);
   stepper.moveRelativeInRevolutions(-25);  
 }
 
