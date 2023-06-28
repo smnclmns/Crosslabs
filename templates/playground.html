@@ -26,16 +26,13 @@ Playground
             </div> <!-- Tablist for the different outputs -->
             <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1">
               <pre id="terminal">
-> Arduino Output:
-{{ response }}
-{% if not connected == True %}
+> Arduino output{% if connected == True %}
+> Arduino is connected
+{{ log }}
+<input id="query-input" type="text" placeholder="> Type in query..." name="query-input">{% endif %}{% if connected == False %}
 <input id="query-input" type="text" placeholder="> Arduino not connected" name="query-input" disabled>
 <input id="connect" value="connect" name="connect" type="hidden">
-<form action="#" method="post"><button type="submit" class="btn col-12 button-5">CONNECT</button></form>
-{% endif %}
-{% if connected == True %}
-<input id="query-input" type="text" placeholder="> Type in query..." name="query-input">
-{% endif %}
+<form action="#" method="post"><button type="submit" class="btn col-12 button-5">CONNECT</button></form>{% endif %}
               </pre>
             </div> <!-- Tabpanel for the Terminal Output -->
             <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" class="is-hidden">
@@ -217,7 +214,7 @@ window.addEventListener('load', function () {
   setInterval(function() {
     var d = new Date();
     document.getElementById("plot").src = "/create_plot?ver=" + d.getTime();
-  }, 5000);
+  }, 2000);
 </script>
 
 <script>
@@ -225,8 +222,17 @@ window.addEventListener('load', function () {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/read_serial', true);
     xhr.send();
-  }, 5000);
+  }, 1000);
 </script>
 {% endif %}
+
+<!-- {% if connected == True %}
+<script>
+  setInterval(function() {
+    var d = new Date();
+    document.getElementById("terminal");
+  }, 1000);
+</script>
+{% endif %} -->
 
 {% endblock %}

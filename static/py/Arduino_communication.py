@@ -59,14 +59,13 @@ class Arduino():
     
     def stop(self) -> None:
         """Stops the Arduino."""
-
-        with self.lock:
-
-            self.should_stop = True
+        
+        while self.serial.in_waiting > 0:
+            self.read()
 
     # communication functions
 
-    def read(self, in_send: bool = False) -> bytes:
+    def read(self, in_send: bool = False, msg = "") -> bytes:
         """Reads a line from the Arduino.
 
         Returns:
@@ -101,7 +100,11 @@ class Arduino():
             except Exception as e:
                 if not in_send: print(e)
         
-        else: self.update_log(rawline)
+        else:
+            if in_send and rawline == f"{msg}\n".encode():
+                self.update_log(b"Sent command: " + rawline)
+            else:
+                self.update_log(rawline)
 
         return rawline
 
@@ -123,7 +126,7 @@ class Arduino():
             self.serial.write(f"{msg}\n".encode())
 
         for i in range(self.QUERY_ITERATIONS):
-            rawline = self.read(in_send=True)
+            rawline = self.read(in_send=True, msg=msg)
             # print(f"rawline after sending: , {rawline}")
             if rawline == f"{msg}\n".encode():
                 break
@@ -137,7 +140,7 @@ class Arduino():
             with open(self.log_adress, "w") as f:
                 f.write("")
 
-    def get_log(self, n_entries = 7) -> list[str]:
+    def get_log(self, n_entries = 10) -> str:
         """Returns the log of the Arduino.
 
         Returns:
@@ -145,12 +148,13 @@ class Arduino():
         """
 
         with open(self.log_adress, "r") as f:
-            log = f.readlines()
+            log = f.read()
 
-        if len(log) < n_entries:
+        if len(log.split("\n")) < n_entries:
             return log
 
-        return log[-n_entries:]
+        else:
+            return "\n".join(log.split("\n")[-n_entries:])
     
     def update_log(self, line: bytes = b"") -> None:
         """Updates the log of the Arduino."""
@@ -158,9 +162,11 @@ class Arduino():
         with open(self.log_adress, "r") as f:
             log = f.readlines()
         if line != b"":
-            log.append(line.decode().rstrip("\n"))
+            log_time = time.strftime("%H:%M:%S", time.localtime())
+            log.append(log_time+" "+line.decode())
         with open(self.log_adress, "w") as f:
             f.writelines(log)
+
         
     # sensor functions
     

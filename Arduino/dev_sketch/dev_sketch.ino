@@ -86,9 +86,10 @@ void loop(void) {
 
     else if (inputString == "mock\n" && !mocking_data) {
       mocking_data = true;
+      Starttime = millis();
     }
 
-    else if (inputString == "Stopp\n") {
+    else if (inputString == "Stop\n") {
       Start = false;
       ph = 0;
       mocking_data = false;

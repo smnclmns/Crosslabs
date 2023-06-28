@@ -70,6 +70,12 @@ def read_serial():
     
     else:
         return jsonify({"data": "no data"})
+    
+@app.route("/refresh_log", methods=["POST", "GET"]) # updates the log
+def refresh_log():
+    pass
+
+    
 
 
 @app.route("/playground", methods=["POST", "GET"])
@@ -82,8 +88,9 @@ def playground():
 
     # Initialising the response
 
-    response = ">"
     is_measuring = False
+    terminal_info = ""
+    log = ""
 
     # Initialising the input_dict
 
@@ -109,26 +116,33 @@ def playground():
         if input_dict["connect"] == "connect":
             ino_ports = get_arduino_ports()
             if ino_ports == []:
-                response = "No Arduino found."
+                terminal_info = "No Arduino found."
             else:
                 connected, arduino = attempt_connection(ino_ports[0])
-                response = connection_state(connected, arduino)
+                terminal_info = connection_state(connected, arduino)
+                if terminal_info == "> Something went wrong":
+                    print("Something went wrong")
+                    connected = False
+
 
         # if the user has submitted the form and wants to query the Arduino, the query will be attempted
 
         if connected and input_dict["query-input"] != "":
             arduino.send(input_dict["query-input"])
-            log = arduino.get_log()
-            response = "\n> ".join(log)
 
         if connected and input_dict["query-input"] == "mock":
             arduino.is_measuring = True
             is_measuring = True
 
+        if connected and input_dict["query-input"] == "Stop":
+            arduino.is_measuring = False
+            is_measuring = False
+
+        if connected: log = arduino.get_log()
 
     # rendering the template with the right values
 
-    return render_template("playground.html", response=response, connected=connected,is_measuring=is_measuring)
+    return render_template("playground.html", connected=connected,is_measuring=is_measuring, log=log)
 
 
 
