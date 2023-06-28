@@ -1,16 +1,11 @@
 from serial import Serial
 from serial.tools.list_ports import comports
 
-
 import time
 import os
 import csv
 import numpy as np
 import threading
-import pandas as pd
-import matplotlib.pyplot as plt
-from bokeh.plotting import figure
-from bokeh.embed import components
 
 # Path: static\py\Arduino_communication.py
 
@@ -25,6 +20,9 @@ class Arduino():
             port (str): port of the Arduino
             baudrate (int, optional): baudrate of the Arduino. Defaults to 9600.
             timeout (int, optional): timeout of the Arduino. Defaults to 1.
+            QUERY_ITERATIONS (int, optional): number of iterations to query the Arduino. Defaults to 10.
+            MIN_DATA_SIZE (int, optional): minimum size of the data. Defaults to 10.
+            csv_name (str, optional): name of the csv file. Defaults to "readings_0.csv".
 
         """
 
@@ -41,8 +39,7 @@ class Arduino():
         self.QUERY_ITERATIONS = QUERY_ITERATIONS
         self.MIN_DATA_SIZE = MIN_DATA_SIZE
 
-        self.last_rawline = b""
-        self.log_adress = os.path.join("csv_folder", "log.csv")
+        self.log_adress = os.path.join("csv_folder", "log.txt")
         self.create_log()
         self.sensor_adress = os.path.join("csv_folder", csv_name)
         self.create_sensor_data()
@@ -67,7 +64,9 @@ class Arduino():
 
             self.should_stop = True
 
-    def read(self) -> bytes:
+    # communication functions
+
+    def read(self, in_send: bool = False) -> bytes:
         """Reads a line from the Arduino.
 
         Returns:
@@ -78,9 +77,36 @@ class Arduino():
 
             rawline = self.serial.readline()
 
-            return rawline
-    
-    
+        if rawline.decode().count(",") > 5:
+
+            try:
+
+                data = rawline.decode().rstrip(",\r\n") # data formation: "time,violet,blue,green,yellow,orange,red"
+                values = np.array(object=data.split(","), dtype=np.uint32)
+                print(f"values: {values}")
+
+                this_t = values[0] + self.thirty_secs_passed * 30000
+
+                if self.last_time > this_t: 
+                    self.thirty_secs_passed += 1
+                    this_t += 30000
+
+                self.last_time = this_t
+                values[0] = this_t
+
+                with open(self.sensor_adress, 'a') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(values)
+
+            except Exception as e:
+                if not in_send: print(e)
+        
+        else: self.update_log(rawline)
+
+        return rawline
+
+
+      
     def send(self, msg: str) -> None:
         """Sends a message to the Arduino.
 
@@ -97,16 +123,13 @@ class Arduino():
             self.serial.write(f"{msg}\n".encode())
 
         for i in range(self.QUERY_ITERATIONS):
-            rawline = self.read()
+            rawline = self.read(in_send=True)
             # print(f"rawline after sending: , {rawline}")
-            if rawline != b"":
-                self.last_rawline = rawline
             if rawline == f"{msg}\n".encode():
                 break
 
-        self.update_log()
+    # log functions
 
-    
     def create_log(self) -> None:
         """Creates a log file for the Arduino."""
 
@@ -114,130 +137,61 @@ class Arduino():
             with open(self.log_adress, "w") as f:
                 f.write("")
 
-    def get_log(self) -> list[str]:
+    def get_log(self, n_entries = 7) -> list[str]:
         """Returns the log of the Arduino.
 
         Returns:
             list[str]: log of the Arduino
         """
 
-        with self.lock:
-            with open(self.log_adress, "r") as f:
-                log = f.readlines()
+        with open(self.log_adress, "r") as f:
+            log = f.readlines()
 
-        return log
+        if len(log) < n_entries:
+            return log
+
+        return log[-n_entries:]
     
     def update_log(self, line: bytes = b"") -> None:
         """Updates the log of the Arduino."""
 
-        with self.lock:
-
-            with open(self.log_adress, "r") as f:
-                log = f.readlines()
-
-            if line != b"":
-                log.append(line.decode())
-
-            else:
-                if self.last_rawline == b"":
-                    return
-                
-                else:
-                    log.append(self.last_rawline.decode())
-                    self.last_rawline = b""
-
-            with open(self.log_adress, "w") as f:
-                f.writelines(log)
-
+        with open(self.log_adress, "r") as f:
+            log = f.readlines()
+        if line != b"":
+            log.append(line.decode().rstrip("\n"))
+        with open(self.log_adress, "w") as f:
+            f.writelines(log)
+        
+    # sensor functions
+    
     def create_sensor_data(self) -> None:
         """Creates a file for the sensor data."""
 
-        if os.path.exists(self.sensor_adress): return
+        with open(self.sensor_adress, "w") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Time", "Violet", "Blue", "Green", "Yellow", "Orange", "Red"])
+            writer.writerow([0, 0, 0, 0, 0, 0, 0])
+    
 
-        with self.lock:
-            with open(self.sensor_adress, "w") as f:
-                writer = csv.writer(f)
-                writer.writerow(["Time", "Violet", "Blue", "Green", "Yellow", "Orange", "Red"])
+# extra functions
 
-    def measurement(self, recurrsion_depth=0) -> None:
-
-        if self.is_measuring and recurrsion_depth == 0:
-            return
-        else:
-            self.is_measuring = True
-
-        columns = [
-            "Time",
-            "Violet",   # 405 nm
-            "Blue",     # 450 nm
-            "Green",    # 510 nm
-            "Yellow",   # 570 nm
-            "Orange",   # 590 nm
-            "Red",      # 630 nm
-        ]
-
-        if not self.serial.in_waiting > self.MIN_DATA_SIZE:
-            if recurrsion_depth < 10:
-                time.sleep(1)
-                self.measurement(recurrsion_depth + 1)
-            else:
-                self.update_log(f"Measurement failed")
-                return
-            
-        try:
-            rawline = self.read()
-        
-            data = rawline.decode().rstrip(",\r\n") # bringt die Daten in die Form "time,violet,blue,green,yellow,orange,red"
-            values = np.array(object=data.split(","), dtype=np.uint32).reshape((1,7))
-
-            this_t = values[0] + self.thirty_secs_passed * 30000
-
-            if self.last_time > this_t: 
-                self.thirty_secs_passed += 1
-                this_t += 30000
-
-            self.last_time = this_t
-            values[0] = this_t
-
-            with open(self.sensor_adress, 'a') as f:
-                writer = csv.writer(f)
-                writer.writerow(values)
-        except:
-            self.update_log(rawline)
-            self.update_log(b"===================== Measurement failed =======================")
-            print("Measurement failed")
-
-    def create_plot(self) -> figure:
-
-        df = pd.read_csv(self.sensor_adress, header=0)
-
-        p = figure(x_axis_type="datetime", title="Farben über Zeit", plot_height=350, plot_width=800)
-        p.xgrid.grid_line_color=None
-        p.ygrid.grid_line_alpha=0.5
-        p.xaxis.axis_label = 'Zeit'
-        p.yaxis.axis_label = 'Wert'
-
-        colors = ["Violet", "Blue", "Green", "Yellow", "Orange", "Red"]
-
-        for color in colors:
-            p.line(df['Time'], df[color], legend_label=color, line_width=2, line_color=color.lower())
-
-        return p
-
-def attempt_connection(port: str, baudrate: int = 9600, timeout: int = 1) -> tuple[bool, Arduino]:
+def attempt_connection(port: str, baudrate: int = 9600, timeout: int = 1, QUERY_ITERATIONS = 10, MIN_DATA_SIZE = 10, csv_name: str = "readings_0.csv") -> tuple[bool, Arduino]:
     """Attempts to connect to the Arduino.
 
     Args:
         port (str): port of the Arduino
         baudrate (int, optional): baudrate of the Arduino. Defaults to 9600.
         timeout (int, optional): timeout of the Arduino. Defaults to 1.
+        QUERY_ITERATIONS (int, optional): number of iterations to query the Arduino. Defaults to 10.
+        MIN_DATA_SIZE (int, optional): minimum size of the data. Defaults to 10.
+        csv_name (str, optional): name of the csv file. Defaults to "readings_0.csv".
 
     Returns:
         bool: True if connection was successful, False otherwise
     """
 
     try:
-        arduino = Arduino(port, baudrate, timeout)
+        arduino = Arduino(port, baudrate, timeout, QUERY_ITERATIONS, MIN_DATA_SIZE, csv_name)
         print(f"Connected to Arduino on port {port}")
         return True, arduino
     except:
@@ -254,12 +208,8 @@ def get_arduino_ports() -> list[str]:
     for port, desc, hwid in sorted(comports()):
         print(f"port: {port}, desc: {desc}, hwid: {hwid}")
         
-        if "Arduino" in desc:
+        if "SER" in hwid:
             arduino_ports.append(port)
-
-    print("Available ports:")
-    for port in arduino_ports:
-        print(port)
 
     return arduino_ports
 

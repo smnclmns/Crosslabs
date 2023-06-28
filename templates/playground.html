@@ -7,10 +7,6 @@ Playground
 {% block header %}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}"> <!-- Link to the main CSS file -->
-<link rel="stylesheet" href="{{ url_for('static', filename='bokeh/bokeh.3.2.0.min.css')}}">
-
-<script scr="{{ url_for('static', filename='bokeh/bokeh.3.2.0.min.js')}}"></script>
-<script>{{ script|safe }}</script>
 
 {% endblock %}
 
@@ -43,7 +39,7 @@ Playground
               </pre>
             </div> <!-- Tabpanel for the Terminal Output -->
             <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" class="is-hidden">
-                <div> {{ div|safe }} </div>
+                <div><img id="plot" src="/create_plot" alt="plot"></div>
             </div> <!-- Tabpanel for the Graphical Output -->
           </div> <!-- Tabs for the different outputs -->
                   
@@ -73,13 +69,10 @@ Playground
 
     </div> <!-- Container for the buttons and the slider -->
 
-    
-  
-    
-    
-
 {% endblock %}
+
 {% block script %}
+
 <script>
 /*
  *   This content is licensed according to the W3C Software License at
@@ -218,4 +211,22 @@ window.addEventListener('load', function () {
   }
 });
 </script>
+
+{% if is_measuring == True %}
+<script>
+  setInterval(function() {
+    var d = new Date();
+    document.getElementById("plot").src = "/create_plot?ver=" + d.getTime();
+  }, 5000);
+</script>
+
+<script>
+  setInterval(function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/read_serial', true);
+    xhr.send();
+  }, 5000);
+</script>
+{% endif %}
+
 {% endblock %}

@@ -1,9 +1,14 @@
-from flask import Flask, render_template, request, flash, url_for
-import threading
-from bokeh.embed import components
+from flask import Flask, render_template, request, url_for, redirect, send_file, jsonify
 
 
-from static.py.Levels import get_level_names
+import matplotlib
+matplotlib.use('Agg')
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import io
+import numpy as np
+
 from static.py.Arduino_communication import Arduino, attempt_connection, get_arduino_ports, connection_state
 
 
@@ -16,38 +21,78 @@ arduino: Arduino = None
 
 app = Flask(__name__)
 
-def check_arduino(connected: bool, arduino: Arduino):
-
-    if connected and isinstance(arduino, Arduino):
-        arduino.measurement()
-
-
 # Routes for the different pages
 
-@app.route("/", methods=["POST", "GET"])
+@app.route("/", methods=["POST", "GET"]) # Home page
 def home():
     return render_template("home.html")
 
-""" @app.route("/start", methods=["POST", "GET"])
-def start():
-    t = threading.Timer(1.0, check_arduino, args=[connected, arduino])
-    t.start() """
+@app.route("/create_plot", methods=["POST", "GET"]) # Page for getting the data from the csv file
+def create_plot():
+
+    # Reading the data from the csv file
+    data = pd.read_csv("csv_folder/readings_0.csv") # columns: time_in_ms, violet, blue, green, yellow, orange, red
+
+    # Creating the plot
+
+    plt.plot(data["Time"]/1000, data["Violet"], color="violet")
+    plt.plot(data["Time"]/1000, data["Blue"], color="blue")
+    plt.plot(data["Time"]/1000, data["Green"], color="green")
+    plt.plot(data["Time"]/1000, data["Yellow"], color="yellow")
+    plt.plot(data["Time"]/1000, data["Orange"], color="orange")
+    plt.plot(data["Time"]/1000, data["Red"], color="red")
+
+    plt.xlabel("Time in s")
+    plt.ylabel("Sensorvalues I [-]")
+    plt.grid()
+
+    # Saving the plot as a png file
+    img = io.BytesIO()
+    plt.savefig(img, format="png")
+    img.seek(0)
+
+    # deleting the plot from the memory
+    plt.cla()
+    plt.clf()
+
+    # Returning the plot
+    return send_file(img, mimetype="image/png")
+    
+
+@app.route("/read_serial", methods=["POST", "GET"]) # Page for getting the data from the serial connection
+def read_serial():
+    
+    # Reading the data from the serial connection
+    if connected and arduino.is_measuring:
+        rawline = arduino.read()
+
+        return jsonify({"data": rawline.decode()})
+    
+    else:
+        return jsonify({"data": "no data"})
+
 
 @app.route("/playground", methods=["POST", "GET"])
 def playground():
 
+    # Initialising the global variables
+
     global connected
     global arduino
 
-    response = ">"
+    # Initialising the response
 
-    script = None
-    div = None
+    response = ">"
+    is_measuring = False
+
+    # Initialising the input_dict
 
     input_dict = {
         "connect": "",
         "query-input": "",        
     }
+
+    # if the user has submitted the form, the input_dict will be updated
 
     if request.method == "POST":
 
@@ -59,30 +104,31 @@ def playground():
             else:
                 input_dict[key] = inp
 
+        # if the user has submitted the form and wants to connect to the Arduino, the connection will be attempted
+
+        if input_dict["connect"] == "connect":
+            ino_ports = get_arduino_ports()
+            if ino_ports == []:
+                response = "No Arduino found."
+            else:
+                connected, arduino = attempt_connection(ino_ports[0])
+                response = connection_state(connected, arduino)
+
+        # if the user has submitted the form and wants to query the Arduino, the query will be attempted
+
         if connected and input_dict["query-input"] != "":
             arduino.send(input_dict["query-input"])
             log = arduino.get_log()
-            if len(log) > 7: response = "\n> ".join(log[-7:])
-            else: response = "\n> ".join(log)
+            response = "\n> ".join(log)
 
-        if input_dict["query-input"] == "mock":
-            t = threading.Timer(1.0, check_arduino, args=[connected, arduino])
-            t.start()
-
-        if input_dict["connect"] == "connect":
-            if get_arduino_ports() == []: response = "No Arduino found."
-            else:
-                connected, arduino = attempt_connection(get_arduino_ports()[0])
-                response = connection_state(connected, arduino)
-
-        if connected and arduino.is_measuring:
-
-            plot = arduino.create_plot()
-            script, div = components(plot)
+        if connected and input_dict["query-input"] == "mock":
+            arduino.is_measuring = True
+            is_measuring = True
 
 
+    # rendering the template with the right values
 
-    return render_template("playground.html", response=response, connected=connected, script=script, div=div,)
+    return render_template("playground.html", response=response, connected=connected,is_measuring=is_measuring)
 
 
 
@@ -306,7 +352,7 @@ def level4():
 
 if __name__ == "__main__":
 
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
 
 
 

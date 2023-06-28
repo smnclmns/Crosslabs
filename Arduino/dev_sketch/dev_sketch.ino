@@ -8,7 +8,7 @@ bool stringComplete = false;
 bool Start = false;
 
 
-unsigned long Starttime;
+unsigned long Starttime = 0;
 uint16_t currentTime;
 
 
@@ -86,7 +86,6 @@ void loop(void) {
 
     else if (inputString == "mock\n" && !mocking_data) {
       mocking_data = true;
-      Starttime = millis();
     }
 
     else if (inputString == "Stopp\n") {
@@ -138,6 +137,8 @@ void loop(void) {
     Mocking_Data();
     send_in_utf_8();
   }
+
+  delay(1000);
 }
 
 void serialEvent() {
@@ -171,7 +172,7 @@ void Mocking_Data() {
 
  
  unsigned long millis_now = millis();
- unsigned long timediff = millis_now - Starttime;
+ long timediff = millis_now - Starttime;
  if (timediff >= 30000) {
   timediff -= 30000;
   Starttime += 30000;
@@ -209,22 +210,22 @@ void Mocking_Data() {
       double value;
       switch (i) {
         case 5:
-          value = amplitudeRed * sin(2 * PI * frequencyRed * currentTime / 1000.0) + offsetRed;
+          value = abs(amplitudeRed * sin(2 * PI * frequencyRed * currentTime / 1000.0) + offsetRed);
           break;
         case 4:
-          value = amplitudeOrange * sin(2 * PI * frequencyOrange * currentTime / 1000.0) + offsetOrange;
+          value = abs(amplitudeOrange * sin(2 * PI * frequencyOrange * currentTime / 1000.0) + offsetOrange);
           break;
         case 3:
-          value = amplitudeYellow * sin(2 * PI * frequencyYellow * currentTime / 1000.0) + offsetYellow;
+          value = abs(amplitudeYellow * sin(2 * PI * frequencyYellow * currentTime / 1000.0) + offsetYellow);
           break;
         case 2:
-          value = amplitudeGreen * sin(2 * PI * frequencyGreen * currentTime / 1000.0) + offsetGreen;
+          value = abs(amplitudeGreen * sin(2 * PI * frequencyGreen * currentTime / 1000.0) + offsetGreen);
           break;
         case 1:
-          value = amplitudeBlue * sin(2 * PI * frequencyBlue * currentTime / 1000.0) + offsetBlue;
+          value = abs(amplitudeBlue * sin(2 * PI * frequencyBlue * currentTime / 1000.0) + offsetBlue);
           break;
         case 0:
-          value = amplitudeViolet * sin(2 * PI * frequencyViolet * currentTime / 1000.0) + offsetViolet;
+          value = abs(amplitudeViolet * sin(2 * PI * frequencyViolet * currentTime / 1000.0) + offsetViolet);
           break;
       }
       values[i] = (uint16_t)value;
