@@ -53,18 +53,20 @@ Tutorial
                         <span class="comment">// Main titration loop</span>
                         <span class="keyword">while</span> <span class="punctuation">(</span><span class="boolean">!</span><span class="identifier">titration_complete</span><span class="punctuation">)</span> <span class="keyword">do</span>:
                                 <span class="identifier">current_color</span> <span class="operator">=</span> <span class="function">measure_color</span><span class="punctuation">()</span>;  <span class="comment">// Measure and save the current color</span>
-                            
+                                <span class="function">set_Motorspeed</span><span class="punctuation">()</span>;  <span class="comment">// Start the Titration pump</span>
                             <span class="comment">// Check if color has changed significantly | larger than a certain treshold</span>
-                            <span class="keyword">if</span> <span class="punctuation">(</span></span><span class="punctuation">(</span><span class="identifier">initial_color</span><span class="punctuation"> &gt; 0.9*</span> <span class="identifier">current_color</span><span class="punctuation">))</span> <span class="keyword">then</span>:
-                                <span class="comment">// Add titrant drop</span>
-                                <span class="function">add_titrant_drop</span><span class="punctuation">()</span>;
+                        <span class="keyword">if</span> <span class="punctuation"></span></span><span class="punctuation"></span><span class="identifier">initial_color </span><input class="user-input" type="text" id='Boolean2' placeholder="&lt;|&gt;" title="Please enter '&lt;' or '&gt;'"  style="width: 40px" name="Boolean2" tabindex="1" pattern="&lt;|&gt;"><span class="identifier"> 0.9 * current_color</span><span class="punctuation"></span> <span class="keyword">then</span>:
+                                <span class="comment">// stop the pump</span>
+                                <span class="function">set_Motorspeed</span><span class="punctuation">()</span>;
                                 
                                 <span class="comment">// Measure color again</span>
                                 <span class="identifier">current_color</span> <span class="operator">=</span> <span class="function">measure_color</span><span class="punctuation">()</span>;
                                 
                                 <span class="comment">// Check if color change indicates endpoint</span>
-                                <span class="keyword">if</span> <span class="punctuation">(</span><span class="function">is_endpoint_reached</span><span class="punctuation">(</span><span class="identifier">current_color</span><span class="punctuation">))</span> <span class="keyword">then</span>:
+                                <span class="keyword">if</span> <span class="punctuation"></span></span><span class="punctuation"></span><span class="identifier">initial_color </span><input class="user-input" type="text" id='Boolean2' placeholder="&lt;|&gt;" title="Please enter '&lt;' or '&gt;'"  style="width: 40px" name="Boolean2" tabindex="1" pattern="&lt;|&gt;"><span class="identifier"> 0.9 * current_color</span><span class="punctuation"></span> <span class="keyword">then</span>:
                                     <span class="identifier">titration_complete</span> <span class="operator">=</span> <input class="user-input" type="text" id='Boolean1' placeholder="Boolean state" title="Please enter 'true' or 'false'" name="Boolean1" tabindex="1" pattern="true|false">;
+                                <span class="keyword">else</span>
+                                    <span class="function">break</span>
                     
                         <span class="comment">// Titration is complete</span>
                         <span class="function">finish_titration</span><span class="punctuation">()</span>;
