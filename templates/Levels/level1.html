@@ -10,34 +10,72 @@ Tutorial
 {% block main %}
 
 
-<div class="dashboard">
-    <section class="main">
-        <h1>UML</h1>
-        <img src="{{ uml_src }}" alt="Result Image">
-    </section>
+<div class="container">
+    <div class="row">
+        <div class='col-12 col-md-6'> <!-- Main Part with heading, explanations and pictures -->
+                <h1 class="d-flex justify-content-center">Equivalence Point recognition</h1>
+                <p class="justify-content-center">
+                    The equivalence point in an acid-base titration is the point at which equivalent amounts of acid and base have reacted,
+                    following the stoichiometry of the balanced chemical equation. 
+                    To recognize the equivalence point in such titrations, an indicator is employed.<br> 
+                    This indicator undergoes a distinct color change or another observable transformation when the reaction reaches its stoichiometric conclusion,
+                    assisting in accurately determining the endpoint of the titration.<br>
+                    The concept of automating this process is explained in the following.
+                </p>
+                <img src="{{ uml_src }}" alt="Result Image" class="img-fluid">
+                <p class="justify-content-center">
+                    Light values are measured in the color channel they appear and the light levels the emit. This is shown below.<br>
+                <img src="{{ uml_src2 }}" alt="Result Image2" class="img-fluid">
+                    It can be proposed to design the controller only using a certain selection of channels or averaging all light channels.
+                    The pseudo-code for this task uses the average values. 
+                </p>
+        </div> <!-- End of Main Part -->    
 
-    <section class="prompt">
-        <h1>Task</h1>
-        <form action="#" method="post">
-<p>
-    In the following you will find a pseudo-code for the calibration of the stepper motor. <br>
-    The pseudo-code is incomplete, so you have to fill in the missing parts. <br>
-</p>
-<pre><code>
-<p>
-<span class="keyword">if</span> incoming command is <span class="string">"Start Calibration"</span>, run the following calbration routine:
-
-<span class="keyword">execute</span> the function <span class="function">set_Motorspeed()</span>
-
-<span class="keyword">for</span> <input class="user-input" type="text" id='Tut_iterations' placeholder="Number of iterations" name="Tut_iterations" tabindex="1" pattern="\d*"> times <span class="keyword">do</span>:
-  <span class="function">Move(<input class="user-input" type="text" id="Tut_steps" placeholder="Steps per iteration" name="Tut_steps" tabindex="2" pattern="\d*">)</span>
-  <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="3" style="width: 50px" pattern="\d*"> ms
-
-Finally <span class="keyword">end</span> calibration
-
-
-</p>
-</code></pre>
+        <div class="col-12 col-md-6 order-md-last"> <!-- Code Part -->
+            <h1 class="d-flex justify-content-center">Task</h1>
+            <form action="#" method="post">
+                <p>
+                    In the following you will find the pseudo-code for the automated recognition of the equivalence point. <br>
+                    The pseudo-code is incomplete, so you have to fill in the missing parts. <br>
+                    Extra Inforation:
+                    Measure_color() is a function that saves the current measured values in a vector. <br>
+                </p>
+                <pre><code class="d-flex justify-content-center">
+                        <p>
+                        <span class="keyword">// Light Sensor-Controlled Titration Pseudo-Code</span>
+                    
+                        <span class="comment">// Initialize variables</span>
+                        <span class="type">int</span>
+                            <span class="identifier">initial_color</span> <span class="operator">=</span> <span class="function">measure_color</span><span class="punctuation">()</span>;  <span class="comment">// Measure the color at the start of the Titration</span>
+                        <span class="type">boolean</span>
+                            <span class="identifier">titration_complete</span> <span class="operator">=</span> <input class="user-input" type="text" id='Boolean1' placeholder="Boolean state" title="Please enter 'true' or 'false'" name="Boolean1" tabindex="1" pattern="true|false">;  <span class="comment">// Boolean for the initial state</span>
+                    
+                        <span class="comment">// Main titration loop</span>
+                        <span class="keyword">while</span> <span class="punctuation">(</span><span class="boolean">!</span><span class="identifier">titration_complete</span><span class="punctuation">)</span> <span class="keyword">do</span>:
+                                <span class="identifier">current_color</span> <span class="operator">=</span> <span class="function">measure_color</span><span class="punctuation">()</span>;  <span class="comment">// Measure and save the current color</span>
+                            
+                            <span class="comment">// Check if color has changed significantly | larger than a certain treshold</span>
+                            <span class="keyword">if</span> <span class="punctuation">(</span></span><span class="punctuation">(</span><span class="identifier">initial_color</span><span class="punctuation"> &gt; 0.9*</span> <span class="identifier">current_color</span><span class="punctuation">))</span> <span class="keyword">then</span>:
+                                <span class="comment">// Add titrant drop</span>
+                                <span class="function">add_titrant_drop</span><span class="punctuation">()</span>;
+                                
+                                <span class="comment">// Measure color again</span>
+                                <span class="identifier">current_color</span> <span class="operator">=</span> <span class="function">measure_color</span><span class="punctuation">()</span>;
+                                
+                                <span class="comment">// Check if color change indicates endpoint</span>
+                                <span class="keyword">if</span> <span class="punctuation">(</span><span class="function">is_endpoint_reached</span><span class="punctuation">(</span><span class="identifier">current_color</span><span class="punctuation">))</span> <span class="keyword">then</span>:
+                                    <span class="identifier">titration_complete</span> <span class="operator">=</span> <input class="user-input" type="text" id='Boolean1' placeholder="Boolean state" title="Please enter 'true' or 'false'" name="Boolean1" tabindex="1" pattern="true|false">;
+                    
+                        <span class="comment">// Titration is complete</span>
+                        <span class="function">finish_titration</span><span class="punctuation">()</span>;
+                        </p>
+                    </code></pre>
+                
+                    
+                    
+                    
+                    
+                    
             <input type="submit" value="Submit">
             <p>
             <br>You got {{ value }} out of 3 points.<br>

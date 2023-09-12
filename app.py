@@ -243,6 +243,7 @@ def level1():
 
     return render_template("Levels/level1.html",
         uml_src=url_for('static', filename='assets/SVGs/Level1.svg'),
+        uml_src2=url_for('static', filename='assets/SVGs/Level1.1.svg'),
         value=score,
         tips=tips,
     )
