@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-Tutorial - Respond to Sensor Data
+Tutorial
 {% endblock %}
 
 {% block header %}
@@ -8,43 +8,114 @@ Tutorial - Respond to Sensor Data
 {% endblock %}
 
 {% block main %}
+<div class="container">
+    <div class="row">
+        <div class='col-12 col-md-6'> <!-- Main Part with heading, explanations and pictures -->
+                <h1 class="d-flex justify-content-center">Pump control</h1>
+                <p class="justify-content-center">
+                    
+                Stepper motor control with Arduino is a meticulously orchestrated process rooted in the principles of electromagnetism and digital control systems. Utilizing an Arduino microcontroller, these motors are meticulously controlled by sequentially energizing their coils in precise patterns.
+                This precise control allows for incremental and highly accurate rotational movement, making stepper motors a preferred choice in scientific and industrial applications like precision instruments, telescopes, and laboratory automation.<br>
+                An Example is given below:
+                </p>
+                <img src="{{ uml_src }}" alt="Result Image" class="img-fluid" width="800" height="800">
+                <p class="justify-content-center">
+                    Arduino controls the speed and step size of a stepper motor by regulating the timing between electrical pulses it sends to the motor. The speed is determined by the interval between these pulses, with shorter intervals resulting in faster rotation.
+                    The step size, representing the angle of rotation with each pulse, is determined by the specific sequence of coil activations, such as full-step, half-step, or micro-stepping, programmed into the Arduino code. For the highest precision we choose 1/32 steps.<br>
+                <img src="{{ uml_src2 }}" alt="Result Image2" class="img-fluid">
+                To control the Pump, we already implemented the calibration function in the tutorial. Now we need to write the functions that will complete the titration.
+            
+                    
+                </p>
+        </div> <!-- End of Main Part -->    
 
-<div class="dashboard">
-    <section class="main">
-        <h1>UML</h1>
-        <img src="{{ uml_src }}" alt="Result Image">
-    </section>
+        <div class="col-12 col-md-6 order-md-last"> <!-- Code Part -->
+            <h1 class="d-flex justify-content-center">Task</h1>
+            <form action="#" method="post">
+                <p>
+                    In the following you will find the pseudo-code for the automated titration using a stepper motor. <br>
+                    The pseudo-code is incomplete, so you have to fill in the missing parts. <br>
+                    
+                </p>
+                <pre><code class="d-flex justify-content-center">
+                <p>
+                <span class="keyword">// Stepper Motor Control Pseudo-Code</span>
+                
 
-    <section class="prompt">
-        <h1>Task</h1>
-        <form action="#" method="post">
-<p>
-    The following pseudo-code describes how to respond to changes in sensor data. <br>
-    The pseudo-code is incomplete, so you need to fill in the missing parts. <br>
-</p>
-<pre><code>
-<p>
-<span class="keyword">if</span> sensor data changes <span class="keyword">do</span>:
+                <span class="comment">// Initialize Stepper Motor and Variables</span>
+                <span class="function">#Include Stepper</span>
+                <span class="function">InitializeStepperMotor</span><span class="punctuation">(<input class="user-input" type="text" id='Microstep_1' placeholder="Microstep" title="Please enter '1,1/2,1/8' or '1/32'" name="Microstep_1" tabindex="1" pattern="^(1|1\/2|1\/8|1\/32)$">)</span>;
+                    
+                <span class="comment">// Function from the Light sensor pseudo code</span>
+                <span class="function">set_Motorspeed</span><span class="punctuation">()</span>;
+                    <span class="comment">// Start of Titration</span>
+                    <span class="function">StartTitration</span><span class="punctuation">()</span>;
+                        titration_complete = false
 
-<span class="keyword">if</span> new sensor data <span class="string">"<input class="user-input" type="text" id='Tut_condition' placeholder="Condition" name="Tut_condition" tabindex="1" pattern="\S*">"</span>, <span class="keyword">execute</span> function <span class="function">Change_PumpState()</span>
+                    <span class="comment">// First_color_change</span>
+                    <span class="function">Pause</span><span class="punctuation">()</span>;
+                        titration_complete = false
+                        First_color_change = true
 
-<span class="keyword">else</span>, <span class="keyword">execute</span> function <span class="function">Maintain_PumpState()</span>
+                    <span class="comment">// End of Titration</span>
+                    <span class="function">End</span><span class="punctuation">()</span>;
+                        titration_complete = true
 
-<span class="keyword">end</span> sensor data routine
-</p>
-</code></pre>
-            <input type="submit" value="Submit">
-            <p>
-            <br>You got {{ value }} out of 3 points.<br>
-            <ul>
-                {% for tip in tips.split("\n")[:-1] %}
-                    <li>{{ tip }}</li>
-                {% endfor %}
-            </ul>
-            </p>
-        </form>
+
+                <span class="function">def</span><span class="punctuation">(StartTitration)</span>;
+                    <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number">10.0</span><span class="punctuation">)</span>;
+                    <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number">10.0</span><span class="punctuation">)</span>;
+                
+                <span class="comment">// At first color change the motor should stop and wait if the color will fade away</span>
+                <span class="comment">// If the color does not stay constant the motor should reduce its velocity</span>  
+
+                <span class="function">def</span><span class="punctuation">(pause)</span>;
+                    <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_1' placeholder="Velocity"  style="width: 40px" name="Velocity_1" tabindex="1" pattern="\d*"><span class="identifier"></span><span class="punctuation">)</span>;
+                    <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_2' placeholder="Velocity"  style="width: 40px" name="Velocity_2" tabindex="1" pattern="\d*"></span><span class="punctuation">)</span>;
+                    <span class="keyword">Wait(<span class="function"> 10s</span>)</span>
+                    <span class="comment"> //First light sensor evaluation</span>
+                    <span class="function">measure_color</span>()
+                    <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_3' placeholder="Velocity"  style="width: 40px" name="Velocity_3" tabindex="1" pattern="\d*"><span class="identifier"></span><span class="punctuation">)</span>;
+                    <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_4' placeholder="Velocity"  style="width: 40px" name="Velocity_4" tabindex="1" pattern="\d*"></span><span class="punctuation">)</span>;
+
+                <span class="function">def</span><span class="punctuation">(End)</span>;
+                    <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_5' placeholder="Velocity"  style="width: 40px" name="Velocity_5" tabindex="1" pattern="\d*"><span class="identifier"></span><span class="punctuation">)</span>;
+                    <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_6' placeholder="Velocity"  style="width: 40px" name="Velocity_6" tabindex="1" pattern="\d*"></span><span class="punctuation">)</span>;
+                
+    
+                </p>
+            </code></pre>
+                        
+                
+                    
+                    
+                    
+                    
+                    
+                    <input type="submit" value="Submit">
+                    {% if visible_tips %}
+                    <p>
+                    <br>
+                    You got {{ value }} out of 7 points.<br>
+                    <ul>
+                        {% for tip in tips.split("\n")[:-1] %}
+                            <li>{{ tip }}</li>
+                        {% endfor %}
+                    </ul>
+                    </p>
+                    {% endif %}
+                </form>
+    
+                {% if value == 7 %}
+                    <a href="{{ url_for('level3') }}" class="btn btn-primary">Go to Level 3</a>
+                {% endif %}
+          </form>
+
     </section>
 </div>
+
+
+
 
 <script>
 
