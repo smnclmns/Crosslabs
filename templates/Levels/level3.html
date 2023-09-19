@@ -9,40 +9,77 @@ Tutorial - Determining Endpoint
 
 {% block main %}
 
-<div class="dashboard">
-    <section class="main">
-        <h1>UML</h1>
-        <img src="{{ uml_src }}" alt="Result Image">
-    </section>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h1 class="d-flex justify-content-center"> Determining the Endpoint</h1>
+                <p class="justify-content-center">
+                 Determining the endpoint of the titration and returning the exact volume used by the syringepump is a crucial part of the automated titration.
+                 In this section the last color change will be detected and the volume will be calculated from the output of the steppermotor.
+                 More Specific the steps the motor took since the titation started.   
+                </p>
+                <img src="{{ uml_src }}" alt="Result Image" class="img-fluid">
+                <p class="justify-content-center">
+                This section is the last procedure of the automated titration. We need to have a final check on the light sensor and if the Titration is 
 
-    <section class="prompt">
-        <h1>Task</h1>
-        <form action="#" method="post">
-<p>
-    The following pseudo-code describes how to determine the endpoint of the titration. <br>
-    The pseudo-code is incomplete, so you need to fill in the missing parts. <br>
-</p>
-<pre><code>
-<p>
-<span class="keyword">if</span> sensor data <span class="string">"significantly changes"</span>, run the following routine:
+                </p>
+        </div>
 
-<span class="keyword">execute</span> the function <span class="function">Stop_Pump()</span>
+            <div class="col-12 col-md-6 order-md-last">
+                <h1 class="d-flex justify-content-center">Task</h1>
+                <form action="#" method="post">
+                <p>
+                    The following pseudo-code describes how to determine the endpoint of the titration.
+                    The Sensor has recorded a change in light values and the following procedure needs to be coded.<br>
+                    The pseudo-code is incomplete, so you need to fill in the missing parts. <br>
+                </p>
+                <pre><code class="d-flex justify-content-center">
+                <p>
+                <span class="keyword">//The Arduino has recorded a change in light value
+                //The syringepump is set to 0 and is waiting for the next command
+                </span>
+                <span class="keyword">if</span> sensor data <span class="string">"significantly changes"</span>, run the following routine:
 
-<span class="keyword">record</span> the total amount of <input class="user-input" type="text" id='Tut_substance' placeholder="Substance" name="Tut_substance" tabindex="1" pattern="\S*"> used
+                <span class="keyword">execute</span> the function <span class="function">Stop_Pump()</span>
+                <span class="comment">//First wait for the equilibirum to settle, as the color might change back again </span>
+                <span class="keyword">wait(<span class="function">10s</span>)</span>
+                <span class="function">if </span><span class="punctuation"></span></span><span class="punctuation"></span><span class="identifier">current_color </span><span class="identifier"> &gt; 0.9 * initial_color</span><span class="punctuation"></span> <span class="keyword">then</span>:    
+                    <Input class="user-input" type="text" id="Tut_Command" name="Tut_Command" placeholder="Command" style="width: 80px;" pattern="Continue|Break|End" title="Please use Conditional statements Continue|Break|End"> Titration
 
-Finally <span class="keyword">end</span> endpoint determination
-</p>
-</code></pre>
-            <input type="submit" value="Submit">
-            <p>
-            <br>You got {{ value }} out of 3 points.<br>
-            <ul>
-                {% for tip in tips.split("\n")[:-1] %}
-                    <li>{{ tip }}</li>
-                {% endfor %}
-            </ul>
-            </p>
-        </form>
+                <span class="function">if </span><span class="punctuation"></span></span><span class="punctuation"></span><span class="identifier">current_color </span><span class="identifier"> &lt; 0.9 * initial_color</span><span class="punctuation"></span> <span class="keyword">then</span>:    
+                    <span class="keyword">record</span> the total amount of substance used:
+                    <span class="comment">//We use the calibration function to determine the volumina</span>
+                    <span class="function">Stepcount</span>()
+                        <span class="function">get</span> Steps
+        
+                    <span class="function">calibration(<input class="user-input" type="text" id="Tut_Steps" style="width: 80px; color: blue;" name="Tut_Steps" placeholder="Variable">)</span>
+                        <span class="keyword">Return</span> Volume
+
+                Finally <span class="keyword">end</span> endpoint determination
+                        <span class="function">Display</span>( "Titration used <input class="user-input" type="text" id="Tut_Variable" placeholder="Variable" name="Tut_Variable" style="width: 80px;"> ml")
+                </p>
+                </code></pre>
+                <input type="submit" value="Submit">
+                            {% if visible_tips %}
+                            <p>
+                            <br>
+                            You got {{ value }} out of 3 points.<br>
+                            <ul>
+                                {% for tip in tips.split("\n")[:-1] %}
+                                    <li>{{ tip }}</li>
+                                {% endfor %}
+                            </ul>
+                            </p>
+                            {% endif %}
+                        </form>
+
+                        {% if value == 3 %}
+                            <a href="{{ url_for('level4') }}" class="btn btn-primary">Go to Level 4</a>
+                        {% endif %}
+                </form>
+                    </section>
+            </div>
+        </div>
     </section>
 </div>
 

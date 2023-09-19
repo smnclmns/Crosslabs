@@ -334,13 +334,10 @@ def level2():
 def level3():
 
     input_dict = {
-        "Microstep_1":0,
-        "Velocity_1":0,
-        "Velocity_2":0,
-        "Velocity_3":0,
-        "Velocity_4":0,
-        "Velocity_5":0,
-        "Velocity_6":0,
+        "Tut_Command":0,
+        "Tut_Steps":0,
+        "Tut_Variable":0,
+       
 
     }
 
@@ -359,33 +356,23 @@ def level3():
 
     for key, val in input_dict.items():
 
-        if key == "Microstep":
-            if val != "1/32" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            elif val == "1/32": score += 1
+        if key == "Tut_Command":
+            if val != "Continue" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            elif val == "Continue": score += 1
 
-        if key == "Velocity_1":
-            if val != "0" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            elif val == "0": score += 1
-        if key == "Velocity_2":
-            if val != "0" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            elif val == "0": score += 1
-        if key == "Velocity_3":
-            if val != "" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            elif val < "10": score += 1
-        if key == "Velocity_4":
-            if val != "" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            elif val < "10": score += 1
-        if key == "Velocity_5":
-            if val != "0" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            elif val == "0": score += 1
-        if key == "Velocity_6":
-            if val != "0" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            elif val == "0": score += 1
+        if key == "Tut_Steps":
+            if val != "Steps" and val != "": tips += f"You didn't set the right Varibale inside the calibration function.\n"
+            elif val == "Steps": score += 1
+        if key == "Tut_Variable":
+            if val != "Volume" and val != "": tips += f"You didn't set the right {key.split('_')[1]}.\n"
+            elif val == "Volume": score += 1
+    
 
     return render_template("Levels/level3.html",
         uml_src=url_for('static', filename='assets/SVGs/Level3.svg'),
         value=score,
         tips=tips,
+        visible_tips = visible_tips,
     )
 
 @app.route("/workspace/level4", methods=["POST", "GET"])
