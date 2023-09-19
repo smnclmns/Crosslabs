@@ -11,6 +11,11 @@ import numpy as np
 
 from static.py.Arduino_communication import Arduino, attempt_connection, get_arduino_ports, connection_state
 
+#User Progress
+enable_level1 = False
+enable_level2 = False
+enable_level3 = False
+enable_level4 = False
 
 # Initialing arduino variables
 
@@ -26,6 +31,7 @@ app = Flask(__name__)
 @app.route("/", methods=["POST", "GET"]) # Home page
 def home():
     return render_template("home.html")
+    
 
 @app.route("/create_plot", methods=["POST", "GET"]) # Page for getting the data from the csv file
 def create_plot():
@@ -154,12 +160,24 @@ def playground():
 
 @app.route("/workspace", methods=["GET", "POST"])
 def workspace():
-    return render_template("workspace.html", lvl1="disabled", lvl2="disabled")
+    global enable_level1
+    global enable_level2
+    global enable_level3
+    global enable_level4
+
+    return render_template("workspace.html", lvl1="enabled" if enable_level1 else "disabled",  lvl2="enabled" if enable_level2 else "disabled",  lvl3="enabled" if enable_level3 else "disabled",  lvl4="enabled" if enable_level4 else "disabled")
+
+    
 
 
 
 @app.route("/workspace/tutorial", methods=["POST", "GET"])
 def tutorial():
+
+    #Progress
+    global enable_level1
+    maximum_score=3
+
 
     # All inputs from the user in the tutorial page
 
@@ -202,9 +220,10 @@ def tutorial():
         if key == "Tut_delay":
             if val != "1000" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
             elif val == "1000": score += 1
-
+        
     # rendering the template with the right values
-    
+    if score == maximum_score:
+            enable_level1 = True
     return render_template("Levels/tutorial.html",
      uml_src=url_for('static', filename='assets/SVGs/Calibration.svg'),
      value=score,
@@ -214,7 +233,9 @@ def tutorial():
 
 @app.route("/workspace/level1", methods=["POST", "GET"])
 def level1():
-
+    #Progress
+    global enable_level2
+    maximum_score=4
     input_dict = {
         "Boolean_state_1": 0,
         "Condition_1": 0,
@@ -253,7 +274,8 @@ def level1():
         if key == "Condition_2":
             if val != "<" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
             elif val == "<": score += 1
-
+    if score == maximum_score:
+            enable_level2 = True
     return render_template("Levels/level1.html",
         uml_src=url_for('static', filename='assets/SVGs/Level1.svg'),
         uml_src2=url_for('static', filename='assets/SVGs/Level1.1.svg'),
@@ -264,6 +286,8 @@ def level1():
 
 @app.route("/workspace/level2", methods=["POST", "GET"])
 def level2():
+    global enable_level3
+    maximum_score=7
 
     input_dict = {
         "Microstep_1":0,
@@ -321,7 +345,8 @@ def level2():
         if key == "Velocity_6":
             if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\n"
             elif val == "0": score += 1
-
+    if score == maximum_score:
+            enable_level3 = True
     return render_template("Levels/level2.html",
         uml_src=url_for('static', filename='assets/SVGs/Stepper1.svg'),
         uml_src2=url_for('static', filename='assets/Gifs/fullround.gif'),
@@ -332,7 +357,8 @@ def level2():
 
 @app.route("/workspace/level3", methods=["POST", "GET"])
 def level3():
-
+    global enable_level4
+    maximum_score=3
     input_dict = {
         "Tut_Command":0,
         "Tut_Steps":0,
@@ -367,7 +393,8 @@ def level3():
             if val != "Volume" and val != "": tips += f"You didn't set the right {key.split('_')[1]}.\n"
             elif val == "Volume": score += 1
     
-
+    if score == maximum_score:
+            enable_level4 = True
     return render_template("Levels/level3.html",
         uml_src=url_for('static', filename='assets/SVGs/Level3.svg'),
         value=score,
@@ -379,16 +406,22 @@ def level3():
 def level4():
 
     input_dict = {
-        "Tut_iterations": 0,
-        "Tut_steps": 0,
-        "Tut_delay": 0,
+        "Tut_Step": 0,
+        "Tut_calibration": 0,
+        "Tut_start": 0,
+        "Tut_Measure":0,
+        "Tut_condition":0,
+        "Tut_Variable":0,
+        "Condition_1":0,
     }
 
     tips= ""
     score = 0
+    visible_tips = False
 
     if request.method == "POST":
-
+        visible_tips = True
+    
         for key, val in input_dict.items():
 
             inp = request.form.get(key)
@@ -396,23 +429,37 @@ def level4():
             else: input_dict[key] = inp
 
     for key, val in input_dict.items():
+        if key == "Tut_Step":
+            if val != "1/32" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            elif val == "1/32": score += 1
 
-        if key == "Tut_iterations":
-            if val != "15": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            else: score += 1
+        if key == "Tut_calibration":
+            if val != "Calibration" and val != "": tips += f"You didn't set the right Function.\n"
+            elif val == "Calibration": score += 1
+        if key == "Tut_start":
+            if val != "StartTitration" and val != "": tips += f"You didn't set the right {key.split('_')[1]}.\n"
+            elif val == "StartTitration": score += 1
+        if key == "Tut_Measure":
+            if val != "Measure_color" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            elif val == "Measure_color": score += 1
+        if key == "Condition_1":
+            if val != "<" and val != "": tips += f"You didn't set the right {key.split('_')[1]}.\n"
+            elif val == "<": score += 1
 
-        if key == "Tut_steps":
-            if val != "500": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            else: score += 1
+        if key == "Tut_condition":
+            if val != "True" and val != "": tips += f"You didn't set the right Varibale inside the calibration function.\n"
+            elif val == "True": score += 1
+        if key == "Tut_Variable":
+            if val != "Volume" and val != "": tips += f"You didn't set the right {key.split('_')[1]}.\n"
+            elif val == "Volume": score += 1
 
-        if key == "Tut_delay":
-            if val != "1000": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
-            else: score += 1
+       
 
     return render_template("Levels/level4.html",
         uml_src=url_for('static', filename='assets/SVGs/Level4.svg'),
         value=score,
         tips=tips,
+        visible_tips = visible_tips,
     )
 
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-Tutorial - Performing Titration
+Tutorial - Automation process
 {% endblock %}
 
 {% block header %}
@@ -9,43 +9,91 @@ Tutorial - Performing Titration
 
 {% block main %}
 
-<div class="dashboard">
-    <section class="main">
-        <h1>UML</h1>
-        <img src="{{ uml_src }}" alt="Result Image">
-    </section>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h1 class="d-flex justify-content-center"> Automation Process</h1>
+                <p class="justify-content-center">
+                 We investigated most of the important factors of the titration. We can cantrol the necessary sensors and actors. The syringepump is calibrated and we can evaluate the total volume used in the titration.
+                 The task now is to complete the script for the automated task. All previously entered code is abreviated in their respective functions. Nevertheless, the pseudo code will be shortened to reduce the amount of inputs and time.
+                 In the following the Functions will be summarized. 
+                </p>
+                <img src="{{ uml_src }}" alt="Result Image" class="img-fluid" >
+                <p class="justify-content-center">
+                This section is the last procedure of the automated titration. All necessary variables are initialized.
+                
 
-    <section class="prompt">
-        <h1>Task</h1>
-        <form action="#" method="post">
-<p>
-    The following pseudo-code represents the process of performing a titration. <br>
-    The pseudo-code is incomplete, so you need to fill in the missing parts. <br>
-</p>
-<pre><code>
-<p>
-<span class="keyword">execute</span> the function <span class="function">Start_Titration()</span>
+                </p>
+        </div>
 
-<span class="keyword">while</span> sensor data <span class="string">"does not significantly change"</span>:
-  <span class="keyword">execute</span> the function <span class="function">Dose_Substance()</span>
-  <span class="keyword">wait</span> for <input class="user-input" type="text" id='Tut_delay' placeholder="Delay" name="Tut_delay" tabindex="1" style="width: 50px" pattern="\d*"> ms
+            <div class="col-12 col-md-6 order-md-last">
+                <h1 class="d-flex justify-content-center">Task</h1>
+                <form action="#" method="post">
+                <p>
+                    The following pseudo-code approaches the automation protocoll that is used afterwards.
+                    The pseudo-code is incomplete, so you need to fill in the missing parts. <br>
+                </p>
+                <pre>
+                <code class="d-flex justify-content-center">
+                    <p>
+                <span class="keyword">// Automated Titration</span>
+                    
+            #Include Stepper
+            <span class="function">InitializeStepperMotor</span>( Microsteps: <Input class="user-input" id="Tut_Step" name="Tut_Step" placeholder="Step size" style="width: 40px;">)
+                
+                <span class="comment">// Calibration</span>
+                    <input class="user-input" id="Tut_calibration" name="Tut_calibration" placeholder="Function">()
+                
+                <span class="comment">// Start Titration and set the state to false</span>
+                    <input class="user-input" id="Tut_start" name="Tut_start" placeholder="Function">()
+                        titration_complete = <span class="function">false</span>
+                        <span class="function">set_Motorspeed</span>();
+                        
+                
+                <span class="comment">//First color change</span> 
+                <span class="keyword">if</span> <span class="punctuation"></span></span><span class="punctuation"></span><span class="identifier">current_color </span><input class="user-input" type="text" id="Condition_1" placeholder="&lt;|&gt;" title="Please enter '&lt;' or '&gt;'"  style="width: 40px" name="Condition_1" tabindex="1" pattern="&lt;|&gt;"><span class="identifier"> 0.9 * initial_color</span><span class="punctuation"></span> <span class="keyword">then</span>:
+                    <span class="keyword">while:</span> titration_complete == false   
+                        <span class="function">pause()</span>
+                        <span class="keyword">Wait(10s)</span>
+                        <Input class="user-input" id="Tut_Measure" name="Tut_Measure" placeholder="Function">()
+                            <span class="keyword">if:</span> change in color is constant
+                                titration_complete = <span class="keyword">true</span>
+                            <span class="keyword">else</span>
+                                <span class="function">set_Motorspeed</span>()
+                                
+                                
+                <span class="comment">// End of Titration</span>
+                <span class="function">End</span>()
+                    <span class="keyword">if:</span> titration_complete == <input class="user-input" id="Tut_condition" name="Tut_condition" placeholder="True | False" style="width: 110px;">
+                    <span class="function">Stepcount</span>()
+                    <span class="keyword">return</span> Volume
+                <span class="function">End</span>()
+            <span class="function">Display</span>( "Titration used <input class="user-input" type="text" id="Tut_Variable" placeholder="Variable" name="Tut_Variable" style="width: 80px;"> ml")
+                </p>
+                </code>
+                    </pre>
+                    
+                <input type="submit" value="Submit">
+                            {% if visible_tips %}
+                            <p>
+                            <br>
+                            You got {{ value }} out of 7 points.<br>
+                            <ul>
+                                {% for tip in tips.split("\n")[:-1] %}
+                                    <li>{{ tip }}</li>
+                                {% endfor %}
+                            </ul>
+                            </p>
+                            {% endif %}
+                        </form>
 
-<span class="keyword">if</span> sensor data <span class="string">"significantly changes"</span>:
-  <span class="keyword">execute</span> the function <span class="function">Stop_Titration()</span>
-
-Finally <span class="keyword">end</span> titration process
-</p>
-</code></pre>
-            <input type="submit" value="Submit">
-            <p>
-            <br>You got {{ value }} out of 3 points.<br>
-            <ul>
-                {% for tip in tips.split("\n")[:-1] %}
-                    <li>{{ tip }}</li>
-                {% endfor %}
-            </ul>
-            </p>
-        </form>
+                        {% if value == 7 %}
+                            <a href="{{ url_for('playground') }}" class="btn btn-primary">Go to Playground</a>
+                        {% endif %}
+                </form>
+                    </section>
+            </div>
+        </div>
     </section>
 </div>
 
