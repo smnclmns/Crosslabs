@@ -17,7 +17,7 @@ enable_level2 = False
 enable_level3 = False
 enable_level4 = False
 
-# Initialing arduino variables
+# Initializing arduino variables
 
 connected = False
 arduino: Arduino = None
