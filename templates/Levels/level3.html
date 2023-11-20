@@ -16,7 +16,9 @@ Tutorial - Determining Endpoint
                 <p class="justify-content-center">
                  Determining the endpoint of the titration and returning the exact volume used by the syringepump is a crucial part of the automated titration.
                  In this section the last color change will be detected and the volume will be calculated from the output of the steppermotor.
-                 More specific the steps the motor took since the titation started. A simplified Example with only 3 color channels is shown below. This example shows how the titration is seen by the lightsensor.    
+                 More specific the steps the motor took since the titation started. A simplified Example with only 3 color channels is shown below. This example shows how the titration is seen by the lightsensor.<b></b>    
+                 At the start of the titration the fluid is transparent and the lighth values are at a high level, because all lightrays are reflected. Once the fluid changes it color because of the indicator and change in acidity, more lightrays are absorded and the light values will shrink. This can be seen in the example below.<b></b>
+                 One Important aspect to consider is that sometimes the color of the fluid will reverse back to its original color. This should be considered inside the automation.
                 </p>
                 <img src="{{ uml_src }}" alt="Result Image" class="img-fluid">
                 <p class="justify-content-center">

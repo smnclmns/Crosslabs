@@ -396,7 +396,7 @@ def level3():
     if score == maximum_score:
             enable_level4 = True
     return render_template("Levels/level3.html",
-        uml_src=url_for('static', filename='assets/SVGs/Level3.svg'),
+        uml_src=url_for('static', filename='assets/SVGs/Examplelightsensor.svg'),
         value=score,
         tips=tips,
         visible_tips = visible_tips,
