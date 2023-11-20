@@ -1,0 +1,14 @@
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\bin\Debug\AD_GUI.exe.config
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\bin\Debug\AD_GUI.exe
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\bin\Debug\AD_GUI.pdb
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.csproj.AssemblyReference.cache
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.Form1.resources
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.Properties.Resources.resources
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.csproj.GenerateResource.cache
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.csproj.CoreCompileInputs.cache
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.exe
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.pdb
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\bin\Debug\AD_GUI.exe.manifest
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\bin\Debug\AD_GUI.application
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.exe.manifest
+C:\Users\simcl\source\repos\AD_GUI\AD_GUI\obj\Debug\AD_GUI.application

@@ -33,6 +33,76 @@ def home():
     return render_template("home.html")
     
 
+@app.route("/Automated Titration", methods=["POST", "GET"]) # Automated Titration page
+def AutomatedTitration():
+    
+    # Initialising the global variables
+
+    global connected
+    global arduino
+
+    # Initialising the response
+
+    is_measuring = False
+    terminal_info = ""
+    log = ""
+
+    # Initialising the input_dict
+
+    input_dict = {
+        "connect": "",
+        "query-input": "",        
+    }
+
+    # if the user has submitted the form, the input_dict will be updated
+
+    if request.method == "POST":
+
+        for key in input_dict:
+
+            inp = request.form.get(key)
+
+            if inp == None: continue
+            else:
+                input_dict[key] = inp
+
+        # if the user has submitted the form and wants to connect to the Arduino, the connection will be attempted
+
+        if input_dict["connect"] == "connect":
+            ino_ports = get_arduino_ports()
+            if ino_ports == []:
+                terminal_info = "No Arduino found."
+            else:
+                connected, arduino = attempt_connection(ino_ports[0])
+                terminal_info = connection_state(connected, arduino)
+                if terminal_info == "> Something went wrong":
+                    print("Something went wrong")
+                    connected = False
+
+
+        # if the user has submitted the form and wants to query the Arduino, the query will be attempted
+
+        if connected and input_dict["query-input"] != "":
+            arduino.send(input_dict["query-input"])
+
+        if connected and input_dict["query-input"] == "mock":
+            arduino.is_measuring = True
+            is_measuring = True
+
+        if connected and input_dict["query-input"] == "Start":
+            arduino.is_measuring = True
+            is_measuring = True
+
+        if connected and input_dict["query-input"] == "Stop":
+            arduino.is_measuring = False
+            is_measuring = False
+
+        if connected: log = arduino.get_log()
+
+    # rendering the template with the right values
+
+    return render_template("Automated Titration.html", connected=connected,is_measuring=is_measuring, log=log)
+    
 @app.route("/create_plot", methods=["POST", "GET"]) # Page for getting the data from the csv file
 def create_plot():
 
