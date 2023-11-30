@@ -33,6 +33,12 @@ uint16_t currentTime;
  * 3 ~ last phase (slow)
  * 4 ~ finish
  */
+// Titrationsphasen
+boolean phase1 = false;
+boolean phase2 = false;
+boolean endphase = false;
+boolean fertig = false;
+boolean pause = false;
 uint8_t phase = 0;
 
 // Adjustments for the process
@@ -76,6 +82,13 @@ void loop(void) {
     if (inputString == "Start\n" && phase == 0 && !Start && !mocking_data) {
       Start = true;
       Starttime = millis();
+      startvalues[0] = sensorValues[AS726x_VIOLET];
+      startvalues[1] = sensorValues[AS726x_BLUE];
+      startvalues[2] = sensorValues[AS726x_GREEN];
+      startvalues[3] = sensorValues[AS726x_YELLOW];
+      startvalues[4] = sensorValues[AS726x_ORANGE];
+      startvalues[5] = sensorValues[AS726x_RED];
+      phase1 = true;
     }
 
     else if (inputString == "mock\n" && !mocking_data && !Start) {
@@ -208,7 +221,10 @@ long extract_motor_settings(String inp) {
   
   String n_steps = "";
 
+
   uint8_t setting = 0;
+
+/*example inp = [12+500+2] */
 
   for (int i = 1; i < inp.length(); i++) {
 
@@ -223,7 +239,7 @@ long extract_motor_settings(String inp) {
         n_steps += inp[i];
       }
     }
-
+    
     else if (inp[i] == '+') {
       setting += 1;
     }

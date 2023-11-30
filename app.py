@@ -44,6 +44,7 @@ def AutomatedTitration():
     # Initialising the response
 
     is_measuring = False
+    is_titrating = False
     terminal_info = ""
     log = ""
 
@@ -90,12 +91,12 @@ def AutomatedTitration():
             is_measuring = True
 
         if connected and input_dict["query-input"] == "Start":
-            arduino.is_measuring = True
-            is_measuring = True
+            arduino.is_titrating = True
+            is_titrating = True
 
         if connected and input_dict["query-input"] == "Stop":
-            arduino.is_measuring = False
-            is_measuring = False
+            arduino.is_titrating = False
+            is_titrating = False
 
         if connected: log = arduino.get_log()
 
