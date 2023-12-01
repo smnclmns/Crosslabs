@@ -41,6 +41,10 @@ boolean fertig = false;
 boolean pause = false;
 uint8_t phase = 0;
 
+// Farbsensor Vergleichswerte 
+int startvalues[6] = {0,0,0,0,0,0};
+int values[6] = {0,0,0,0,0,0};
+
 // Adjustments for the process
 double change = 0.9; // indicates at what percentage of the initial intensity of a light value phase 2 should be initiated
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
@@ -91,6 +95,71 @@ void loop(void) {
       phase1 = true;
     }
 
+     // In Phase 1 werden zwischen den Lichtmessungen noch vergleichsweise viele Schritte ausgeführt, um die Zeit der Titration insgesamt zu verringern
+  
+  if (phase1){
+    Serial.println("p1");
+    farbmessung();
+    livefarbe();
+    for (int i=0;i<6;i++){
+      if (values[i] < change*startvalues[i]){
+        phase1 = false;
+        phase2 = true;
+      } // if Ende
+    } // for Ende
+    if (phase1){
+      moving(steps1);
+    } // if Ende
+  } // if phase1 Ende
+
+  // Sobald die Intensität eines beliebigen Farbwerts unter die festgelegte Schwelle fällt wird die nächste Phase aktiv
+
+  // In Phase 2 wird nun vorsichtiger titriert, um den sensiblen Farbumschlag des Indikators zu erkennen
+  
+  else if (phase2){
+    farbmessung();
+    livefarbe();
+    for (int i=0;i<6;i++){
+      if (values[i] < endvalue*startvalues[i]){
+        phase2 = false;
+        endphase = true;
+      } // if Ende
+    } // for Ende
+    
+    
+    if (phase2){
+      moving(steps2);
+      Serial.println("p2");
+      
+    } // if Ende
+  } // else if phase2 Ende
+
+  // In der letzten Phase wird zu beginn eine gewisse Zeit gewartet, bevor erneut die Lichtwerte kontrolliert werden
+  // Damit auf die Situation reagiert werden, dass der Indikator sich wieder entfärbt hat
+
+  // Sollten  die Werte immernoch niedrig genug sein, wird die Titration gestoppt
+
+  else if (endphase){
+    Serial.println("p3");
+    delay(endtime);
+    farbmessung();
+    livefarbe();
+    for (int i=0;i<6;i++){
+      if (values[i] < endvalue*startvalues[i]){
+        endphase = false;
+        Serial.println("p4");
+         
+      } // if Ende
+      
+      if (endphase){
+        endphase = false;
+        phase2 = true;
+      } // if Ende
+      
+    } // for Ende
+  }
+
+
     else if (inputString == "mock\n" && !mocking_data && !Start) {
       mocking_data = true;
       Starttime = millis();
@@ -138,6 +207,9 @@ void loop(void) {
   if (Start == true) {
     measurement();
     send_in_utf_8();
+    // Nachdem Befehle ausgeführt wurden wird mit der jeweiligen Phase fortgefahren
+
+  // else if Ende
   }
   
   if (mocking_data && Start != true) {
@@ -163,10 +235,29 @@ void serialEvent() {
   }
 }
 
+void moving(double x){
+  stepper.setSpeedInRevolutionsPerSecond(10.0);
+  stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+  stepper.moveRelativeInSteps(x);
+  if (x > 0){
+    liveticker(x);
+  } // if Ende
+  nullposition += x;
+}
+
+void liveticker(double x){
+  String steps = String(x);
+  Serial.println("s"+steps);
+}
+
 void Calibration() {
-  stepper.setSpeedInStepsPerSecond(100);
-  stepper.setAccelerationInStepsPerSecondPerSecond(100);
-  stepper.moveToPositionInSteps(200);
+    stepper.setSpeedInRevolutionsPerSecond(10.0);
+        stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+        for (int i=0;i<15;i++){
+          stepper.moveRelativeInSteps(500);
+          nullposition += 500;
+          delay(1000);
+        } // for
 }
 
 void Reset() {
@@ -190,6 +281,9 @@ void measurement() {
     delay(5);
     rdy = ams.dataReady();
   }
+  
+
+  
    
  unsigned long millis_now = millis();
  long timediff = millis_now - Starttime;
@@ -200,6 +294,12 @@ void measurement() {
  currentTime = (uint16_t)timediff;
 
  ams.readRawValues(values);
+  values[0] = sensorValues[AS726x_VIOLET];
+  values[1] = sensorValues[AS726x_BLUE];
+  values[2] = sensorValues[AS726x_GREEN];
+  values[3] = sensorValues[AS726x_YELLOW];
+  values[4] = sensorValues[AS726x_ORANGE];
+  values[5] = sensorValues[AS726x_RED];
 }
 
 void send_in_utf_8(){

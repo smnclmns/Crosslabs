@@ -70,7 +70,7 @@ void loop() {
     
     check(firstchar); // die "check"-Funktion sucht nach befehlen und führt diese aus
     } // if Ende
-
+    
 
   // Nachdem Befehle ausgeführt wurden wird mit der jeweiligen Phase fortgefahren
 
