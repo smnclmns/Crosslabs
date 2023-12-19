@@ -45,6 +45,13 @@ def AutomatedTitration():
 
     is_measuring = False
     is_titrating = False
+    is_reseting = False
+    is_nullpoint = False
+    is_nullpoint = False
+    is_forward = False
+    is_backward = False
+    is_change = False
+    is_calibrating = False
     terminal_info = ""
     log = ""
 
@@ -98,11 +105,32 @@ def AutomatedTitration():
             arduino.is_titrating = False
             is_titrating = False
 
+        if connected and input_dict["query-input"] == "Reset":
+            arduino.is_reseting = True
+            is_reseting = True
+
+        if connected and input_dict["query-input"] == "Cali":
+            arduino.is_calibrating = True
+            is_calibrating = True
+
+        if connected and input_dict["query-input"] == "Foward":
+            arduino.is_foward = True
+            is_forward = True
+
+        if connected and input_dict["query-input"] == "Backward":
+            arduino.is_backward = True
+            is_backward = True
+
+        if connected and input_dict["query-input"] == "Nullpoint":
+            arduino.is_nullpoint = True
+            is_nullpoint = True
+
         if connected: log = arduino.get_log()
 
     # rendering the template with the right values
 
-    return render_template("Automated Titration.html", connected=connected,is_measuring=is_measuring, log=log)
+    return render_template("Automated Titration.html", connected=connected, is_titrating=is_titrating, is_measuring=is_measuring, is_reseting=is_reseting, is_nullpoint=is_nullpoint, is_forward=is_forward, is_backward=is_backward, is_change=is_change, is_calibrating=is_calibrating, log=log)
+
     
 @app.route("/create_plot", methods=["POST", "GET"]) # Page for getting the data from the csv file
 def create_plot():
@@ -145,6 +173,11 @@ def read_serial():
 
         return jsonify({"data": rawline.decode()})
     
+    if connected and arduino.is_titrating:
+        rawline = arduino.read()
+
+        return jsonify({"data": rawline.decode()}) 
+        
     else:
         return jsonify({"data": "no data"})
     

@@ -233,6 +233,23 @@ window.addEventListener('load', function () {
     document.getElementById("terminal");
   }, 1000);
 </script>
-{% endif %} -->
+{% endif %} 
+
+"Start\n": Initiates the titration process.
+"Stop\n": Stops the titration process.
+"Calib\n": Initiates the calibration process.
+"Reset\n": Resets the motor position.
+"F[number of steps]\n": Moves the motor forward by the specified number of steps.
+Example: "F500\n" moves the motor forward by 500 steps.
+"B[number of steps]\n": Moves the motor backward by the specified number of steps.
+Example: "B500\n" moves the motor backward by 500 steps.
+"Null\n": Sets the NULLPOSITION to 0.
+"Change\n": Switches between two sets of values for change and endvalue.
+
+
+
+
+
+-->
 
 {% endblock %}

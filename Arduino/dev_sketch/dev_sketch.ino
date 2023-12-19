@@ -99,6 +99,7 @@ void loop(void) {
   
   if (phase1){
     Serial.println("p1");
+    POSITION = 0;
     farbmessung();
     livefarbe();
     for (int i=0;i<6;i++){
@@ -169,6 +170,11 @@ void loop(void) {
       Start = false;
       phase = 0;
       mocking_data = false;
+      phase1 = false;
+      phase2 = false;
+      endphase = false;
+      pause = true;
+      Serial.println("p5");
     }
 
     else if (inputString == "Calib\n" && !Start) {
@@ -179,16 +185,30 @@ void loop(void) {
       Reset();
     }
 
-    else if (inputString.startsWith("F")) {      
-      Forward(extract_motor_settings(inputString));
+    else if (inputString.startsWith("F")) {   
+      stepper.setSpeedInRevolutionsPerSecond(10);
+      stepper.setAccelerationInRevolutionsPerSecondPerSecond(10);
+      stepper.moveRelativeInRevolutions(5);   
     }
 
     else if (inputString.startsWith("B")) {
-      Backward(extract_motor_settings(inputString));
+      stepper.setSpeedInRevolutionsPerSecond(10);
+      stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+      stepper.moveRelativeInRevolutions(-5);
     }
 
     else if (inputString == "Null\n") {
       NULLPOSITION = 0;
+    }
+    else if (inputString == "Change\n"){
+      if (change=0.9){
+          change = 0.95;
+          endvalue = 0.95;
+        }
+        else{
+          change = 0.9;
+          endvalue = 0.9;
+        }
     }
 
   /*
@@ -205,7 +225,6 @@ void loop(void) {
     */
 
   if (Start == true) {
-    measurement();
     send_in_utf_8();
     // Nachdem Befehle ausgeführt wurden wird mit der jeweiligen Phase fortgefahren
 
@@ -242,7 +261,8 @@ void moving(double x){
   if (x > 0){
     liveticker(x);
   } // if Ende
-  nullposition += x;
+  NULLPOSITION += x;
+  POSITION += x;
 }
 
 void liveticker(double x){
@@ -252,15 +272,18 @@ void liveticker(double x){
 
 void Calibration() {
     stepper.setSpeedInRevolutionsPerSecond(10.0);
-        stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
+    stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
         for (int i=0;i<15;i++){
           stepper.moveRelativeInSteps(500);
-          nullposition += 500;
+          NULLPOSITION += 500;
           delay(1000);
         } // for
 }
 
 void Reset() {
+    stepper.setSpeedInRevolutionsPerSecond(10);
+    stepper.setAccelerationInRevolutionsPerSecondPerSecond(10);
+    stepper.moveRelativeInSteps(-NULLPOSITION);
   
 }
 
@@ -272,7 +295,7 @@ void Backward(long bw_steps) {
   stepper.moveRelativeInSteps(-bw_steps);  
 }
 
-void measurement() {
+void farbmessung() {
 
   ams.startMeasurement();
 
@@ -301,6 +324,22 @@ void measurement() {
   values[4] = sensorValues[AS726x_ORANGE];
   values[5] = sensorValues[AS726x_RED];
 }
+
+
+void livefarbe(){
+
+  farbmessung();
+  if (sizeof(values) > 0){
+    String violet = String(values[0]);
+    String blue = String(values[1]);
+    String green = String(values[2]);
+    String yellow = String(values[3]);
+    String orange = String(values[4]);
+    String red = String(values[5]);
+    Serial.println("f"+violet+","+blue+","+green+","+yellow+","+orange+","+red);
+  } // if
+} // livefarbe
+
 
 void send_in_utf_8(){
   

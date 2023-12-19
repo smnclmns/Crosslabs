@@ -18,6 +18,7 @@ boolean phase2 = false;
 boolean endphase = false;
 boolean fertig = false;
 boolean pause = false;
+uint8_t phase = 0;
 
 // Farbsensor Vergleichswerte 
 int startvalues[6] = {0,0,0,0,0,0};
