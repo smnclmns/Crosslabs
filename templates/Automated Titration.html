@@ -39,6 +39,9 @@ Automated Titration
                     <div>
                         <!-- Use the same path for the picture -->
                         <img id="command-picture" src="/create_plot" alt="Command Picture">
+                        <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1">
+                          <pre id="terminal">
+> Arduino output
                     </div>
                 </div> <!-- Tabpanel for the Commands -->
             </div> <!-- Tabs for the different outputs -->
@@ -47,7 +50,7 @@ Automated Titration
 </div> <!-- Container for the whole page -->
 <div class="container text-center">
 
-  <div id="arduino-buttons" class="row g-0"> <!-- Row for the buttons and the revolutions input -->
+  <div id="arduino-buttons" class="row g-0" hidden > <!-- Row for the buttons and the revolutions input -->
     <button type="submit" name="query-input" value="Start" id="start-btn" class="btn col-12 button-5">Start</button>
     <button type="submit" name="query-input" value="Stop" id="stop-btn" class="btn col-12 button-5">Stop</button>
     <button type="submit" name="query-input" value="Reset" id="reset-btn" class="btn col-12 button-5">Reset</button>
@@ -200,17 +203,16 @@ window.addEventListener('load', function () {
   for (var i = 0; i < tablists.length; i++) {
     new TabsManual(tablists[i]);
   }
+
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('tab-1').addEventListener('click', function() {
-        // Hide buttons when Tab 1 is active
-        document.getElementById('arduino-buttons').style.display = 'none';
-    });
 
+  document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('tab-2').addEventListener('click', function() {
         // Show buttons when Tab 2 is active
-        document.getElementById('arduino-buttons').style.display = 'block';
+        document.getElementById('arduino-buttons').removeAttribute('hidden');
+
+        document.getElementById('tab-1').disabled = true;
     });
 });
 
