@@ -12,17 +12,20 @@ Automated Titration
 
 {% block main %}
 <div class="container">
-  <form action="#" method="post">
-    <div class="row g-4"> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
-        <div class="tabs">
-            <h3 id="tablist-1" class="d-flex justify-content-center">Arduino Responses</h3>
-            <div role="tablist" aria-labelledby="tablist-1" class="manual">
-              <button id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1">
-                <span class="focus">Terminal</span>
-              </button>
-            </div> <!-- Tablist for the different outputs -->
-            <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1">
-              <pre id="terminal">
+    <form action="#" method="post">
+        <div class="row g-4"> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
+            <div class="tabs">
+                <h3 id="tablist-1" class="d-flex justify-content-center">Arduino Responses</h3>
+                <div role="tablist" aria-labelledby="tablist-1" class="manual">
+                    <button id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1">
+                        <span class="focus">Terminal</span>
+                    </button>
+                    <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2">
+                        <span class="focus">Commands</span>
+                    </button>
+                </div> <!-- Tablist for the different outputs -->
+                <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1">
+                    <pre id="terminal">
 > Arduino output{% if connected == True %}
 > Arduino is connected
 {{ log }}
@@ -30,15 +33,33 @@ Automated Titration
 <input id="query-input" type="text" placeholder="> Arduino not connected" name="query-input" disabled>
 <input id="connect" value="connect" name="connect" type="hidden">
 <form action="#" method="post"><button type="submit" class="btn col-12 button-5">CONNECT</button></form>{% endif %}
-              </pre>
-          </div> <!-- Tabs for the different outputs -->
-                  
-      </div> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
+                    </pre>
+                </div> <!-- Tabpanel for the Terminal Output -->
+                <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" class="is-hidden">
+                    <div>
+                        <!-- Use the same path for the picture -->
+                        <img id="command-picture" src="/create_plot" alt="Command Picture">
+                    </div>
+                </div> <!-- Tabpanel for the Commands -->
+            </div> <!-- Tabs for the different outputs -->
+        </div> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
     </form>
-    </div> <!-- Container for the whole page -->
-      
+</div> <!-- Container for the whole page -->
+<div class="container text-center">
 
-    </div> <!-- Container for the buttons and the slider -->
+  <div id="arduino-buttons" class="row g-0"> <!-- Row for the buttons and the revolutions input -->
+    <button type="submit" name="query-input" value="Start" id="start-btn" class="btn col-12 button-5">Start</button>
+    <button type="submit" name="query-input" value="Stop" id="stop-btn" class="btn col-12 button-5">Stop</button>
+    <button type="submit" name="query-input" value="Reset" id="reset-btn" class="btn col-12 button-5">Reset</button>
+    <button type="submit" name="query-input" value="mock" id="mock-btn" class="btn col-12 button-5">Mock</button>
+  </div>
+
+
+
+<div class="row g-0"> <!-- Row for the valve position -->
+
+</div>
+</div> <!-- Container for the buttons and the slider -->
 
 {% endblock %}
 
@@ -172,7 +193,6 @@ class TabsManual {
     this.setSelectedTab(event.currentTarget);
   }
 }
-
 // Initialize tablist
 
 window.addEventListener('load', function () {
@@ -181,7 +201,23 @@ window.addEventListener('load', function () {
     new TabsManual(tablists[i]);
   }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('tab-1').addEventListener('click', function() {
+        // Hide buttons when Tab 1 is active
+        document.getElementById('arduino-buttons').style.display = 'none';
+    });
+
+    document.getElementById('tab-2').addEventListener('click', function() {
+        // Show buttons when Tab 2 is active
+        document.getElementById('arduino-buttons').style.display = 'block';
+    });
+});
+
+
 </script>
+
+
 
 {% if is_titrating == True %}
 <script>
@@ -197,6 +233,32 @@ window.addEventListener('load', function () {
     xhr.open('GET', '/read_serial', true);
     xhr.send();
   }, 1000);
+</script>
+<script>
+// Function to send commands to the Arduino
+function sendCommand(command) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/send_command', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            console.log('Command sent successfully');
+        } else {
+            console.error('Error sending command');
+        }
+    };
+    xhr.send(JSON.stringify({ command: command }));
+}
+
+// Event handler for the "Start Titration" button
+document.getElementById('start-titration').addEventListener('click', function () {
+    sendCommand('start-titration');
+});
+
+// Event handler for the "Stop Titration" button
+document.getElementById('stop-titration').addEventListener('click', function () {
+    sendCommand('stop-titration');
+});
 </script>
 {% endif %}
 
