@@ -324,3 +324,15 @@ input[type=range]:focus::-ms-fill-upper {
   box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
   transform: translateY(0);
 }
+
+#arduino-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Optionally, set a height for the container */
+}
+
+#arduino-buttons button {
+  /* Add any additional styling for the buttons */
+  margin: 5px; /* Optional margin between buttons */
+}

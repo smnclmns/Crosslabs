@@ -50,11 +50,17 @@ Automated Titration
 </div> <!-- Container for the whole page -->
 <div class="container text-center">
 
-  <div id="arduino-buttons" class="row g-0" hidden > <!-- Row for the buttons and the revolutions input -->
-    <button type="submit" name="query-input" value="Start" id="start-btn" class="btn col-12 button-5">Start</button>
-    <button type="submit" name="query-input" value="Stop" id="stop-btn" class="btn col-12 button-5">Stop</button>
-    <button type="submit" name="query-input" value="Reset" id="reset-btn" class="btn col-12 button-5">Reset</button>
-    <button type="submit" name="query-input" value="mock" id="mock-btn" class="btn col-12 button-5">Mock</button>
+  <div id="arduino-buttons" class="row g-0" hidden> <!-- Row for the buttons and the revolutions input -->
+    
+    <button type="submit" data-command="Start" value="Start" id="start-btn" class="btn col-12 button-5">Start</button>
+    <button type="submit" data-command="Stop" value="Stop" id="stop-btn" class="btn col-12 button-5">Stop</button>
+    <button type="submit" data-command="Reset" value="Reset" id="reset-btn" class="btn col-12 button-5">Reset</button>
+    <button type="submit" data-command="mock" value="mock" id="mock-btn" class="btn col-12 button-5">Mock</button>
+    <button type="submit" data-command="Forward" value="forward" id="forward-btn" class="btn col-12 button-5">forward</button>
+    <button type="submit" data-command="Backward" value="backward" id="backward-btn" class="btn col-12 button-5">backward</button>
+    <button type="submit" data-command="Cali" value="Cali" id="Cali-btn" class="btn col-12 button-5">Calibration</button>
+    <button type="submit" data-command="Nullpoint" value="Nullpoint" id="Null-btn" class="btn col-12 button-5">Nullposition</button>
+  
   </div>
 
 
@@ -213,9 +219,20 @@ window.addEventListener('load', function () {
         document.getElementById('arduino-buttons').removeAttribute('hidden');
 
         document.getElementById('tab-1').disabled = true;
+
+         // Add event listeners for buttons
+        var buttons = document.querySelectorAll('#arduino-buttons button');
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                // Get the command from the data-command attribute
+                var command = button.getAttribute('data-command');
+
+                // Send the command to app.py
+                sendCommand(command);
+            });
+        });
     });
 });
-
 
 </script>
 
@@ -252,15 +269,7 @@ function sendCommand(command) {
     xhr.send(JSON.stringify({ command: command }));
 }
 
-// Event handler for the "Start Titration" button
-document.getElementById('start-titration').addEventListener('click', function () {
-    sendCommand('start-titration');
-});
 
-// Event handler for the "Stop Titration" button
-document.getElementById('stop-titration').addEventListener('click', function () {
-    sendCommand('stop-titration');
-});
 </script>
 {% endif %}
 
