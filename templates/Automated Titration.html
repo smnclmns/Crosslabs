@@ -31,7 +31,7 @@ Automated Titration
 {{ log }}
 <input id="query-input" type="text" placeholder="> Type in query..." name="query-input">{% endif %}{% if connected == False %}
 <input id="query-input" type="text" placeholder="> Arduino not connected" name="query-input" disabled>
-<input id="connect" value="connect" name="connect" type="hidden">
+<input id="connect" value="connect" name="connect" type="hidden"> 
 <form action="#" method="post"><button type="submit" class="btn col-12 button-5">CONNECT</button></form>{% endif %}
                     </pre>
                 </div> <!-- Tabpanel for the Terminal Output -->
@@ -55,14 +55,14 @@ Automated Titration
 
   <div id="arduino-buttons" class="row g-0" hidden> <!-- Row for the buttons and the revolutions input -->
     <form action="#" method="post">
-    <button type="submit" data-command="Start" value="Start" id="query-input" class="btn col-12 button-5">Start</button>
-    <button type="submit" data-command="Stop" value="Stop" id="query-input" class="btn col-12 button-5">Stop</button>
-    <button type="submit" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5">Reset</button>
-    <button type="submit" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
-    <button type="submit" data-command="Forward" value="forward" id="query-input" class="btn col-12 button-5">forward</button>
-    <button type="submit" data-command="Backward" value="backward" id="query-input" class="btn col-12 button-5">backward</button>
-    <button type="submit" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
-    <button type="submit" data-command="Nullpoint" value="Nullpoint" id="query-input" class="btn col-12 button-5">Nullposition</button>
+    <button type="submit" name="query-input" data-command="Start" value="Start" id="query-input" class="btn col-12 button-5">Start</button>
+    <button type="submit" name="query-input" data-command="Stop" value="Stop" id="query-input" class="btn col-12 button-5">Stop</button>
+    <button type="submit" name="query-input" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5">Reset</button>
+    <button type="submit" name="query-input" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
+    <button type="submit" name="query-input" data-command="Forward" value="forward" id="query-input" class="btn col-12 button-5">forward</button>
+    <button type="submit" name="query-input" data-command="Backward" value="backward" id="query-input" class="btn col-12 button-5">backward</button>
+    <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
+    <button type="submit" name="query-input" data-command="Nullpoint" value="Nullpoint" id="query-input" class="btn col-12 button-5">Nullposition</button>
     </form>
   </div>
 
