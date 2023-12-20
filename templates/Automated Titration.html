@@ -241,7 +241,7 @@ window.addEventListener('load', function () {
 
 
 
-{% if connected == True %}
+{% if is_titrating == True %}
 <script>
   setInterval(function() {
     var d = new Date();
@@ -276,13 +276,13 @@ function sendCommand(command) {
 </script>
 {% endif %}
 
-<!-- {% if connected == True %}
+{% if connected == True %}
 <script>
   setInterval(function() {
     var d = new Date();
     document.getElementById("terminal");
   }, 1000);
 </script>
-{% endif %} -->
+{% endif %}
 
 {% endblock %}

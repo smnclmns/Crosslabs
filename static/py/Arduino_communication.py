@@ -46,6 +46,7 @@ class Arduino():
 
         self.is_measuring = False
         self.is_titrating = False
+        print("No titration")
         self.last_time = 0
         self.thirty_secs_passed = 0
         self.user_commands = []
