@@ -15,20 +15,19 @@ Automated Titration
     <form action="#" method="post">
         <div class="row g-4"> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
             <div class="col-md-6 custom-col"> <!-- Use Bootstrap's grid system to divide into two columns -->
-                <pre id="terminal" class="flex-grow-1">
-> Arduino output{% if connected == True %}
+              <div class="title-container">
+                <span class="custom-title">Terminal</span></div><pre id="custom-terminal" class="flex-grow-1">> Arduino output{% if connected == True %}
 > Arduino is connected
 {{ log }}
 <div class="mt-auto">
-<input id="query-input" type="text" placeholder="> Type in query..." name="query-input" class="w-100">{% endif %}{% if connected == False %}
+{% endif %}{% if connected == False %}
 <input id="query-input" type="text" placeholder="> Arduino not connected" name="query-input" disabled>
 <input id="connect" value="connect" name="connect" type="hidden">
 <form action="#" method="post"><button type="submit" class="btn col-12 button-5">CONNECT</button></form>{% endif %}
-</div>
-                </pre>
-            </div>
+</div></pre></div>
             <div id="col2" class="col-md-6 custom-col2" hidden> <!-- Use Bootstrap's grid system to divide into two columns -->
-                <img id="plot" src="/create_plot" alt="plot" class="custom-img" hidden>
+              <div class="title-container">
+                <span class="custom-title">Light Sensor</span></div><img id="plot" src="/create_plot" alt="plot" class="custom-img" hidden>
             </div>
         </div>
     </form>
@@ -197,9 +196,10 @@ window.addEventListener('load', function () {
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function()  {
+  {% if connected == True %}
     // Check if Arduino is connected before showing elements
-    {% if connected == True %}
+
         // Show elements when the page is loaded
         document.getElementById('arduino-buttons').removeAttribute('hidden');
         document.getElementById('plot').removeAttribute('hidden');
@@ -216,9 +216,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 sendCommand(command);
             });
         });
-    {% endif %}
+{% endif %}
 });
-
 </script>
 
 
