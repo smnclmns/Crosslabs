@@ -17,8 +17,8 @@ long POSITION = 0;
 
 // Lightsensor object and buffer
 Adafruit_AS726x ams;
-uint16_t startvalues[AS726x_NUM_CHANNELS];
-uint16_t values[AS726x_NUM_CHANNELS];
+//buffer to hold Adafruit sensor raw values
+uint16_t sensorValues[AS726x_NUM_CHANNELS];
 
 // Titration adjustments and buffer
 bool Start = false;
@@ -86,12 +86,6 @@ void loop(void) {
     if (inputString == "Start\n" && phase == 0 && !Start && !mocking_data) {
       Start = true;
       Starttime = millis();
-      startvalues[0] = sensorValues[AS726x_VIOLET];
-      startvalues[1] = sensorValues[AS726x_BLUE];
-      startvalues[2] = sensorValues[AS726x_GREEN];
-      startvalues[3] = sensorValues[AS726x_YELLOW];
-      startvalues[4] = sensorValues[AS726x_ORANGE];
-      startvalues[5] = sensorValues[AS726x_RED];
       phase1 = true;
     }
 
