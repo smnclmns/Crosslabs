@@ -53,6 +53,31 @@ br {
 
 /********** Styles for the Playground page **********/
 
+.custom-col {
+  /* Add your custom styling for the col-md-6 div */
+  padding: 20px; /* Adjust padding */
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 10px; /* Add border-radius */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box-shadow */
+}
+
+.custom-col2 {
+  /* Add your custom styling for the col-md-6 div */
+  padding: 20px; /* Adjust padding */
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 15px; /* Add border-radius */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box-shadow */
+}
+.custom-img {
+  max-width: 100%; /* Set the maximum width to 100% of the container */
+  height: auto; /* Maintain the aspect ratio */
+  display: block; /* Remove any default inline spacing */
+  margin: auto; /* Center the image */
+}
+
+
+
+
 #terminal {
     font-family: monospace;
     background-color: black;
@@ -60,6 +85,7 @@ br {
     padding: 10px;
     height: 100%;
     max-height: 40vh;
+    
 }
 
 .tabs {

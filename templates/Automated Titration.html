@@ -14,57 +14,38 @@ Automated Titration
 <div class="container">
     <form action="#" method="post">
         <div class="row g-4"> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
-            <div class="tabs">
-                <h3 id="tablist-1" class="d-flex justify-content-center">Arduino Responses</h3>
-                <div role="tablist" aria-labelledby="tablist-1" class="manual">
-                    <button id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1">
-                        <span class="focus">Terminal</span>
-                    </button>
-                    <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2">
-                        <span class="focus">Commands</span>
-                    </button>
-                </div> <!-- Tablist for the different outputs -->
-                <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1">
-                    <pre id="terminal">
+            <div class="col-md-6 custom-col"> <!-- Use Bootstrap's grid system to divide into two columns -->
+                <pre id="terminal" class="flex-grow-1">
 > Arduino output{% if connected == True %}
 > Arduino is connected
 {{ log }}
-<input id="query-input" type="text" placeholder="> Type in query..." name="query-input">{% endif %}{% if connected == False %}
+<div class="mt-auto">
+<input id="query-input" type="text" placeholder="> Type in query..." name="query-input" class="w-100">{% endif %}{% if connected == False %}
 <input id="query-input" type="text" placeholder="> Arduino not connected" name="query-input" disabled>
-<input id="connect" value="connect" name="connect" type="hidden"> 
+<input id="connect" value="connect" name="connect" type="hidden">
 <form action="#" method="post"><button type="submit" class="btn col-12 button-5">CONNECT</button></form>{% endif %}
-                    </pre>
-                </div> <!-- Tabpanel for the Terminal Output -->
-                <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" class="is-hidden">
-                    <div>
-                        <!-- Use the same path for the picture -->
-                        
-                        <img id="plot" src="/create_plot" alt="plot">
-                      
-                        
-                        <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1">
-                          <pre id="terminal">
-> Arduino output
-                    </div>
-                </div> <!-- Tabpanel for the Commands -->
-            </div> <!-- Tabs for the different outputs -->
-        </div> <!-- Row for the Responses and the graphical Outputs from the Arduino -->
+</div>
+                </pre>
+            </div>
+            <div id="col2" class="col-md-6 custom-col2" hidden> <!-- Use Bootstrap's grid system to divide into two columns -->
+                <img id="plot" src="/create_plot" alt="plot" class="custom-img" hidden>
+            </div>
+        </div>
     </form>
-</div> <!-- Container for the whole page -->
+</div>
 <div class="container text-center">
-
-  <div id="arduino-buttons" class="row g-0" hidden> <!-- Row for the buttons and the revolutions input -->
-    <form action="#" method="post">
-    <button type="submit" name="query-input" data-command="Start" value="Start" id="query-input" class="btn col-12 button-5">Start</button>
-    <button type="submit" name="query-input" data-command="Stop" value="Stop" id="query-input" class="btn col-12 button-5">Stop</button>
-    <button type="submit" name="query-input" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5">Reset</button>
-    <button type="submit" name="query-input" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
-    <button type="submit" name="query-input" data-command="Forward" value="forward" id="query-input" class="btn col-12 button-5">forward</button>
-    <button type="submit" name="query-input" data-command="Backward" value="backward" id="query-input" class="btn col-12 button-5">backward</button>
-    <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
-    <button type="submit" name="query-input" data-command="Nullpoint" value="Nullpoint" id="query-input" class="btn col-12 button-5">Nullposition</button>
-    </form>
-  </div>
+    <div id="arduino-buttons" class="row g-0" hidden> <!-- Row for the buttons and the revolutions input -->
+        <form action="#" method="post">
+        <button type="submit" name="query-input" data-command="Start" value="Start" id="query-input" class="btn col-12 button-5">Start</button>
+        <button type="submit" name="query-input" data-command="Stop" value="Stop" id="query-input" class="btn col-12 button-5">Stop</button>
+        <button type="submit" name="query-input" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5">Reset</button>
+        <button type="submit" name="query-input" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
+        <button type="submit" name="query-input" data-command="Forward" value="forward" id="query-input" class="btn col-12 button-5">forward</button>
+        <button type="submit" name="query-input" data-command="Backward" value="backward" id="query-input" class="btn col-12 button-5">backward</button>
+        <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
+        <button type="submit" name="query-input" data-command="Nullpoint" value="Nullpoint" id="query-input" class="btn col-12 button-5">Nullposition</button>
+        </form>
+    </div>
 
 
 
@@ -72,7 +53,7 @@ Automated Titration
 
 </div>
 </div> <!-- Container for the buttons and the slider -->
-
+</div>
 {% endblock %}
 
 {% block script %}
@@ -216,14 +197,15 @@ window.addEventListener('load', function () {
 });
 
 
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('tab-2').addEventListener('click', function() {
-        // Show buttons when Tab 2 is active
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if Arduino is connected before showing elements
+    {% if connected == True %}
+        // Show elements when the page is loaded
         document.getElementById('arduino-buttons').removeAttribute('hidden');
+        document.getElementById('plot').removeAttribute('hidden');
+        document.getElementById('col2').removeAttribute('hidden');
 
-        document.getElementById('tab-1').disabled = true;
-
-         // Add event listeners for buttons
+        // Add event listeners for buttons
         var buttons = document.querySelectorAll('#arduino-buttons button');
         buttons.forEach(function(button) {
             button.addEventListener('click', function() {
@@ -234,7 +216,7 @@ window.addEventListener('load', function () {
                 sendCommand(command);
             });
         });
-    });
+    {% endif %}
 });
 
 </script>
