@@ -87,12 +87,13 @@ void loop(void) {
       Start = true;
       Starttime = millis();
       phase1 = true;
+      Serial.println("Automated Titration Started");
     }
 
      // In Phase 1 werden zwischen den Lichtmessungen noch vergleichsweise viele Schritte ausgeführt, um die Zeit der Titration insgesamt zu verringern
   
   if (phase1){
-    Serial.println("p1");
+    Serial.println("Phase 1");
     POSITION = 0;
     farbmessung();
     livefarbe();
@@ -124,7 +125,7 @@ void loop(void) {
     
     if (phase2){
       moving(steps2);
-      Serial.println("p2");
+      Serial.println("Phase 2");
       
     } // if Ende
   } // else if phase2 Ende
@@ -135,14 +136,14 @@ void loop(void) {
   // Sollten  die Werte immernoch niedrig genug sein, wird die Titration gestoppt
 
   else if (endphase){
-    Serial.println("p3");
+    Serial.println("Phase 3");
     delay(endtime);
     farbmessung();
     livefarbe();
     for (int i=0;i<6;i++){
       if (values[i] < endvalue*startvalues[i]){
         endphase = false;
-        Serial.println("p4");
+        Serial.println("Titration complete");
          
       } // if Ende
       
@@ -168,10 +169,11 @@ void loop(void) {
       phase2 = false;
       endphase = false;
       pause = true;
-      Serial.println("p5");
+      Serial.println("Stop all actions");
     }
 
-    else if (inputString == "Calib\n" && !Start) {
+    else if (inputString == "Cali\n" && !Start) {
+      Serial.println("Calibration started \nDo not forget to weight the fluid");
       Calibration();
     }
 
@@ -192,6 +194,7 @@ void loop(void) {
     }
 
     else if (inputString == "Null\n") {
+      Serial.println("Nullpoint set");
       NULLPOSITION = 0;
     }
     else if (inputString == "Change\n"){
@@ -204,6 +207,9 @@ void loop(void) {
           endvalue = 0.9;
         }
     }
+    else if (inputString == "Test\n") {
+      testFunction();
+    } 
 
   /*
    * End of command checking. 
@@ -217,6 +223,8 @@ void loop(void) {
    /*
     * Below the functions are executed in the loop depending on the current state.
     */
+
+   
 
   if (Start == true) {
     send_in_utf_8();
@@ -390,8 +398,17 @@ long extract_motor_settings(String inp) {
 }
 
 /*
- *  Mocking Data function below
+ *  Mocking Data and Test Function
  */
+
+void testFunction() {
+  Serial.println("Test message received!");
+}
+
+
+
+
+
 
 void Mocking_Data() {
 

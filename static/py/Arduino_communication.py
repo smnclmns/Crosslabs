@@ -142,32 +142,40 @@ class Arduino():
             with open(self.log_adress, "w") as f:
                 f.write("")
 
-    def get_log(self, n_entries = 10) -> str:
+    def get_log(self, n_entries = 15) -> str:
         """Returns the log of the Arduino.
 
         Returns:
             list[str]: log of the Arduino
         """
+        try:
+            with open(self.log_adress, "r") as f:
+                log = f.read()
 
-        with open(self.log_adress, "r") as f:
-            log = f.read()
+            if len(log.split("\n")) < n_entries:
+                return log
 
-        if len(log.split("\n")) < n_entries:
-            return log
-
-        else:
-            return "\n".join(log.split("\n")[-n_entries:])
+            else:
+                return "\n".join(log.split("\n")[-n_entries:])
+        except Exception as e:
+            print(f"Error reading log: {e}")
+            return "Error reading log"
+        
     
     def update_log(self, line: bytes = b"") -> None:
         """Updates the log of the Arduino."""
+        try:
 
-        with open(self.log_adress, "r") as f:
-            log = f.readlines()
-        if line != b"":
-            log_time = time.strftime("%H:%M:%S", time.localtime())
-            log.append(log_time+" "+line.decode())
-        with open(self.log_adress, "w") as f:
-            f.writelines(log)
+            with open(self.log_adress, "r") as f:
+                log = f.readlines()
+            if line != b"":
+                log_time = time.strftime("%H:%M:%S", time.localtime())
+                log.append(log_time+" "+line.decode())
+            with open(self.log_adress, "w") as f:
+                f.writelines(log)
+                f.flush()
+        except Exception as e:
+            print(f"Error updating log: {e}")
 
         
     # sensor functions

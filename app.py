@@ -8,6 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import io
 import numpy as np
+import time
 
 from static.py.Arduino_communication import Arduino, attempt_connection, get_arduino_ports, connection_state
 
@@ -125,7 +126,9 @@ def AutomatedTitration():
             arduino.is_nullpoint = True
             is_nullpoint = True
 
-        if connected: log = arduino.get_log()
+        if connected:
+            time.sleep(0.1) 
+            log = arduino.get_log()
 
     # rendering the template with the right values
 

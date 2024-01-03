@@ -95,7 +95,7 @@ br {
   background-color: black;
   color: white;
   padding: 10px;
-  height: 90%;
+  height: auto;
   
 }
 
@@ -314,9 +314,11 @@ br {
 input[type=range] {
   height: 32px;
   -webkit-appearance: none;
+  appearance: none; /* Standard property for compatibility */
   margin: 10px 0;
   width: 100%;
 }
+
 input[type=range]:focus {
   outline: none;
 }
@@ -324,7 +326,7 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 16px;
   cursor: pointer;
-  animate: 0.2s;
+  animation: 0.2s;
   box-shadow: 0px 0px 0px #000000;
   background: #B6B6B6;
   border-radius: 25px;
@@ -348,7 +350,7 @@ input[type=range]::-moz-range-track {
   width: 100%;
   height: 16px;
   cursor: pointer;
-  animate: 0.2s;
+  animation: 0.2s;
   box-shadow: 0px 0px 0px #000000;
   background: #B6B6B6;
   border-radius: 25px;
@@ -367,7 +369,7 @@ input[type=range]::-ms-track {
   width: 100%;
   height: 16px;
   cursor: pointer;
-  animate: 0.2s;
+  animation: 0.2s;
   background: transparent;
   border-color: transparent;
   color: transparent;
