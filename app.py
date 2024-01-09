@@ -166,7 +166,7 @@ def create_plot():
     plt.clf()
 
     # Returning the plot
-    return send_file(img, mimetype="image/png", cache_timeout =0)
+    return send_file(img, mimetype="image/png")
     
 
 @app.route("/read_serial", methods=["POST", "GET"]) # Page for getting the data from the serial connection
