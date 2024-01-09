@@ -235,15 +235,20 @@ document.addEventListener('DOMContentLoaded', function()  {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/read_serial', true);
     xhr.send();
-  }, 1000);
+  }, 500);
 </script>
-// Function to send commands to the Arduino
-
 <script>
   setInterval(function() {
     var d = new Date();
-    document.getElementById("terminal");
-  }, 1000);
+    document.getElementById("custom-terminal");
+  }, 100);
+</script>
+<script>
+  setInterval(function() {
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open('GET', '/refresh_log', true);
+    xhr2.send();
+  }, 500);
 </script>
 {% endif %}
 

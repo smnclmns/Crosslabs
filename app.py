@@ -180,6 +180,11 @@ def read_serial():
         rawline = arduino.read()
 
         return jsonify({"data": rawline.decode()}) 
+    
+    if connected:
+        rawline = arduino.read()
+
+        return jsonify({"data": rawline.decode()}) 
         
     else:
         return jsonify({"data": "no data"})
