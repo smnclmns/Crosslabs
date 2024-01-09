@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function()  {
   setInterval(function() {
     var d = new Date();
     document.getElementById("plot").src = "/create_plot?ver=" + d.getTime();
-  }, 2000);
+  }, 1000);
 </script>
 
 <script>
@@ -237,19 +237,16 @@ document.addEventListener('DOMContentLoaded', function()  {
     xhr.send();
   }, 500);
 </script>
+
+<!-----/->
 <script>
   setInterval(function() {
     var d = new Date();
     document.getElementById("custom-terminal");
-  }, 100);
+  }, 1000);
 </script>
-<script>
-  setInterval(function() {
-    var xhr2 = new XMLHttpRequest();
-    xhr2.open('GET', '/refresh_log', true);
-    xhr2.send();
-  }, 500);
-</script>
+<---->
+
 {% endif %}
 
 {% endblock %}
