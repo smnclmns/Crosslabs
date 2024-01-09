@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function()  {
   setInterval(function() {
     var d = new Date();
     document.getElementById("plot").src = "/create_plot?ver=" + d.getTime();
-  }, 1000);
+  }, 2000);
 </script>
 
 <script>
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function()  {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/read_serial', true);
     xhr.send();
-  }, 500);
+  }, 1000);
 </script>
 
 <!-----/->
