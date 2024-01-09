@@ -408,7 +408,7 @@ void testFunction() {
 
 void Mocking_Data() {
   farbmessung();
-  for (int i = 1; i < AS726x_NUM_CHANNELS; i++) {
+  for (int i = 0; i < AS726x_NUM_CHANNELS; i++) {
       values[i] = sensorValues[i];
     }
 }
