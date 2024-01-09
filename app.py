@@ -105,6 +105,8 @@ def AutomatedTitration():
         if connected and input_dict["query-input"] == "Stop":
             arduino.is_titrating = False
             is_titrating = False
+            arduino.is_measuring = False
+            is_measuring = False
 
         if connected and input_dict["query-input"] == "Reset":
             arduino.is_reseting = True
@@ -164,7 +166,7 @@ def create_plot():
     plt.clf()
 
     # Returning the plot
-    return send_file(img, mimetype="image/png")
+    return send_file(img, mimetype="image/png", cache_timeout =0)
     
 
 @app.route("/read_serial", methods=["POST", "GET"]) # Page for getting the data from the serial connection
