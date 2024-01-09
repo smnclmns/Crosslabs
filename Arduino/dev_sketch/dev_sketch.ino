@@ -328,19 +328,19 @@ void farbmessung() {
 }
 
 
-void livefarbe(){
-
+void livefarbe() {
   farbmessung();
-  if (sizeof(values) > 0){
+  if (sizeof(values) / sizeof(values[0]) > 0) {
     String violet = String(values[0]);
     String blue = String(values[1]);
     String green = String(values[2]);
     String yellow = String(values[3]);
     String orange = String(values[4]);
     String red = String(values[5]);
-    Serial.println("f"+violet+","+blue+","+green+","+yellow+","+orange+","+red);
-  } // if
-} // livefarbe
+    Serial.println("f" + violet + "," + blue + "," + green + "," + yellow + "," + orange + "," + red);
+  }
+}
+
 
 
 void send_in_utf_8(){
