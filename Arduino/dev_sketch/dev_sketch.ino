@@ -20,6 +20,7 @@ Adafruit_AS726x ams;
 //buffer to hold Adafruit sensor raw values
 uint16_t sensorValues[AS726x_NUM_CHANNELS];
 
+
 // Titration adjustments and buffer
 bool Start = false;
 unsigned long Starttime = 0;
@@ -452,22 +453,22 @@ void Mocking_Data() {
       double value;
       switch (i) {
         case 5:
-          value = abs(amplitudeRed * sin(2 * PI * frequencyRed * currentTime / 1000.0) + offsetRed);
+          value = sensorValues[AS726x_VIOLET];
           break;
         case 4:
-          value = abs(amplitudeOrange * sin(2 * PI * frequencyOrange * currentTime / 1000.0) + offsetOrange);
+          value = sensorValues[AS726x_BLUE] ;
           break;
         case 3:
-          value = abs(amplitudeYellow * sin(2 * PI * frequencyYellow * currentTime / 1000.0) + offsetYellow);
+          value = sensorValues[AS726x_GREEN];
           break;
         case 2:
-          value = abs(amplitudeGreen * sin(2 * PI * frequencyGreen * currentTime / 1000.0) + offsetGreen);
+          value = sensorValues[AS726x_YELLOW];
           break;
         case 1:
-          value = abs(amplitudeBlue * sin(2 * PI * frequencyBlue * currentTime / 1000.0) + offsetBlue);
+          value = sensorValues[AS726x_ORANGE] ;
           break;
         case 0:
-          value = abs(amplitudeViolet * sin(2 * PI * frequencyViolet * currentTime / 1000.0) + offsetViolet);
+          value = sensorValues[AS726x_RED]; 
           break;
       }
       values[i] = (uint16_t)value;
