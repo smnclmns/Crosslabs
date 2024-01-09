@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function()  {
 
 
 
-{% if is_titrating == True %}
+{% if connected == True %}
 <script>
   setInterval(function() {
     var d = new Date();
@@ -237,14 +237,8 @@ document.addEventListener('DOMContentLoaded', function()  {
     xhr.send();
   }, 1000);
 </script>
-<script>
 // Function to send commands to the Arduino
 
-
-</script>
-{% endif %}
-
-{% if connected == True %}
 <script>
   setInterval(function() {
     var d = new Date();
