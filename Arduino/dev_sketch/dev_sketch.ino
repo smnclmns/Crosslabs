@@ -313,8 +313,15 @@ void farbmessung() {
     delay(5);
     rdy = ams.dataReady();
   }
-  
- ams.readRawValues(sensorValues);
+  unsigned long millis_now = millis();
+  long timediff = millis_now - Starttime;
+  if (timediff >= 30000) {
+  timediff -= 30000;
+  Starttime += 30000;
+  }
+  currentTime = (uint16_t)timediff;
+
+  ams.readRawValues(sensorValues);
   values[0] = sensorValues[AS726x_VIOLET];
   values[1] = sensorValues[AS726x_BLUE];
   values[2] = sensorValues[AS726x_GREEN];
@@ -326,6 +333,14 @@ void farbmessung() {
 
 void livefarbe() {
   farbmessung();
+    unsigned long millis_now = millis();
+    long timediff = millis_now - Starttime;
+    if (timediff >= 30000) {
+    timediff -= 30000;
+    Starttime += 30000;
+    }
+    currentTime = (uint16_t)timediff;
+  
   if (sizeof(values) / sizeof(values[1]) > 0) {
     String violet = String(values[0]);
     String blue = String(values[1]);
@@ -392,7 +407,6 @@ long extract_motor_settings(String inp) {
   return n_steps.toInt();
   
 }
-
 /*
  *  Mocking Data and Test Function
  */
@@ -400,11 +414,6 @@ long extract_motor_settings(String inp) {
 void testFunction() {
   Serial.println("Test message received!");
 }
-
-
-
-
-
 
 void Mocking_Data() {
   farbmessung();
