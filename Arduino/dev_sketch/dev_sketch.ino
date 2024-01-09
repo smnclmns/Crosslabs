@@ -98,6 +98,12 @@ void loop(void) {
     POSITION = 0;
     farbmessung();
     livefarbe();
+    startvalues[0] = sensorValues[AS726x_VIOLET];
+    startvalues[1] = sensorValues[AS726x_BLUE];
+    startvalues[2] = sensorValues[AS726x_GREEN];
+    startvalues[3] = sensorValues[AS726x_YELLOW];
+    startvalues[4] = sensorValues[AS726x_ORANGE];
+    startvalues[5] = sensorValues[AS726x_RED];
     for (int i=0;i<6;i++){
       if (values[i] < change*startvalues[i]){
         phase1 = false;
@@ -308,18 +314,7 @@ void farbmessung() {
     rdy = ams.dataReady();
   }
   
-
-  
-   
- unsigned long millis_now = millis();
- long timediff = millis_now - Starttime;
- if (timediff >= 30000) {
-  timediff -= 30000;
-  Starttime += 30000;
- }
- currentTime = (uint16_t)timediff;
-
- ams.readRawValues(values);
+ ams.readRawValues(sensorValues);
   values[0] = sensorValues[AS726x_VIOLET];
   values[1] = sensorValues[AS726x_BLUE];
   values[2] = sensorValues[AS726x_GREEN];
@@ -331,14 +326,14 @@ void farbmessung() {
 
 void livefarbe() {
   farbmessung();
-  if (sizeof(values) / sizeof(values[0]) > 0) {
+  if (sizeof(values) / sizeof(values[1]) > 0) {
     String violet = String(values[0]);
     String blue = String(values[1]);
     String green = String(values[2]);
     String yellow = String(values[3]);
     String orange = String(values[4]);
     String red = String(values[5]);
-    Serial.println("f" + violet + "," + blue + "," + green + "," + yellow + "," + orange + "," + red);
+    Serial.println("f"+violet+","+blue+","+green+","+yellow+","+orange+","+red);
   }
 }
 
@@ -412,65 +407,8 @@ void testFunction() {
 
 
 void Mocking_Data() {
-
- 
- unsigned long millis_now = millis();
- long timediff = millis_now - Starttime;
- if (timediff >= 30000) {
-  timediff -= 30000;
-  Starttime += 30000;
- }
- currentTime = (uint16_t)timediff;
-  
-
- // Generiere simulierten Lichtsensorwerte für jede Farbe (Kanal)
-    double amplitudeRed = 1000.0; // Amplitude für den Rot-Kanal
-    double frequencyRed = 0.1; // Frequenz für den Rot-Kanal
-    double offsetRed = 500.0; // Versatz für den Rot-Kanal
-    
-    double amplitudeOrange = 800.0; // Amplitude für den Orange-Kanal
-    double frequencyOrange = 0.15; // Frequenz für den Orange-Kanal
-    double offsetOrange = 600.0; // Versatz für den Orange-Kanal
-    
-    double amplitudeYellow = 1200.0; // Amplitude für den Gelb-Kanal
-    double frequencyYellow = 0.2; // Frequenz für den Gelb-Kanal
-    double offsetYellow = 700.0; // Versatz für den Gelb-Kanal
-    
-    double amplitudeGreen = 600.0; // Amplitude für den Grün-Kanal
-    double frequencyGreen = 0.25; // Frequenz für den Grün-Kanal
-    double offsetGreen = 400.0; // Versatz für den Grün-Kanal
-    
-    double amplitudeBlue = 1000.0; // Amplitude für den Blau-Kanal
-    double frequencyBlue = 0.3; // Frequenz für den Blau-Kanal
-    double offsetBlue = 300.0; // Versatz für den Blau-Kanal
-    
-    double amplitudeViolet = 800.0; // Amplitude für den Violett-Kanal
-    double frequencyViolet = 0.35; // Frequenz für den Violett-Kanal
-    double offsetViolet = 200.0; // Versatz für den Violett-Kanal
-    
-    // Berechne die simulierten Werte für die sechs Kanäle des Lichtsensors
-    for (int i = 0; i < AS726x_NUM_CHANNELS; i++) {
-      double value;
-      switch (i) {
-        case 5:
-          value = sensorValues[AS726x_VIOLET];
-          break;
-        case 4:
-          value = sensorValues[AS726x_BLUE] ;
-          break;
-        case 3:
-          value = sensorValues[AS726x_GREEN];
-          break;
-        case 2:
-          value = sensorValues[AS726x_YELLOW];
-          break;
-        case 1:
-          value = sensorValues[AS726x_ORANGE] ;
-          break;
-        case 0:
-          value = sensorValues[AS726x_RED]; 
-          break;
-      }
-      values[i] = (uint16_t)value;
+  farbmessung();
+  for (int i = 1; i < AS726x_NUM_CHANNELS; i++) {
+      values[i] = sensorValues[i];
     }
 }
