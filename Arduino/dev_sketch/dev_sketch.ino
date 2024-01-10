@@ -57,8 +57,8 @@ int values[6] = {0,0,0,0,0,0};
 double change = 0.9; // indicates at what percentage of the initial intensity of a light value phase 2 should be initiated
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
 double endtime = 10.0; // waiting time in s to check if titration is finished
-double steps1 = 50.0 * 1000000; // indicates the number of steps in phase 1 after which the light values are compared
-double steps2 = 10.0 * 1000000; // indicates the number of steps in phase 2 after which the light values are compared
+double steps1 = 50.0 ; // indicates the number of steps in phase 1 after which the light values are compared
+double steps2 = 10.0 ; // indicates the number of steps in phase 2 after which the light values are compared
 
 // Enables the generation of mocking data to test handling of sensor readings
 bool mocking_data = false;
@@ -75,14 +75,12 @@ void setup(void) {
     Serial.println("Could not connect to sensor! Please check your wiring.");
   }
 
-  stepper.connectToPins(MOTOR_STEP_PIN, MOTOR_DIRECTION_PIN); // implement the wiring of the motor
-
-
-  Serial.println("Setup ready...");
+  Serial.println("Light Sensor ready...");
   Wire.begin();
   delay(20);
   tic.setStepMode(TicStepMode::Microstep32);
   Serial.println("Stepper motor ready...");
+  tic.energize();
   tic.exitSafeStart();
   
 
@@ -140,6 +138,10 @@ void loop(void) {
       Starttime = millis();
       phase1 = true;
       Serial.println("Automated Titration Started");
+      tic.setTargetVelocity(0);
+      delayWhileResettingComandTimeout(1000);
+      tic.haltAndSetPosition(0);
+      delayWhileResettingComandTimeout(1000);
     }
 
 // In Phase 1 werden zwischen den Lichtmessungen noch vergleichsweise viele Schritte ausgeführt, um die Zeit der Titration insgesamt zu verringern
@@ -147,7 +149,6 @@ void loop(void) {
   if (phase1){
     Serial.println("Phase 1");
     POSITION = 0;
-    tic.haltAndSetPosition(0);
     farbmessung();
     livefarbe();
     startvalues[0] = sensorValues[AS726x_VIOLET];
@@ -232,7 +233,7 @@ void loop(void) {
     }
 
     else if (inputString == "Cali\n" && !Start) {
-      Serial.println("Calibration started \nDo not forget to weight the fluid");
+      Serial.println("Calibration started \n Do not forget to weight the fluid");
       Calibration();
     }
 
@@ -263,7 +264,7 @@ void loop(void) {
       tic.haltAndSetPosition(0);
     }
     else if (inputString == "Change\n"){
-      if (change=0.9){
+      if (change == 0.9){
           change = 0.95;
           endvalue = 0.95;
         }
@@ -284,12 +285,6 @@ void loop(void) {
     stringComplete = false;
   }
 
-
-   /*
-    * Below the functions are executed in the loop depending on the current state.
-    */
-
-   
 
   if (Start == true) {
     send_in_utf_8();
@@ -323,8 +318,10 @@ void serialEvent() {
 
 void moving(double x){
   //x steps in 1 second
-  tic.setTargetVelocity(x);
-  delayWhileResettingCommandTimeout(1000);
+  tic.setTargetposition(tic.getTargetPosition() + x);
+  waitForPosition(1000);
+  tic.setTargetVelocity(0);
+  delayWhileResettingComandTimeout(1000);
   if (x > 0){
     liveticker(x);
   } // if Ende
@@ -338,29 +335,28 @@ void liveticker(double x){
 }
 
 void Calibration() {
-    stepper.setSpeedInRevolutionsPerSecond(10.0);
-    stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
-        for (int i=0;i<15;i++){
-          stepper.moveRelativeInSteps(500);
-          NULLPOSITION += 500;
+  tic.setTargetVelocity(0);
+  delayWhileResettingComandTimeout(1000);
+  tic.haltAndSetPosition(0);
+  tic.exitSafeStart();
+        for (int i=0;i<10;i++){
+          tic.setTargetposition(tic.getTargetPosition() + 50);
+          waitForPosition(1000);
+          tic.setTargetVelocity(0);
+          waitForPosition(1000);
           delay(1000);
         } // for
 }
 
 void Reset() {
+    tic.exitSafeStart();
+    tic.energize();
     tic.setTargetPosition(0);
-    waitForPosition(10000);
+    waitForPosition(15000);
     tic.exitSafeStart();
   
 }
 
-void Forward(long fw_steps) {
-  stepper.moveRelativeInSteps(fw_steps);  
-}
-
-void Backward(long bw_steps) {
-  stepper.moveRelativeInSteps(-bw_steps);  
-}
 
 void farbmessung() {
 
@@ -410,8 +406,6 @@ void livefarbe() {
   }
 }
 
-
-
 void send_in_utf_8(){
   
   Serial.print(currentTime); Serial.print(",");
@@ -419,51 +413,7 @@ void send_in_utf_8(){
   for (uint8_t i=0; i<AS726x_NUM_CHANNELS; i++) {
      Serial.print(values[i]); Serial.print(",");
   }
-  
   Serial.println();  
-}
-
-long extract_motor_settings(String inp) {
-
-  String s_p_s = "";
-
-  String a_p_qs = "";
-  
-  String n_steps = "";
-
-
-  uint8_t setting = 0;
-
-/*example inp = [12+500+2] */
-
-  for (int i = 1; i < inp.length(); i++) {
-
-    if (isdigit(inp[i]) || inp[i] == '.') {
-      if (setting == 0) {
-        s_p_s += inp[i];
-      }
-      else if (setting == 1) {
-        a_p_qs += inp[i];
-      }
-      else if (setting == 2) {
-        n_steps += inp[i];
-      }
-    }
-    
-    else if (inp[i] == '+') {
-      setting += 1;
-    }
-    
-    else {
-      break;
-    }
-  }
-
-  stepper.setSpeedInStepsPerSecond(s_p_s.toDouble());
-  stepper.setAccelerationInStepsPerSecondPerSecond(a_p_qs.toDouble());
-
-  return n_steps.toInt();
-  
 }
 /*
  *  Mocking Data and Test Function
@@ -471,10 +421,17 @@ long extract_motor_settings(String inp) {
 
 void testFunction() {
   Serial.println("Test message received!");
-  stepper.setSpeedInStepsPerSecond(10);
-  stepper.setAccelerationInStepsPerSecondPerSecond(10);
-  SpeedyStepper stepper;
+  tic.setTargetVelocity(0);
+  delayWhileResettingComandTimeout(1000);
+  Serial.println("Null Point Set");
+  tic.haltAndSetPosition(0);
+  tic.exitSafeStart();
+  tic.setTargetPosition(500);
+  waitForPosition(10000);
   Serial.println("Motor moved");
+  tic.setTargetPosition(0);
+  waitForPosition(10000);
+  Serial.println("Going Home");
 }
 
 void Mocking_Data() {
