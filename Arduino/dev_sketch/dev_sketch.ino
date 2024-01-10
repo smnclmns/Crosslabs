@@ -1,6 +1,13 @@
 #include <Wire.h>
 #include "Adafruit_AS726x.h"
 #include "SpeedyStepper.h"
+#include <Tic.h>
+TicI2C tic;
+
+// On boards with a hardware serial port available for use, use
+// that port to communicate with the Tic. For other boards,
+// create a SoftwareSerial object using pin 10 to receive (RX)
+// and pin 11 to transmit (TX).
 
 // Buffer to read the Serial port commands
 String inputString = "";
@@ -50,8 +57,8 @@ int values[6] = {0,0,0,0,0,0};
 double change = 0.9; // indicates at what percentage of the initial intensity of a light value phase 2 should be initiated
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
 double endtime = 10.0; // waiting time in s to check if titration is finished
-double steps1 = 50.0; // indicates the number of steps in phase 1 after which the light values are compared
-double steps2 = 10.0; // indicates the number of steps in phase 2 after which the light values are compared
+double steps1 = 50.0 * 1000000; // indicates the number of steps in phase 1 after which the light values are compared
+double steps2 = 10.0 * 1000000; // indicates the number of steps in phase 2 after which the light values are compared
 
 // Enables the generation of mocking data to test handling of sensor readings
 bool mocking_data = false;
@@ -72,8 +79,52 @@ void setup(void) {
 
 
   Serial.println("Setup ready...");
+  Wire.begin();
+  delay(20);
+  tic.setStepMode(TicStepMode::Microstep32);
+  Serial.println("Stepper motor ready...");
+  tic.exitSafeStart();
+  
+
 }
 
+
+// Sends a "Reset command timeout" command to the Tic.  We must
+// call this at least once per second, or else a command timeout
+// error will happen.  The Tic's default command timeout period
+// is 1000 ms, but it can be changed or disabled in the Tic
+// Control Center
+void resetCommandTimeout()
+{
+  tic.resetCommandTimeout();
+}
+
+// Delays for the specified number of milliseconds while
+// resetting the Tic's command timeout so that its movement does
+// not get interrupted.
+void delayWhileResettingCommandTimeout(uint32_t ms)
+{
+  uint32_t start = millis();
+  do
+  {
+    resetCommandTimeout();
+  } while ((uint32_t)(millis() - start) <= ms);
+}
+
+
+// Polls the Tic, waiting for it to reach the specified target
+// position.  Note that if the Tic detects an error, the Tic will
+// probably go into safe-start mode and never reach its target
+// position, so this function will loop infinitely.  If that
+// happens, you will need to reset your Arduino.
+void waitForPosition(int32_t targetPosition)
+{
+  do
+  {
+    resetCommandTimeout();
+  } while (tic.getCurrentPosition() != targetPosition);
+}
+  
   
 void loop(void) {
 
@@ -91,11 +142,12 @@ void loop(void) {
       Serial.println("Automated Titration Started");
     }
 
-     // In Phase 1 werden zwischen den Lichtmessungen noch vergleichsweise viele Schritte ausgeführt, um die Zeit der Titration insgesamt zu verringern
+// In Phase 1 werden zwischen den Lichtmessungen noch vergleichsweise viele Schritte ausgeführt, um die Zeit der Titration insgesamt zu verringern
   
   if (phase1){
     Serial.println("Phase 1");
     POSITION = 0;
+    tic.haltAndSetPosition(0);
     farbmessung();
     livefarbe();
     startvalues[0] = sensorValues[AS726x_VIOLET];
@@ -137,10 +189,10 @@ void loop(void) {
     } // if Ende
   } // else if phase2 Ende
 
-  // In der letzten Phase wird zu beginn eine gewisse Zeit gewartet, bevor erneut die Lichtwerte kontrolliert werden
-  // Damit auf die Situation reagiert werden, dass der Indikator sich wieder entfärbt hat
+// In der letzten Phase wird zu beginn eine gewisse Zeit gewartet, bevor erneut die Lichtwerte kontrolliert werden
+// Damit auf die Situation reagiert werden, dass der Indikator sich wieder entfärbt hat
 
-  // Sollten  die Werte immernoch niedrig genug sein, wird die Titration gestoppt
+// Sollten  die Werte immernoch niedrig genug sein, wird die Titration gestoppt
 
   else if (endphase){
     Serial.println("Phase 3");
@@ -188,21 +240,27 @@ void loop(void) {
       Reset();
     }
 
-    else if (inputString.startsWith("F")) {   
-      stepper.setSpeedInRevolutionsPerSecond(10);
-      stepper.setAccelerationInRevolutionsPerSecondPerSecond(10);
-      stepper.moveRelativeInRevolutions(5);   
+    else if (inputString.startsWith("F")) {
+      Serial.println("Forwardmovement for 5 seconds");   
+      tic.setTargetVelocity(20000000);
+      delayWhileResettingCommandTimeout(5000);
+      tic.setTargetVelocity(0);
+      delayWhileResettingCommandTimeout(2000);
+      
+        
     }
 
     else if (inputString.startsWith("B")) {
-      stepper.setSpeedInRevolutionsPerSecond(10);
-      stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
-      stepper.moveRelativeInRevolutions(-5);
+      Serial.println("Backwardmovement for 5 seconds"); 
+      tic.setTargetVelocity(-20000000);
+      delayWhileResettingCommandTimeout(5000);
+      tic.setTargetVelocity(-0);
+      delayWhileResettingCommandTimeout(2000);
     }
 
     else if (inputString == "Null\n") {
       Serial.println("Nullpoint set");
-      NULLPOSITION = 0;
+      tic.haltAndSetPosition(0);
     }
     else if (inputString == "Change\n"){
       if (change=0.9){
@@ -264,9 +322,9 @@ void serialEvent() {
 }
 
 void moving(double x){
-  stepper.setSpeedInRevolutionsPerSecond(10.0);
-  stepper.setAccelerationInRevolutionsPerSecondPerSecond(10.0);
-  stepper.moveRelativeInSteps(x);
+  //x steps in 1 second
+  tic.setTargetVelocity(x);
+  delayWhileResettingCommandTimeout(1000);
   if (x > 0){
     liveticker(x);
   } // if Ende
@@ -290,9 +348,9 @@ void Calibration() {
 }
 
 void Reset() {
-    stepper.setSpeedInRevolutionsPerSecond(10);
-    stepper.setAccelerationInRevolutionsPerSecondPerSecond(10);
-    stepper.moveRelativeInSteps(-NULLPOSITION);
+    tic.setTargetPosition(0);
+    waitForPosition(10000);
+    tic.exitSafeStart();
   
 }
 
@@ -413,6 +471,10 @@ long extract_motor_settings(String inp) {
 
 void testFunction() {
   Serial.println("Test message received!");
+  stepper.setSpeedInStepsPerSecond(10);
+  stepper.setAccelerationInStepsPerSecondPerSecond(10);
+  SpeedyStepper stepper;
+  Serial.println("Motor moved");
 }
 
 void Mocking_Data() {
