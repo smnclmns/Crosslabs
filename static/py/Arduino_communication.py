@@ -165,15 +165,15 @@ class Arduino():
     def update_log(self, line: bytes = b"") -> None:
         """Updates the log of the Arduino."""
         try:
-
-            with open(self.log_adress, "r") as f:
-                log = f.readlines()
-            if line != b"":
-                log_time = time.strftime("%H:%M:%S", time.localtime())
-                log.append(log_time+" "+line.decode())
-            with open(self.log_adress, "w") as f:
-                f.writelines(log)
-                f.flush()
+            with self.lock:
+                with open(self.log_adress, "r") as f:
+                    log = f.readlines()
+                if line != b"":
+                    log_time = time.strftime("%H:%M:%S", time.localtime())
+                    log.append(log_time+" "+line.decode())
+                with open(self.log_adress, "w") as f:
+                    f.writelines(log)
+                    f.flush()
         except Exception as e:
             print(f"Error updating log: {e}")
 

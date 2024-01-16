@@ -152,7 +152,7 @@ void loop(void) {
       Reset();
     }
 
-    else if (inputString.startsWith("F")) {
+    else if (inputString.startsWith("f")) {
       tic.exitSafeStart();
       Serial.println("Forwardmovement for 1 second");   
       tic.setTargetVelocity(20000000);
@@ -163,7 +163,7 @@ void loop(void) {
         
     }
 
-    else if (inputString.startsWith("B")) {
+    else if (inputString.startsWith("b")) {
       tic.exitSafeStart();
       Serial.println("Backwardmovement for 1 second1"); 
       tic.setTargetVelocity(-20000000);
@@ -207,12 +207,10 @@ void loop(void) {
   }
   if (phase1){
     Serial.println("Phase 1");
+    send_in_utf_8();
     farbmessung();
     livefarbe();
-    
-
     for (int i=0;i<6;i++){
-      Serial.print("Value: "); Serial.print(values[i]); Serial.print(", Threshold: "); Serial.println(startvalues[i]);
       if (values[i] < change*startvalues[i]){
         phase1 = false;
         phase2 = true;
@@ -229,6 +227,7 @@ void loop(void) {
   
   else if (phase2){
     Serial.println("Phase 2 is started");
+    send_in_utf_8();
     farbmessung();
     livefarbe();
     delay(0.5 * endtime);
@@ -256,6 +255,7 @@ void loop(void) {
     Serial.println("Phase 3");
     delay(endtime);
     Serial.println("Extended Light Sensor Checking");
+    send_in_utf_8();
     farbmessung();
     livefarbe();
     for (int i=0;i<6;i++){

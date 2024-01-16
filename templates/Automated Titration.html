@@ -230,9 +230,13 @@ document.addEventListener('DOMContentLoaded', function()  {
   }, 2000);
 </script>
 
-
-
-
+<script>
+  setInterval(function() {
+    var d = new Date();
+    document.getElementById("plot").src = "/create_plot?ver=" + d.getTime();
+  }, 2000);
+  
+</script>
 
 
 
