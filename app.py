@@ -158,7 +158,7 @@ def create_plot():
 
     # Saving the plot as a png file
     img = io.BytesIO()
-    plt.savefig(img, format="png")
+    plt.savefig(img, format="svg")
     img.seek(0)
 
     # deleting the plot from the memory
@@ -166,7 +166,7 @@ def create_plot():
     plt.clf()
 
     # Returning the plot
-    return send_file(img, mimetype="image/png")
+    return send_file(img, mimetype="image/svg")
     
 
 @app.route("/read_serial", methods=["POST", "GET"]) # Page for getting the data from the serial connection
@@ -193,7 +193,12 @@ def read_serial():
     
 @app.route("/refresh_log", methods=["POST", "GET"]) # updates the log
 def refresh_log():
-    pass
+    try:
+        log = arduino.get_log()
+        return render_template("Automated Titration.html", log=log)
+    except Exception as e:
+        # Handle exceptions if any and return an error message or redirect
+        return f"Error: {e}"
 
     
 
@@ -351,10 +356,10 @@ def level1():
     global enable_level2
     maximum_score=4
     input_dict = {
-        "Boolean_state_1": 0,
-        "Condition_1": 0,
-        "Condition_2": 0,
-        "Boolean_state_2": 0,
+        "Titration Condition": 0,
+        "First Light Condition": 0,
+        "Second Light Condition": 0,
+        "End Condition": 0,
         }
     
     tips= ""
@@ -373,19 +378,19 @@ def level1():
 
     for key, val in input_dict.items():
         
-        if key == "Boolean_state_1":
+        if key == "Titration Condition":
             if val != "false" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
             elif val == "false": score += 1
 
-        if key == "Condition_1":
+        if key == "First Light Condition":
             if val != "<" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
             elif val == "<": score += 1
 
-        if key == "Boolean_state_2":
+        if key == "End Condition":
             if val != "true" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
             elif val == "true": score += 1
 
-        if key == "Condition_2":
+        if key == "Second Light Condition":
             if val != "<" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
             elif val == "<": score += 1
     if score == maximum_score:

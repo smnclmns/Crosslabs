@@ -75,6 +75,11 @@ br {
   margin: auto; /* Center the image */
 }
 
+.custom-image2 {
+  max-width: 200px;  /* Adjust the value as needed */
+  height: auto;  /* Ensures proportional scaling */
+}
+
 .custom-title {
   font-family: "lucida grande", sans-serif;
     font-size: 1.5rem;

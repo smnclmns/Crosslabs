@@ -224,6 +224,14 @@ window.addEventListener('load', function () {
     xhr.send();
   }, 1000);
 </script>
+
+<script>
+  setInterval(function() {
+    var d = new Date();
+    document.getElementById("custom-terminal").innerHTML = "/refresh_log?ver= " + d.getTime() ;
+  }, 1000);
+</script>
+
 {% endif %}
 
 <!-- {% if connected == True %}
