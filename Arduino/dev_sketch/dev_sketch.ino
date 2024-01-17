@@ -12,6 +12,7 @@ TicI2C tic;
 // Buffer to read the Serial port commands
 String inputString = "";
 bool stringComplete = false;
+bool titrationCompletePrinted = false;
 
 // Motor object, outputs and buffer variables
 SpeedyStepper stepper;
@@ -57,8 +58,8 @@ int values[6] = {0,0,0,0,0,0};
 double change = 0.9; // indicates at what percentage of the initial intensity of a light value phase 2 should be initiated
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
 double endtime = 8000.0; // waiting time in s to check if titration is finished
-double steps1 = 500.0 ; // indicates the number of steps in phase 1 after which the light values are compared
-double steps2 = 100.0 ; // indicates the number of steps in phase 2 after which the light values are compared
+double steps1 = 1000.0 ; // indicates the number of steps in phase 1 after which the light values are compared
+double steps2 = 500.0 ; // indicates the number of steps in phase 2 after which the light values are compared
 
 // Enables the generation of mocking data to test handling of sensor readings
 bool mocking_data = false;
@@ -109,47 +110,68 @@ void loop(void) {
       startvalues[3] = sensorValues[AS726x_YELLOW];
       startvalues[4] = sensorValues[AS726x_ORANGE];
       startvalues[5] = sensorValues[AS726x_RED];
-    
+      //First measurement for the Plot
+      farbmessung();
+      send_in_utf_8();
       //set the starting point of the titration
       Serial.println("Automated Titration Started");
       //Initializing the Phase and Position
       tic.haltAndSetPosition(0);
+      titrationCompletePrinted = false;
       phase1 = true;
       POSITION=0;
       }
   
 
-
-
-    else if (inputString == "mock\n" && !mocking_data && !Start) {
-      mocking_data = true;
-      Starttime = millis();
+    else if (inputString == "mock\n") {
+      Mocking_Data();
+      
     }
 
     else if (inputString == "Stop\n") {
       Start = false;
-      phase = 0;
       mocking_data = false;
       phase1 = false;
       phase2 = false;
       endphase = false;
-      pause = true;
       Serial.println("Stop all actions");
     }
 
     else if (inputString == "Cali\n" && !Start) {
-      Serial.println("Calibration started \n Do not forget to weight the fluid");
+      Serial.println("Calibration started \nDo not forget to weight the fluid");
       Calibration();
     }
 
-    else if (inputString == "Reset\n" && phase == 0) {
+    else if (inputString == "Reset\n") {
       Start = false;
-      phase = 0;
       mocking_data = false;
       phase1 = false;
       phase2 = false;
       endphase = false;
       Reset();
+    }
+    else if (inputString == "Pause\n") {
+      Start = false;
+      mocking_data = false;
+      phase1 = false;
+      phase2 = false;
+      endphase = false;
+      Serial.println("Before you refill the Syringe switch the lever!");
+      
+    }
+    else if (inputString == "Refill\n") {
+      Refill_Syringe();
+    }
+    else if (inputString == "Continue p1\n") {
+      phase1 = true;
+      phase2 = false;
+      Serial.println("Continue with Phase 1");
+    }
+
+    else if (inputString == "Continue p2\n") {
+      phase1 = false;
+      phase2 = true;
+      Serial.println("Continue with Phase 2");
     }
 
     else if (inputString.startsWith("f")) {
@@ -172,6 +194,26 @@ void loop(void) {
       delayWhileResettingCommandTimeout(2000);
     }
 
+    else if (inputString.startsWith("long f")) {
+      tic.exitSafeStart();
+      Serial.println("Forwardmovement for 5 seconds");   
+      tic.setTargetVelocity(80000000);
+      delayWhileResettingCommandTimeout(5000);
+      tic.setTargetVelocity(0);
+      delayWhileResettingCommandTimeout(2000);
+      
+        
+    }
+
+    else if (inputString.startsWith("long b")) {
+      tic.exitSafeStart();
+      Serial.println("Backwardmovement for 5 seconds"); 
+      tic.setTargetVelocity(-80000000);
+      delayWhileResettingCommandTimeout(5000);
+      tic.setTargetVelocity(-0);
+      delayWhileResettingCommandTimeout(2000);
+    }
+
     else if (inputString == "Null\n") {
       Serial.println("Nullpoint set");
       tic.haltAndSetPosition(0);
@@ -189,14 +231,8 @@ void loop(void) {
     else if (inputString == "Test\n") {
       testFunction();
     } 
-    
-  
-    if (mocking_data = true) {
-    Mocking_Data();
-    send_in_utf_8();
-    }
 
-  delay(1000);
+  delay(500);
 
     /*
    * End of command checking. 
@@ -207,9 +243,8 @@ void loop(void) {
   }
   if (phase1){
     Serial.println("Phase 1");
-    send_in_utf_8();
     farbmessung();
-    livefarbe();
+    send_in_utf_8();
     for (int i=0;i<6;i++){
       if (values[i] < change*startvalues[i]){
         phase1 = false;
@@ -227,10 +262,8 @@ void loop(void) {
   
   else if (phase2){
     Serial.println("Phase 2 is started");
-    send_in_utf_8();
     farbmessung();
-    livefarbe();
-    delay(0.5 * endtime);
+    send_in_utf_8();
     for (int i=0;i<6;i++){
       if (values[i] < endvalue*startvalues[i]){
         phase2 = false;
@@ -253,19 +286,37 @@ void loop(void) {
 
   else if (endphase){
     Serial.println("Phase 3");
+    farbmessung();
+    send_in_utf_8();
     delay(endtime);
     Serial.println("Extended Light Sensor Checking");
-    send_in_utf_8();
     farbmessung();
-    livefarbe();
+    send_in_utf_8();
     for (int i=0;i<6;i++){
       if (values[i] < endvalue*startvalues[i]){
         endphase = false;
-        Serial.println("Titration complete");
-        Serial.print("\n");
+        Start = false;
+        delay(500);
+        farbmessung();
+        send_in_utf_8();
+        // Check if the message has not been printed before
+        if (!titrationCompletePrinted) {
+          farbmessung();
+          send_in_utf_8();
+          delay(500);
+          Serial.println("Titration complete");
+          Serial.print("\n");
 
-        Serial.println("End position: ");
-        Serial.println(POSITION);
+          Serial.println("End position: ");
+          Serial.println(POSITION);
+          farbmessung();
+          send_in_utf_8();
+
+          // Set the variable to true to indicate that the message has been printed
+          titrationCompletePrinted = true;
+        }
+      
+    
          
       } // if Ende
       
@@ -319,17 +370,26 @@ void liveticker(double x){
 }
 
 void Calibration() {
+  tic.exitSafeStart();
   tic.setTargetVelocity(0);
   delayWhileResettingCommandTimeout(1000);
-  tic.haltAndSetPosition(0);
-  tic.exitSafeStart();
-        for (int i=0;i<10;i++){
-          tic.setTargetPosition(tic.getCurrentPosition() + 50);
-          
+  int Cali_Position = 0;
+        for (int i=0;i<10;){
+          tic.setTargetPosition(tic.getCurrentPosition() + 500);
+          tic.exitSafeStart();
+          delayWhileResettingCommandTimeout(500);
           tic.setTargetVelocity(0);
+          delayWhileResettingCommandTimeout(500);
           
-          delay(1000);
+          
+          delay(100);
+          i += 1;
+          Cali_Position += 100;
         } // for
+  Serial.print("Position:");Serial.print(Cali_Position);
+  Serial.print("\n");
+
+  Serial.println("End of Calibration");
 }
 
 void Reset() {
@@ -345,10 +405,18 @@ void Reset() {
     if (POSITION == 0){
       Serial.println("Already at the starting point");
     }
-    Start = false;
-    phase1 = false;
-    phase2=false;
-    endphase=false;
+}
+
+void Refill_Syringe() {
+    Serial.println("Pump moves to the starting point");
+    Serial.println("The Titrationprocess is only paused");
+
+    tic.exitSafeStart();
+    tic.energize();
+    tic.setTargetPosition(tic.getCurrentPosition() - POSITION);
+    delayWhileResettingCommandTimeout(POSITION * 2);
+    tic.setTargetVelocity(0);
+    delayWhileResettingCommandTimeout(1000);
 }
 
 
@@ -401,7 +469,7 @@ void livefarbe() {
 
 void send_in_utf_8(){
   
-  Serial.print(currentTime/1000); Serial.print(",");
+  Serial.print(currentTime/10); Serial.print(",");
   
   for (uint8_t i=0; i<AS726x_NUM_CHANNELS; i++) {
      Serial.print(values[i]); Serial.print(",");
@@ -429,11 +497,18 @@ void testFunction() {
 }
 
 void Mocking_Data() {
-  farbmessung();
-  for (int i = 0; i < AS726x_NUM_CHANNELS; i++) {
-      values[i] = sensorValues[i];
+  Serial.println("Lightsensor Test");
+  for ( int i = 0; i<6;) { 
+    farbmessung();
+    send_in_utf_8();
+    i +=1;
+    delay(2000);
     }
+  Serial.println("End of Test");
+  
 }
+
+
 
 // Sends a "Reset command timeout" command to the Tic.  We must
 // call this at least once per second, or else a command timeout

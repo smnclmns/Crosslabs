@@ -39,11 +39,20 @@ Automated Titration
         <button type="submit" name="query-input" data-command="Stop" value="Stop" id="query-input" class="btn col-12 button-5">Stop</button>
         <button type="submit" name="query-input" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5">Reset</button>
         <button type="submit" name="query-input" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
+        <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
+        <button type="submit" name="query-input" data-command="Nullpoint" value="Null" id="query-input" class="btn col-12 button-5">Nullposition</button>
+
         <button type="submit" name="query-input" data-command="Forward" value="forward" id="query-input" class="btn col-12 button-5">forward</button>
         <button type="submit" name="query-input" data-command="Backward" value="backward" id="query-input" class="btn col-12 button-5">backward</button>
-        <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
-        <button type="submit" name="query-input" data-command="Nullpoint" value="Nullpoint" id="query-input" class="btn col-12 button-5">Nullposition</button>
-        </form>
+        <button type="submit" name="query-input" data-command="long Forward" value="long forward" id="query-input" class="btn col-12 button-5">long forward</button>
+        <button type="submit" name="query-input" data-command="long Backward" value="long backward" id="query-input" class="btn col-12 button-5">long backward</button>
+        
+        <button type="submit" name="query-input" data-command="Pause" value="Pause" id="query-input" class="btn col-12 button-5">Pause</button>
+        <button type="submit" name="query-input" data-command="Refill" value="Refill" id="query-input" class="btn col-12 button-5">Refill</button>
+
+        <button type="submit" name="query-input" data-command="Continue p1" value="Continue p1" id="query-input" class="btn col-12 button-5">Continue Phase 1</button>
+        <button type="submit" name="query-input" data-command="Continue p2" value="Continue p2" id="query-input" class="btn col-12 button-5">Continue Phase 2</button>
+      </form>
     </div>
 
 
@@ -230,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function()  {
   }, 1000);
 </script>
 
-<!---
+
 <script>
   setInterval(function() {
     var xhr = new XMLHttpRequest();
@@ -238,15 +247,38 @@ document.addEventListener('DOMContentLoaded', function()  {
     xhr.send();
   }, 1000);
 </script>
--->
 
 <script>
   setInterval(function() {
-    var d = new Date();
-    document.getElementById("custom-terminal").innerHTML = "/refresh_log?ver= " + d.getTime() ;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/refresh_log', true);
+
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+        var responseData = JSON.parse(xhr.responseText);
+        if (responseData.log) {
+          document.getElementById("custom-terminal").innerText = responseData.log;
+        } else if (responseData.error) {
+          console.error("Error fetching log:", responseData.error);
+        }
+      }
+    };
+
+    xhr.send();
   }, 1000);
 </script>
 
+</script>
+
+
+<!--
+<script>
+  setInterval(function() {
+    var d = new Date();
+    document.getElementById("custom-terminal").innerText = "/refresh_log" + d.getTime() ;
+  }, 1000);
+</script>
+-->
 
 {% endif %}
 

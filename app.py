@@ -158,7 +158,7 @@ def create_plot():
 
     # Saving the plot as a png file
     img = io.BytesIO()
-    plt.savefig(img, format="svg")
+    plt.savefig(img, format="png")
     img.seek(0)
 
     # deleting the plot from the memory
@@ -166,7 +166,7 @@ def create_plot():
     plt.clf()
 
     # Returning the plot
-    return send_file(img, mimetype="image/svg")
+    return send_file(img, mimetype="image/png")
     
 
 @app.route("/read_serial", methods=["POST", "GET"]) # Page for getting the data from the serial connection
@@ -193,12 +193,24 @@ def read_serial():
     
 @app.route("/refresh_log", methods=["POST", "GET"]) # updates the log
 def refresh_log():
+    log_path = "csv_folder/log.txt"  # Update the path to your log.txt file
+    
     try:
-        log = arduino.get_log()
-        return render_template("Automated Titration.html", log=log)
+        n_entries = 22
+        log_lines = []
+
+        with open(log_path, "r") as log_file:
+            for line in log_file:
+                log_lines.append(line)
+        
+        # Retrieve the last 15 entries or the entire log if fewer than 15
+        log_content = "".join(log_lines[-n_entries:])
+
+        return jsonify({"log": log_content})
+    
     except Exception as e:
-        # Handle exceptions if any and return an error message or redirect
-        return f"Error: {e}"
+        return jsonify({"error": str(e)})
+       
 
     
 
