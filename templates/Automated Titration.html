@@ -33,34 +33,41 @@ Automated Titration
     </form>
 </div>
 <div class="container text-center">
-    <div id="arduino-buttons" class="row g-0" hidden> <!-- Row for the buttons and the revolutions input -->
-        <form action="#" method="post">
-        <button type="submit" name="query-input" data-command="Start" value="Start" id="query-input" class="btn col-12 button-5">Start</button>
-        <button type="submit" name="query-input" data-command="Stop" value="Stop" id="query-input" class="btn col-12 button-5">Stop</button>
-        <button type="submit" name="query-input" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5">Reset</button>
-        <button type="submit" name="query-input" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
-        <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
-        <button type="submit" name="query-input" data-command="Nullpoint" value="Null" id="query-input" class="btn col-12 button-5">Nullposition</button>
-
-        <button type="submit" name="query-input" data-command="Forward" value="forward" id="query-input" class="btn col-12 button-5">forward</button>
-        <button type="submit" name="query-input" data-command="Backward" value="backward" id="query-input" class="btn col-12 button-5">backward</button>
-        <button type="submit" name="query-input" data-command="long Forward" value="long forward" id="query-input" class="btn col-12 button-5">long forward</button>
-        <button type="submit" name="query-input" data-command="long Backward" value="long backward" id="query-input" class="btn col-12 button-5">long backward</button>
-        
-        <button type="submit" name="query-input" data-command="Pause" value="Pause" id="query-input" class="btn col-12 button-5">Pause</button>
-        <button type="submit" name="query-input" data-command="Refill" value="Refill" id="query-input" class="btn col-12 button-5">Refill</button>
-
-        <button type="submit" name="query-input" data-command="Continue p1" value="Continue p1" id="query-input" class="btn col-12 button-5">Continue Phase 1</button>
-        <button type="submit" name="query-input" data-command="Continue p2" value="Continue p2" id="query-input" class="btn col-12 button-5">Continue Phase 2</button>
-      </form>
+    <div id="arduino-buttons" class="row g-0" hidden > <!-- Row for the buttons and the revolutions input -->
+          <form action="#" method="post">
+            <div class="button-container">
+              <span class="button-description">Automated Titration</span> 
+              <button type="submit" name="query-input" data-command="Start" value="Start" id="query-input" class="btn col-12 button-5">Start</button>
+              <button type="submit" name="query-input" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5" style="background-color: red;" title="This will reset the titration and delete the current progess. The pump will return to it's starting point. This should only be used after the Titration is finished!!">Reset</button>
+              <button type="submit" name="query-input" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
+              </div>
+            <div class="button-container">
+              <span class="button-description">Calibration</span>
+              <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
+              <input type="text" name="cali-value" id="cali-value" placeholder="Enter Weight in gramm with this format [X.xx] gramm"  value="{{ previous_cali_value }}">  
+              <button type="submit" class="btn col-12 button-5" id="Submit_cal">Submit Calibration</button>
+              </div>  
+            <div class="button-container">
+              <span class="button-description">Manual Pump Control</span>
+              <button type="submit" name="query-input" data-command="Forward" value="forward" id="query-input" class="btn col-12 button-5">forward</button>
+              <button type="submit" name="query-input" data-command="Backward" value="backward" id="query-input" class="btn col-12 button-5">backward</button>
+              <button type="submit" name="query-input" data-command="long Forward" value="long forward" id="query-input" class="btn col-12 button-5">long forward</button>
+              <button type="submit" name="query-input" data-command="long Backward" value="long backward" id="query-input" class="btn col-12 button-5">long backward</button>
+              </div> 
+              <div class="button-container"> 
+              <span class="button-description">Pause & Continue</span>  
+              <button type="submit" name="query-input" data-command="Pause" value="Pause" id="query-input" class="btn col-12 button-5" title="Click to pause the titration, this can be used to refill the syringe if the titration is not yet completed">Pause</button>
+              <button type="submit" name="query-input" data-command="Refill" value="Refill" id="query-input" class="btn col-12 button-5">Refill</button>
+              
+              <button type="submit" name="query-input" data-command="Continue p1" value="Continue p1" id="query-input" class="btn col-12 button-5">Continue Phase 1</button>
+              <button type="submit" name="query-input" data-command="Continue p2" value="Continue p2" id="query-input" class="btn col-12 button-5">Continue Phase 2</button>
+              </div>
+              <div class="button-container"> 
+                <span class="button-description">Volume of last titration</span>
+                <input type="text" id="volume-last-titration" name="volume-last-titration" value="{{ last_titration_value }}" readonly>
+               </div>
+          </form>
     </div>
-
-
-
-<div class="row g-0"> <!-- Row for the valve position -->
-
-</div>
-</div> <!-- Container for the buttons and the slider -->
 </div>
 {% endblock %}
 
@@ -281,5 +288,20 @@ document.addEventListener('DOMContentLoaded', function()  {
 -->
 
 {% endif %}
+<style>
+  .button-container {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+  }
+
+  .button-description {
+      display: block;
+      font-family: "lucida grande", sans-serif;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: rgb(123, 123, 123); /* Text color */
+  }
+</style>
 
 {% endblock %}

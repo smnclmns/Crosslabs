@@ -41,6 +41,7 @@ def AutomatedTitration():
 
     global connected
     global arduino
+    
 
     # Initialising the response
 
@@ -55,13 +56,17 @@ def AutomatedTitration():
     is_calibrating = False
     terminal_info = ""
     log = ""
+    
 
     # Initialising the input_dict
 
     input_dict = {
         "connect": "",
-        "query-input": "",        
+        "query-input": "",
+        "cali-value":"",
+
     }
+
 
     # if the user has submitted the form, the input_dict will be updated
 
@@ -88,7 +93,20 @@ def AutomatedTitration():
                     print("Something went wrong")
                     connected = False
 
+            # Check if weight input is provided and is a number
+        cali_value = input_dict.get("cali-value", "").strip()
 
+        if cali_value.replace(".", "", 1).isdigit():  # Allow one decimal point
+            weight_value = float(cali_value)
+            # Store the weight_value for later calculations
+            # You can save it in a database, session, or any suitable storage
+            print(f"Weight value submitted: {weight_value}")
+        else:
+            weight_value = ""  # or set it to another default value if needed
+    
+            
+        
+        last_titration_value = "123.45"
         # if the user has submitted the form and wants to query the Arduino, the query will be attempted
 
         if connected and input_dict["query-input"] != "":
@@ -132,9 +150,24 @@ def AutomatedTitration():
             time.sleep(0.1) 
             log = arduino.get_log()
 
+            
+            # Check if weight input is provided and is a number
+            cali_value = input_dict.get("cali-value", "").strip()
+
+            if cali_value.replace(".", "", 1).isdigit():  # Allow one decimal point
+                weight_value = float(cali_value)
+                # Store the weight_value for later calculations
+                # You can save it in a database, session, or any suitable storage
+                print(f"Weight value submitted: {weight_value}")
+            else:
+                weight_value = ""  # or set it to another default value if needed
+
+        
+            
+        
     # rendering the template with the right values
 
-    return render_template("Automated Titration.html", connected=connected, is_titrating=is_titrating, is_measuring=is_measuring, is_reseting=is_reseting, is_nullpoint=is_nullpoint, is_forward=is_forward, is_backward=is_backward, is_change=is_change, is_calibrating=is_calibrating, log=log)
+    return render_template("Automated Titration.html",last_titration_value=last_titration_value,previous_cali_value=weight_value, connected=connected, is_titrating=is_titrating, is_measuring=is_measuring, is_reseting=is_reseting, is_nullpoint=is_nullpoint, is_forward=is_forward, is_backward=is_backward, is_change=is_change, is_calibrating=is_calibrating, log=log)
 
     
 @app.route("/create_plot", methods=["POST", "GET"]) # Page for getting the data from the csv file
@@ -367,11 +400,12 @@ def level1():
     #Progress
     global enable_level2
     maximum_score=4
+
     input_dict = {
-        "Titration Condition": 0,
-        "First Light Condition": 0,
-        "Second Light Condition": 0,
-        "End Condition": 0,
+        "Titration_Condition": 0,
+        "First_Light_Condition": 0,
+        "Second_Light_Condition": 0,
+        "End_Condition": 0,
         }
     
     tips= ""
@@ -390,20 +424,20 @@ def level1():
 
     for key, val in input_dict.items():
         
-        if key == "Titration Condition":
-            if val != "false" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+        if key == "Titration_Condition":
+            if val != "false" and val != "": tips += f"You didn't set the right initial boolean state.\n"
             elif val == "false": score += 1
 
-        if key == "First Light Condition":
-            if val != "<" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+        if key == "First_Light_Condition":
+            if val != "<" and val != "": tips += f"You didn't set the right [ < | > ] symbole for the first check.\n"
             elif val == "<": score += 1
 
-        if key == "End Condition":
-            if val != "true" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+        if key == "End_Condition":
+            if val != "true" and val != "": tips += f"You didn't set the right boolean state for the end of the Titration.\n"
             elif val == "true": score += 1
 
-        if key == "Second Light Condition":
-            if val != "<" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+        if key == "Second_Light_Condition":
+            if val != "<" and val != "": tips += f"You didn't set the right [ < | > ] symbole for the repeat check.\n"
             elif val == "<": score += 1
     if score == maximum_score:
             enable_level2 = True
@@ -447,14 +481,14 @@ def level2():
     for key, val in input_dict.items():
 
         if key == "Microstep_1":
-            if val != "1/32" and val != "": tips += f"You didn't set the right Microsteps"
+            if val != "1/32" and val != "": tips += f"You didn't set the right Microstep setting"
             elif val == "1/32": score += 1
 
         if key == "Velocity_1":
-            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\n"
+            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\nThe motor should be stopped while measuring.\n"
             elif val == "0": score += 1
         if key == "Velocity_2":
-            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\n"
+            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\nThe motor should be stopped while measuring.\n"
             elif val == "0": score += 1
         if key == "Velocity_3":
             if not val:
@@ -467,11 +501,11 @@ def level2():
             if not val:
                 tips += f"You didn't set the right {key}-value.\n"
             elif not val.isdigit() or float(val) >= 10:
-                tips += f"The {key}-value should be a numeric value less than 10.\n"
+                tips += f"The {key}-value should be a numeric value less than 10.\nThe motor should be stopped while measuring.\n"
             else:
                 score += 1
         if key == "Velocity_5":
-            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\n"
+            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\nThe motor should be stopped while measuring.\n"
             elif val == "0": score += 1
         if key == "Velocity_6":
             if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\n"
@@ -514,14 +548,14 @@ def level3():
     for key, val in input_dict.items():
 
         if key == "Tut_Command":
-            if val != "Continue" and val != "": tips += f"You didn't set the right {key.split('_')[1]}-value.\n"
+            if val != "Continue" and val != "": tips += f"You didn't set the right function.\nThese could be break; continue; pass; end"
             elif val == "Continue": score += 1
 
         if key == "Tut_Steps":
             if val != "Steps" and val != "": tips += f"You didn't set the right Varibale inside the calibration function.\n"
             elif val == "Steps": score += 1
         if key == "Tut_Variable":
-            if val != "Volume" and val != "": tips += f"You didn't set the right {key.split('_')[1]}.\n"
+            if val != "Volume" and val != "": tips += f"What do we want to know after a Titration is ended if it is not directly the concentration.\n"
             elif val == "Volume": score += 1
     
     if score == maximum_score:
