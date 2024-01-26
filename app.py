@@ -56,6 +56,7 @@ def AutomatedTitration():
     is_calibrating = False
     terminal_info = ""
     log = ""
+    last_titration_value = ""
     
 
     # Initialising the input_dict
@@ -66,6 +67,9 @@ def AutomatedTitration():
         "cali-value":"",
 
     }
+
+    last_titration_value="0"
+    weight_value = 0.0
 
 
     # if the user has submitted the form, the input_dict will be updated
