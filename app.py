@@ -65,6 +65,7 @@ def AutomatedTitration():
         "connect": "",
         "query-input": "",
         "cali-value":"",
+        "endvalue":"",
 
     }
 
@@ -110,7 +111,6 @@ def AutomatedTitration():
     
             
         
-        last_titration_value = "123.45"
         # if the user has submitted the form and wants to query the Arduino, the query will be attempted
 
         if connected and input_dict["query-input"] != "":
@@ -149,6 +149,7 @@ def AutomatedTitration():
         if connected and input_dict["query-input"] == "Nullpoint":
             arduino.is_nullpoint = True
             is_nullpoint = True
+        
 
         if connected:
             time.sleep(0.1) 
@@ -165,6 +166,21 @@ def AutomatedTitration():
                 print(f"Weight value submitted: {weight_value}")
             else:
                 weight_value = ""  # or set it to another default value if needed
+
+            endvalue = input_dict.get("endvalue", "").strip()
+
+            if endvalue.replace(".", "", 1).isdigit():  # Allow one decimal point
+                
+                cal = 20000
+                last_titration_value = (float(weight_value) / float(cal)) * float(endvalue)
+
+                # Store the weight_value for later calculations
+                # You can save it in a database, session, or any suitable storage
+                print(f"end value submitted: {last_titration_value}")
+            else:
+                last_titration_value = ""  # or set it to another default value if needed
+
+
 
         
             

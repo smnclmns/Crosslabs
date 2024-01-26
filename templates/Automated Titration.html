@@ -64,6 +64,8 @@ Automated Titration
               </div>
               <div class="button-container"> 
                 <span class="button-description">Volume of last titration</span>
+                <input type="text" name="endvalue" id="endvalue" placeholder="Enter the Endposition"  value="{{ endvalue }}">  
+              <button type="submit" class="btn col-12 button-5" id="Submit_end">Submit Endposition</button>
                 <input type="text" id="volume-last-titration" name="volume-last-titration" value="{{ last_titration_value }}" readonly>
                </div>
           </form>
