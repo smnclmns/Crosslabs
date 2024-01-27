@@ -129,8 +129,6 @@ void loop(void) {
     }
 
     else if (inputString == "Stop\n") {
-      Start = false;
-      mocking_data = false;
       phase1 = false;
       phase2 = false;
       endphase = false;
@@ -223,10 +221,12 @@ void loop(void) {
       if (change == 0.9){
           change = 0.95;
           endvalue = 0.95;
+          Serial.println("5 % Margin set");
         }
         else{
           change = 0.9;
           endvalue = 0.9;
+          Serial.println("10 % Margin set");
         }
     }
     else if (inputString == "Test\n") {
