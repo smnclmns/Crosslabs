@@ -38,7 +38,7 @@ Automated Titration
             <div class="button-container">
               <span class="button-description">Automated Titration</span> 
               <button type="submit" name="query-input" data-command="Start" value="Start" id="query-input" class="btn col-12 button-5">Start</button>
-              <button type="submit" name="query-input" data-command="Change" value="Change" id="query-input" class="btn col-12 button-5">Start</button>
+              <button type="submit" name="query-input" data-command="Change" value="Change" id="query-input" class="btn col-12 button-5">Change Margin</button>
               <button type="submit" name="query-input" data-command="Reset" value="Reset" id="query-input" class="btn col-12 button-5" style="background-color: red;" title="This will reset the titration and delete the current progess. The pump will return to it's starting point. This should only be used after the Titration is finished!!">Reset</button>
               <button type="submit" name="query-input" data-command="mock" value="mock" id="query-input" class="btn col-12 button-5">Mock</button>
               </div>
@@ -65,8 +65,6 @@ Automated Titration
               </div>
               <div class="button-container"> 
                 <span class="button-description">Volume of last titration</span>
-                <input type="text" name="endvalue" id="endvalue" placeholder="Enter the Endposition"  value="{{ endvalue }}">  
-              <button type="submit" class="btn col-12 button-5" id="Submit_end">Submit Endposition</button>
                 <input type="text" id="volume-last-titration" name="volume-last-titration" value="{{ last_titration_value }}" readonly>
                </div>
           </form>

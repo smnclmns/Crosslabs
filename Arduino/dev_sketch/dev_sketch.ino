@@ -59,10 +59,7 @@ double change = 0.9; // indicates at what percentage of the initial intensity of
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
 double endtime = 8000.0; // waiting time in s to check if titration is finished
 double steps1 = 1250.0 ; // indicates the number of steps in phase 1 after which the light values are compared
-double steps2 = 600.0 ; // indicates the number of steps in phase 2 after which the light values are compared
-
-// Enables the generation of mocking data to test handling of sensor readings
-bool mocking_data = false;
+double steps2 = 650.0 ; // indicates the number of steps in phase 2 after which the light values are compared
 
 
 void setup(void) {
@@ -151,25 +148,23 @@ void loop(void) {
       phase2 = false;
       endphase = false;
       Serial.println("Before you refill the Syringe switch the lever!");
+      // Add a small delay and flush serial data
+      delay(100);
+      Serial.flush();
       
     }
     else if (inputString == "Refill\n") {
-      phase1 = false;
-      phase2 = false;
-      endphase = false;
       Refill_Syringe();
     }
     else if (inputString == "Continue p1\n") {
       phase1 = true;
       phase2 = false;
-      endphase = false;
       Serial.println("Continue with Phase 1");
     }
 
     else if (inputString == "Continue p2\n") {
       phase1 = false;
       phase2 = true;
-      endphase = false;
       Serial.println("Continue with Phase 2");
     }
 
@@ -262,6 +257,7 @@ void loop(void) {
   // In Phase 2 wird nun vorsichtiger titriert, um den sensiblen Farbumschlag des Indikators zu erkennen
   
   else if (phase2){
+    Serial.println("Phase 2");
     farbmessung();
     send_in_utf_8();
     for (int i=0;i<6;i++){
@@ -290,15 +286,13 @@ void loop(void) {
     send_in_utf_8();
     delay(15000);
     Serial.println("Extended Light Sensor Checking");
-    delay(3000);
     farbmessung();
     send_in_utf_8();
     for (int i=0;i<6;i++){
       if (values[i] < endvalue*startvalues[i]){
-        delay(1000);
+        delay(500);
         farbmessung();
         send_in_utf_8();
-        endphase = false;
         // Check if the message has not been printed before
         if (!titrationCompletePrinted) {
           farbmessung();
@@ -311,16 +305,15 @@ void loop(void) {
           Serial.println(POSITION);
           farbmessung();
           send_in_utf_8();
+
+          // Set the variable to true to indicate that the message has been printed
+          titrationCompletePrinted = true;
           endphase = false;
           Start = false;
           phase1 = false;
           phase2=false;
-
-          // Set the variable to true to indicate that the message has been printed
-          titrationCompletePrinted = true;
         }
-        inputString == "Stop";
-      
+      inputString =="Stop";
     
          
       } // if Ende
@@ -334,12 +327,6 @@ void loop(void) {
   }
 
 }
-
-
-
-  
-
-
 
 
 void serialEvent() {
@@ -379,18 +366,13 @@ void Calibration() {
   tic.setTargetVelocity(0);
   delayWhileResettingCommandTimeout(1000);
   int Cali_Position = 0;
-        for (int i=0;i<20;){
-          tic.setTargetPosition(tic.getCurrentPosition() + 1000);
-          tic.exitSafeStart();
-          delayWhileResettingCommandTimeout(500);
-          tic.setTargetVelocity(0);
-          delayWhileResettingCommandTimeout(500);
-          
-          
-          delay(100);
-          i += 1;
-        } // for
-
+  tic.setTargetPosition(tic.getCurrentPosition() + 20000);
+  tic.exitSafeStart();
+  delayWhileResettingCommandTimeout(5000);
+  tic.setTargetVelocity(0);
+  delayWhileResettingCommandTimeout(1000);
+  delay(100);
+  
   Serial.println("End of Calibration");
 }
 
@@ -398,17 +380,18 @@ void Reset() {
     Serial.println("Pump moves to the Nullpoint and the Titration can be Started again");
 
     tic.exitSafeStart();
-    
+    tic.energize();
     tic.setTargetPosition(tic.getCurrentPosition() - POSITION);
     delayWhileResettingCommandTimeout(POSITION * 2);
     tic.setTargetVelocity(0);
     delayWhileResettingCommandTimeout(1000);
-    delay(500);
     POSITION = 0;
-      if (POSITION == 0){
+    if (POSITION == 0){
       Serial.println("Already at the starting point");
-      }
-    delay(500);
+    }
+    // Add a small delay and flush serial data
+    delay(100);
+    Serial.flush();
 }
 
 void Refill_Syringe() {
@@ -416,12 +399,14 @@ void Refill_Syringe() {
     Serial.println("The Titrationprocess is only paused");
 
     tic.exitSafeStart();
-    
+    tic.energize();
     tic.setTargetPosition(tic.getCurrentPosition() - POSITION);
     delayWhileResettingCommandTimeout(POSITION * 2);
     tic.setTargetVelocity(0);
     delayWhileResettingCommandTimeout(1000);
-    delay(500);
+    // Add a small delay and flush serial data
+    delay(100);
+    Serial.flush();
 }
 
 
