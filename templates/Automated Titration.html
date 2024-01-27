@@ -45,6 +45,7 @@ Automated Titration
             <div class="button-container">
               <span class="button-description">Calibration</span>
               <button type="submit" name="query-input" data-command="Cali" value="Cali" id="query-input" class="btn col-12 button-5">Calibration</button>
+              <span class="button-description">Submit The Weight</span>
               <input type="text" name="cali-value" id="cali-value" placeholder="Enter Weight in gramm with this format [X.xx] gramm"  value="{{ previous_cali_value }}">  
               <button type="submit" class="btn col-12 button-5" id="Submit_cal">Submit Calibration</button>
               </div>  
@@ -64,8 +65,11 @@ Automated Titration
               <button type="submit" name="query-input" data-command="Continue p2" value="Continue p2" id="query-input" class="btn col-12 button-5">Continue Phase 2</button>
               </div>
               <div class="button-container"> 
-                <span class="button-description">Volume of last titration</span>
-                <input type="text" id="volume-last-titration" name="volume-last-titration" value="{{ last_titration_value }}" readonly>
+                <span class="button-description">Submit Endposition</span>
+                <input type="text" name="endvalue" id="endvalue" placeholder="Enter the Endposition"  value="{{ endvalue }}">  
+                <button type="submit" class="btn col-12 button-5" id="Submit_end">Submit Endposition</button>
+                <span class="button-description">Titration Volume</span>
+                <input type="text" id="volume-last-titration" name="volume-last-titration" value="{{ last_titration_value }}" placeholder="Titrated Volume" readonly>
                </div>
           </form>
     </div>
