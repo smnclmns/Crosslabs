@@ -78,6 +78,9 @@ void setup(void) {
   delay(20);
   tic.setStepMode(TicStepMode::Microstep32);
   Serial.println("Stepper motor ready...");
+  Serial.println("Margin:");
+  int margin = (1-change)*100;
+  Serial.print(margin);Serial.print("%");
   tic.energize();
   tic.exitSafeStart();
   
@@ -115,8 +118,9 @@ void loop(void) {
       //Initializing the Phase and Position
       tic.haltAndSetPosition(0);
       titrationCompletePrinted = false;
-      phase1 = true;
+      pause=false;
       POSITION=0;
+      phase1 = true;
       }
   
 
@@ -147,6 +151,7 @@ void loop(void) {
       phase1 = false;
       phase2 = false;
       endphase = false;
+      pause = true;
       Serial.println("Before you refill the Syringe switch the lever!");
       // Add a small delay and flush serial data
       delay(100);
@@ -313,7 +318,7 @@ void loop(void) {
           phase1 = false;
           phase2=false;
         }
-      inputString =="Stop";
+      inputString ="Stop";
     
          
       } // if Ende
@@ -381,14 +386,19 @@ void Reset() {
 
     tic.exitSafeStart();
     tic.energize();
-    tic.setTargetPosition(tic.getCurrentPosition() - POSITION);
-    delayWhileResettingCommandTimeout(POSITION * 2);
-    tic.setTargetVelocity(0);
-    delayWhileResettingCommandTimeout(1000);
-    POSITION = 0;
-    if (POSITION == 0){
-      Serial.println("Already at the starting point");
+    if (pause){
+      Serial.println("Because of the break inbetween the titration, the Syringe should be manually filled");
     }
+  else{
+      tic.setTargetPosition(tic.getCurrentPosition() - POSITION);
+      delayWhileResettingCommandTimeout(POSITION * 2);
+      tic.setTargetVelocity(0);
+      delayWhileResettingCommandTimeout(1000);
+      POSITION = 0;
+      if (POSITION == 0){
+        Serial.println("Already at the starting point");
+      }
+  }
     // Add a small delay and flush serial data
     delay(100);
     Serial.flush();
