@@ -472,16 +472,16 @@ def level1():
 @app.route("/workspace/level2", methods=["POST", "GET"])
 def level2():
     global enable_level3
-    maximum_score=7
+    maximum_score=4
 
     input_dict = {
         "Microstep_1":0,
         "Velocity_1":0,
-        "Velocity_2":0,
+        
         "Velocity_3":0,
-        "Velocity_4":0,
+        
         "Velocity_5":0,
-        "Velocity_6":0,
+        
 
     }
 
@@ -507,9 +507,7 @@ def level2():
         if key == "Velocity_1":
             if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\nThe motor should be stopped while measuring.\n"
             elif val == "0": score += 1
-        if key == "Velocity_2":
-            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\nThe motor should be stopped while measuring.\n"
-            elif val == "0": score += 1
+        
         if key == "Velocity_3":
             if not val:
                 tips += f"You didn't set the right {key}-value.\n"
@@ -517,19 +515,12 @@ def level2():
                 tips += f"The {key}-value should be a numeric value less than 10.\n"
             else:
                 score += 1
-        if key == "Velocity_4":
-            if not val:
-                tips += f"You didn't set the right {key}-value.\n"
-            elif not val.isdigit() or float(val) >= 10:
-                tips += f"The {key}-value should be a numeric value less than 10.\nThe motor should be stopped while measuring.\n"
-            else:
-                score += 1
+        
+        
         if key == "Velocity_5":
             if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\nThe motor should be stopped while measuring.\n"
             elif val == "0": score += 1
-        if key == "Velocity_6":
-            if val != "0" and val != "": tips += f"You didn't set the right {key}-value.\n"
-            elif val == "0": score += 1
+        
     if score == maximum_score:
             enable_level3 = True
     return render_template("Levels/level2.html",

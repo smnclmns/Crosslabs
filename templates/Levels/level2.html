@@ -66,25 +66,22 @@ Tutorial
 
                                     <span class="function">def</span><span class="punctuation">(StartTitration)</span>;
                                         <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number">10.0</span><span class="punctuation">)</span>;
-                                        <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number">10.0</span><span class="punctuation">)</span>;
-                                    
+                                        
                                     <span class="comment">// At first color change the motor should stop and wait if the color will fade away</span>
                                     <span class="comment">// If the color does not stay constant the motor should reduce its velocity</span>  
 
                                     <span class="function">def</span><span class="punctuation">(pause)</span>;
                                         <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_1' placeholder="Velocity"  style="width: 40px" name="Velocity_1" tabindex="1" pattern="\d*"><span class="identifier"></span><span class="punctuation">)</span>;
-                                        <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_2' placeholder="Velocity"  style="width: 40px" name="Velocity_2" tabindex="1" pattern="\d*"></span><span class="punctuation">)</span>;
                                         <span class="keyword">Wait(<span class="function"> 10s</span>)</span>
                                         <span class="comment"> //First light sensor evaluation</span>
                                         <span class="function">measure_color</span>()
                                         <span class="comment">//This function will be further evaluated in the next level</span>
                                         <span class="comment">//for now it suffice, that the first change in color was recorded and the Motor needs to be adjusted</span>
                                         <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_3' placeholder="Velocity"  style="width: 40px" name="Velocity_3" tabindex="1" pattern="\d*"><span class="identifier"></span><span class="punctuation">)</span>;
-                                        <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_4' placeholder="Velocity"  style="width: 40px" name="Velocity_4" tabindex="1" pattern="\d*"></span><span class="punctuation">)</span>;
-
+                                        
                                     <span class="function">def</span><span class="punctuation">(End)</span>;
                                         <span class="function">stepper.setSpeedInRevolutionsPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_5' placeholder="Velocity"  style="width: 40px" name="Velocity_5" tabindex="1" pattern="\d*"><span class="identifier"></span><span class="punctuation">)</span>;
-                                        <span class="function">stepper.setAccelerationInRevolutionsPerSecondPerSecond</span><span class="punctuation">(</span><span class="number"><input class="user-input" type="text" id='Velocity_6' placeholder="Velocity"  style="width: 40px" name="Velocity_6" tabindex="1" pattern="\d*"></span><span class="punctuation">)</span>;
+                                        
                                     
                         
                                     </p>
@@ -100,7 +97,7 @@ Tutorial
                     {% if visible_tips %}
                     <p>
                     <br>
-                    You got {{ value }} out of 7 points.<br>
+                    You got {{ value }} out of 4 points.<br>
                     <ul>
                         {% for tip in tips.split("\n")[:-1] %}
                             <li>{{ tip }}</li>
@@ -110,7 +107,7 @@ Tutorial
                     {% endif %}
                 </form>
     
-                {% if value == 7 %}
+                {% if value == 4 %}
                     <a href="{{ url_for('level3') }}" class="btn btn-primary">Go to Level 3</a>
                 {% endif %}
           </form>
