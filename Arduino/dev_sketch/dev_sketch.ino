@@ -82,6 +82,7 @@ void setup(void) {
   Serial.println("Margin:");
   margin = (1-change)*100;
   Serial.print(margin);Serial.print("%");
+  tic.deenergize();
   tic.energize();
   tic.exitSafeStart();
   
@@ -153,6 +154,7 @@ void loop(void) {
       phase2 = false;
       endphase = false;
       pause = true;
+      tic.deenergize();
       Serial.println("Before you refill the Syringe switch the lever!");
       // Add a small delay and flush serial data
       delay(100);
@@ -175,6 +177,7 @@ void loop(void) {
     }
 
     else if (inputString.startsWith("f")) {
+      tic.deenergize();
       tic.energize();
       tic.exitSafeStart();
       Serial.println("Forwardmovement for 1 second");   
@@ -187,9 +190,10 @@ void loop(void) {
     }
 
     else if (inputString.startsWith("b")) {
+      tic.deenergize();
       tic.energize();
       tic.exitSafeStart();
-      Serial.println("Backwardmovement for 1 second1"); 
+      Serial.println("Backwardmovement for 1 second"); 
       tic.setTargetVelocity(-20000000);
       delayWhileResettingCommandTimeout(1000);
       tic.setTargetVelocity(-0);
@@ -319,12 +323,9 @@ void loop(void) {
           // Set the variable to true to indicate that the message has been printed
           titrationCompletePrinted = true;
           endphase = false;
-          Start = false;
           phase1 = false;
           phase2=false;
         }
-      inputString ="Stop";
-    
          
       } // if Ende
       
@@ -357,6 +358,8 @@ void serialEvent() {
 void moving(double x){
   //x steps in 1 second
   Serial.println("Moving...");
+  tic.energize();
+  tic.exitSafeStart();
   tic.setTargetPosition(tic.getCurrentPosition() + x);
   delayWhileResettingCommandTimeout(1000);
   delayWhileResettingCommandTimeout(1000);
