@@ -21,6 +21,7 @@ const int MOTOR_DIRECTION_PIN = 4;
 long NULLPOSITION = 0;
 long ENDPOSITION = 11000; // number of steps from full to empty syringe
 long POSITION = 0;
+long margin;
 
 
 // Lightsensor object and buffer
@@ -79,7 +80,7 @@ void setup(void) {
   tic.setStepMode(TicStepMode::Microstep32);
   Serial.println("Stepper motor ready...");
   Serial.println("Margin:");
-  int margin = (1-change)*100;
+  margin = (1-change)*100;
   Serial.print(margin);Serial.print("%");
   tic.energize();
   tic.exitSafeStart();
@@ -174,6 +175,7 @@ void loop(void) {
     }
 
     else if (inputString.startsWith("f")) {
+      tic.energize();
       tic.exitSafeStart();
       Serial.println("Forwardmovement for 1 second");   
       tic.setTargetVelocity(20000000);
@@ -185,6 +187,7 @@ void loop(void) {
     }
 
     else if (inputString.startsWith("b")) {
+      tic.energize();
       tic.exitSafeStart();
       Serial.println("Backwardmovement for 1 second1"); 
       tic.setTargetVelocity(-20000000);
@@ -194,6 +197,7 @@ void loop(void) {
     }
 
     else if (inputString.startsWith("long f")) {
+      tic.energize();
       tic.exitSafeStart();
       Serial.println("Forwardmovement for 5 seconds");   
       tic.setTargetVelocity(80000000);
@@ -205,6 +209,7 @@ void loop(void) {
     }
 
     else if (inputString.startsWith("long b")) {
+      tic.energize();
       tic.exitSafeStart();
       Serial.println("Backwardmovement for 5 seconds"); 
       tic.setTargetVelocity(-80000000);
