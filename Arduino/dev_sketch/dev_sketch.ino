@@ -59,7 +59,7 @@ int values[6] = {0,0,0,0,0,0};
 double change = 0.9; // indicates at what percentage of the initial intensity of a light value phase 2 should be initiated
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
 double endtime = 8000.0; // waiting time in s to check if titration is finished
-double steps1 = 1500.0 ; // indicates the number of steps in phase 1 after which the light values are compared
+double steps1 = 2000.0 ; // indicates the number of steps in phase 1 after which the light values are compared
 double steps2 = 750.0 ; // indicates the number of steps in phase 2 after which the light values are compared
 
 
@@ -79,9 +79,8 @@ void setup(void) {
   delay(20);
   tic.setStepMode(TicStepMode::Microstep32);
   Serial.println("Stepper motor ready...");
-  Serial.println("Margin:");
-  margin = (1-change)*100;
-  Serial.print(margin);Serial.print("%");
+  Serial.println("speed:");
+  Serial.print(steps1);Serial.print("steps per second");
   tic.deenergize();
   tic.energize();
   tic.exitSafeStart();
@@ -227,15 +226,14 @@ void loop(void) {
       tic.haltAndSetPosition(0);
     }
     else if (inputString == "Change\n"){
-      if (change == 0.9){
-          change = 0.95;
-          endvalue = 0.95;
-          Serial.println("5 % Margin set");
+      if (steps1 == 1500){
+          steps1 = 3000;
+          
+          Serial.println("fast mode");
         }
         else{
-          change = 0.9;
-          endvalue = 0.9;
-          Serial.println("10 % Margin set");
+          steps1 = 1500;
+          Serial.println("Slow mode");
         }
     }
     else if (inputString == "Test\n") {
