@@ -59,8 +59,8 @@ int values[6] = {0,0,0,0,0,0};
 double change = 0.9; // indicates at what percentage of the initial intensity of a light value phase 2 should be initiated
 double endvalue = 0.9; // indicates at what percentage of the initial intensity of a light value the titration should stop
 double endtime = 8000.0; // waiting time in s to check if titration is finished
-double steps1 = 1250.0 ; // indicates the number of steps in phase 1 after which the light values are compared
-double steps2 = 650.0 ; // indicates the number of steps in phase 2 after which the light values are compared
+double steps1 = 1500.0 ; // indicates the number of steps in phase 1 after which the light values are compared
+double steps2 = 750.0 ; // indicates the number of steps in phase 2 after which the light values are compared
 
 
 void setup(void) {
