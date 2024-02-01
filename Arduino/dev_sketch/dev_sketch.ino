@@ -155,9 +155,10 @@ void loop(void) {
       pause = true;
       tic.deenergize();
       Serial.println("Before you refill the Syringe switch the lever!");
+      Serial.println("Dont press Start, this will reset ur titration progress");
       // Add a small delay and flush serial data
       delay(100);
-      Serial.flush();
+      
       
     }
     else if (inputString == "Refill\n") {
@@ -392,7 +393,7 @@ void Reset() {
 
     tic.exitSafeStart();
     tic.energize();
-    if (pause){
+  if (pause){
       Serial.println("Because of the break inbetween the titration, the Syringe should be manually filled");
     }
   else{
@@ -407,7 +408,6 @@ void Reset() {
   }
     // Add a small delay and flush serial data
     delay(100);
-    Serial.flush();
 }
 
 void Refill_Syringe() {
