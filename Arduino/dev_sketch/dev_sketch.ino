@@ -311,6 +311,7 @@ void loop(void) {
           farbmessung();
           send_in_utf_8();
           delay(500);
+          endphase = false;
           Serial.println("Titration complete");
           Serial.print("\n");
 
@@ -321,9 +322,7 @@ void loop(void) {
 
           // Set the variable to true to indicate that the message has been printed
           titrationCompletePrinted = true;
-          endphase = false;
-          phase1 = false;
-          phase2=false;
+          
         }
          
       } // if Ende
